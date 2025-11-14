@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 
 /**
  * ENUM: Turnos de comida

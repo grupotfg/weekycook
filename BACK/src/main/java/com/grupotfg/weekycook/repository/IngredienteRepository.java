@@ -1,8 +1,8 @@
-package repository;
+package com.grupotfg.weekycook.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import entity.Ingrediente;
+import com.grupotfg.weekycook.entity.Ingrediente;
 
 import java.util.List;
 

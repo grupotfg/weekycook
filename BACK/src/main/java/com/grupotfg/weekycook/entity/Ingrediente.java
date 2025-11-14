@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -37,16 +37,16 @@ public class Ingrediente implements Serializable {
     @Column(name = "unidad_base", nullable = false)
     private String unidadBase; // Ej: "gr", "ml", "ud"
 
-   
-    @Column(name = "calorias_por_unidad", precision = 10, scale = 3) 
+    //he tenido que borra scale y precision porque sql peta
+    @Column(name = "calorias_por_unidad") 
     private Double caloriasPorUnidad; // kcal por unidad_base
 
-    @Column(name = "proteinas_por_unidad", precision = 10, scale = 3)
+    @Column(name = "proteinas_por_unidad")
     private Double proteinasPorUnidad; // gramos por unidad_base
 
-    @Column(name = "grasas_por_unidad", precision = 10, scale = 3)
+    @Column(name = "grasas_por_unidad")
     private Double grasasPorUnidad; // gramos por unidad_base
 
-    @Column(name = "hidratos_por_unidad", precision = 10, scale = 3)
+    @Column(name = "hidratos_por_unidad")
     private Double hidratosPorUnidad; // gramos por unidad_base
 }

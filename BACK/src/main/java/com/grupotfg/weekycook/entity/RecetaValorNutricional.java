@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -31,17 +31,19 @@ public class RecetaValorNutricional implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receta_id", unique = true)
     private Receta receta;
+    
+    // //borro tb precision = 10, scale = 3 xq con double no traga sql
 
-    @Column(name = "calorias_totales", precision = 12, scale = 3)
+    @Column(name = "calorias_totales")
     private Double caloriasTotales;
 
-    @Column(name = "proteinas_totales", precision = 12, scale = 3)
+    @Column(name = "proteinas_totales")
     private Double proteinasTotales;
 
-    @Column(name = "grasas_totales", precision = 12, scale = 3)
+    @Column(name = "grasas_totales")
     private Double grasasTotales;
 
-    @Column(name = "hidratos_totales", precision = 12, scale = 3)
+    @Column(name = "hidratos_totales")
     private Double hidratosTotales;
 
     @Column(name = "fecha_calculo")
