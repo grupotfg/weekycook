@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -38,7 +38,8 @@ public class RecetaIngrediente implements Serializable {
     private Ingrediente ingrediente;
 
     // Cantidad del ingrediente en la receta
-    @Column(nullable = false, precision = 10, scale = 3)
+    //borro tb precision = 10, scale = 3 xq con double no traga sql
+    @Column(nullable = false)
     private Double cantidad; // Ej: 200.00
 
     @Column(nullable = false)

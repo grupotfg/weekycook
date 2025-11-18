@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 
 
 import java.io.Serializable;

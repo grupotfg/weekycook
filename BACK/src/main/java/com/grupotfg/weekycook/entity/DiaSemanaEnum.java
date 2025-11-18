@@ -1,4 +1,4 @@
-package entity;
+package com.grupotfg.weekycook.entity;
 /**
  * ENUM: Los dias de la semana
  * Para que coioncidan exactamente con los valores ENUM de la base de datos 

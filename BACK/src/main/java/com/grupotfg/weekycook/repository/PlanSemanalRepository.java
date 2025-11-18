@@ -1,8 +1,8 @@
-package repository;
+package com.grupotfg.weekycook.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import entity.PlanSemanal;
+import com.grupotfg.weekycook.entity.PlanSemanal;
 
 import java.util.List;
 import java.util.Optional;
