@@ -71,6 +71,6 @@ public class Receta implements Serializable {
     // Relación 1:1 con RecetaValorNutricional
     // cascade.ALL: Al borrar receta, se borra su valor nutricional
     @ToString.Exclude
-    @OneToOne(mappedBy = "receta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "receta", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private RecetaValorNutricional valorNutricional;
 }
