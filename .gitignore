@@ -1,0 +1,36 @@
+# ==========================
+#   IGNORAR ARCHIVOS ECLIPSE
+# ==========================
+.metadata/
+.classpath
+.project
+.settings/
+
+# ==========================
+#   SPRING / MAVEN
+# ==========================
+**/target/
+**/bin/
+
+# ==========================
+#   NODE / FRONTEND
+# ==========================
+FRONT/node_modules/
+FRONT/build/
+
+# ==========================
+#   ARCHIVOS BASURA
+# ==========================
+*.log
+*.tmp
+*.DS_Store
+Thumbs.db
+
+# ==========================
+#   CARPETAS ERRÓNEAS
+# ==========================
+WeekyCook/
+BACK/WeekyCook/
+
+.factorypath
+BACK/.factorypath
