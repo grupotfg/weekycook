@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoriaResponseDTO {
+	//plano solo datos básicos
 
     private Integer id;
     private String nombre;
