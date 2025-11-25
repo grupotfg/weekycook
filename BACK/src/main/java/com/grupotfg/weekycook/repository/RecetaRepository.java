@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REPOSITORIO: RecetaRepository
- * CRUD de recetas con filtros avanzados
+ * RecetaRepository
+ * CRUD de recetas con filtros mejores filtro
  * 
- * - findByTiempoPreparacionMinLessThanEqual: Filtro "Recetas rápidas < 30min"
- * - findByTituloContainingAndCategoriaId: Filtro combinado (título + categoría)
- * - findRandom: Funcionalidad "Opción aleatoria" del planificador ****Esta mola****
- * - findByTitulo pues eso, es una busqueda exacta, evita duplicados
+ * findByTiempoPreparacionMinLessThanEqual: Filtro "Recetas rápidas < 30min"
+ * findByTituloContainingAndCategoriaId: Filtro combinado (título + categoría)
+ * findRandom: Funcionalidad "Opción aleatoria" del planificador ****Esta nos mola****
+ * findByTitulo pues eso, es una busqueda exacta, evita duplicados
  */
 public interface RecetaRepository extends JpaRepository<Receta, Integer> {
     
