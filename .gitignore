@@ -26,11 +26,7 @@ FRONT/build/
 *.DS_Store
 Thumbs.db
 
-# ==========================
-#   CARPETAS ERRÓNEAS
-# ==========================
-WeekyCook/
-BACK/WeekyCook/
+
 
 .factorypath
 BACK/.factorypath
