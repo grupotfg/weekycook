@@ -5,6 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * IngredienteResponseDTO
+ * Datos de ingrediente con valores nutricionales
+ * - Incluye todos los valores nutricionales para cálculos en frontend
+ * viene pk para mostrar en la lista de ingredientes o en detalle de receta
+ */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,6 +19,8 @@ import lombok.NoArgsConstructor;
 
 public class IngredienteRequestDTO {
 
+
+	private Integer id;
     private String nombre;
     private String unidadBase;
     private Double caloriasPorUnidad;
@@ -20,3 +29,4 @@ public class IngredienteRequestDTO {
     private Double hidratosPorUnidad;
 
 }
+
