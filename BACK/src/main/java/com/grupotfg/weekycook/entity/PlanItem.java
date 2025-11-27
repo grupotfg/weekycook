@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: PlanItem
+ * PlanItem
  * Cada celda del plan semanal (ej: Lunes-Comida → Receta X)
- * - Usamos DiaSemanaEnum y TurnoEnum (en español) porque la base de datos tiene ENUM('Lunes',...)
- * - UNIQUE (plan_id, dia, turno): No puede haber dos recetas para el mismo día y turno
- * - LAZY: No carga receta completa hasta que se accede, más optimo
+ * Usamos DiaSemanaEnum y TurnoEnum (en español) porque la base de datos tiene ENUM('Lunes',...)
+ * unique (plan_id, dia, turno): No puede haber dos recetas para el mismo día y turno
+ * Lazy: No carga receta completa hasta que se accede menos carga
  */
 @Data
 @NoArgsConstructor
@@ -35,16 +35,16 @@ public class PlanItem implements Serializable {
     @JoinColumn(name = "receta_id", nullable = false)
     private Receta receta;
 
-    // @Enumerated(EnumType.STRING): Guarda el nombre del enum en la BD (ej: "Lunes")
+    // enumerated(EnumType.STRING) que Guarda el nombre del enum en la BD / lunes x ej
     // DiaSemanaEnum: Nuestro propio enum para coincidir con la BD
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DiaSemanaEnum dia;
 
-    // TurnoEnum: "Comida" o "Cena" (coincide con ENUM de la BD)
+    // TurnoEnum: "Comida" o "Cena" que hemos definido (coincide con enum de la BD)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TurnoEnum turno;
 
-    private String notas; // Ej: "(postre para compartir)"
+    private String notas; // comentarios
 }

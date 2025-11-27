@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * CLASE EMBED: RecetaIngredienteId
+ * embed de RecetaIngredienteId
  * Clave primaria compuesta para receta_ingrediente
  * 
  * se requiere esto para tablas de unión N:M con atributos adicionales

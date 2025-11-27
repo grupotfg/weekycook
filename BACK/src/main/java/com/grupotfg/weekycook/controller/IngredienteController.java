@@ -28,9 +28,9 @@ public class IngredienteController {
     @Autowired
     private IngredienteRepository ingredienteRepository;
 
-    /**
-     * Crear ingrediente
-     */
+    
+     // -------Crear ingrediente
+     
     @PostMapping
     public ResponseEntity<IngredienteResponseDTO> create(@RequestBody Ingrediente ingrediente) {
 
@@ -41,9 +41,8 @@ public class IngredienteController {
         return ResponseEntity.created(location).body(dto);
     }
 
-    /**
-     * Listar todos
-     */
+    //------Listar todos
+    
     @GetMapping
     public ResponseEntity<List<IngredienteResponseDTO>> getAll() {
         List<IngredienteResponseDTO> dtos = ingredienteService.findAll()
@@ -54,9 +53,8 @@ public class IngredienteController {
         return ResponseEntity.ok(dtos);
     }
 
-    /**
-     * Obtener por ID
-     */
+    //-----por ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<IngredienteResponseDTO> getById(@PathVariable Integer id) {
         return ingredienteService.findById(id)
@@ -64,9 +62,8 @@ public class IngredienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Actualizar
-     */
+    // ------Actualizar
+    
     @PutMapping("/{id}")
     public ResponseEntity<IngredienteResponseDTO> update(
             @PathVariable Integer id,
@@ -82,9 +79,8 @@ public class IngredienteController {
         return ResponseEntity.ok(ingredienteMapper.toDto(updated));
     }
 
-    /**
-     * Eliminar
-     */
+    //-------Eliminar
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 

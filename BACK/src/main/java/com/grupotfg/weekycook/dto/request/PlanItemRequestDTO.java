@@ -7,17 +7,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * PlanItemRequestDTO
+ * Cambio día y turno como STRING para evitar errores en front, no me salía nada,
+ *  al final con parse pra service
+ */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlanItemRequestDTO {
 
-    private Integer planSemanalId;
-    private Integer recetaId;
-    private DiaSemanaEnum dia;
-    private TurnoEnum turno;
-    private String notas;
+    
+	  private Integer recetaId;
+	    private String dia;   // "Lunes, Martes..."
+	    private String turno; // "Comida/Cena"
+	    private String notas;
 
 }
 

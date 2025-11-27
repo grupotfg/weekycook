@@ -5,20 +5,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: Ingrediente
- * Almacena información nutricional base de cada ingrediente
+ * Ingrediente
+ * Con información nutricional base de cada ingrediente
  * 
  * Valores x unidad_base para calcular nutrición total en recetas
  * Ej: Pollo pechuga = 1.65 kcal por gramo
  * 
- * precision = 10: Número TOTAL de dígitos (enteros + decimales)
- * scale = 3: Número de dígitos DECIMALES después del punto
- * Ejemplo: 1234567.890 (7 enteros + 3 decimales = 10 dígitos totales)
- * 
- * Esto define cómo se mapea el tipo Double de Java al tipo DECIMAL de MySQL
- * con precisión EXACTA de decimales, así ambos manejan lo mismo, por buenas practicas!!.
- * 
- */
+ * en un principo meti scale y precision pero no va en double lo cambio, sin lios
+  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

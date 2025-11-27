@@ -10,7 +10,7 @@ import lombok.Data;
  * Asocia un ingrediente a una receta con cantidad y unidad
  * Se va a usar en endpoint x separado: POST /api/recetas/{recetaId}/ingredientes
  * No va a incluir recetaId: Se mete en la URL del endpoint
- * IngredienteId en lugar de objeto completo para menos carga
+ * IngredienteId en lugar de todo completo para menos carga
  * para manejar mejor claves compuestas + relaciones
  * 
  * x ej Asignar 200gr de Pollo a "Ensalada de pollo"

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * IngredienteResponseDTO
- * Datos de ingrediente con valores nutricionales
- * - Incluye todos los valores nutricionales para cálculos en frontend
+ * ingrediente con valores nutricionales
+ * incluye todos los valores nutricionales para cálculos en fron
  * viene pk para mostrar en la lista de ingredientes o en detalle de receta
  */
 

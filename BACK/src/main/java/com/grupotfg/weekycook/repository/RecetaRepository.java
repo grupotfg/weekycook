@@ -11,43 +11,41 @@ import java.util.Optional;
 
 /**
  * RecetaRepository
- * CRUD de recetas con filtros mejores filtro
+ * CRUD de recetas con filtros mejores
  * 
- * findByTiempoPreparacionMinLessThanEqual: Filtro "Recetas rápidas < 30min"
- * findByTituloContainingAndCategoriaId: Filtro combinado (título + categoría)
- * findRandom: Funcionalidad "Opción aleatoria" del planificador ****Esta nos mola****
+ * findByTiempoPreparacionMinLessThanEqual: Filtro "Recetas rápidas < 30min" si lo usuamos al final¡
+ * findByTituloContainingAndCategoriaId: Filtro conjunto (título + categoría)
+ * findRandom: para "Opción aleatoria" del planificador ****Esta nos mola****
  * findByTitulo pues eso, es una busqueda exacta, evita duplicados
  */
 public interface RecetaRepository extends JpaRepository<Receta, Integer> {
     
-    /**
-     * Búsqueda contiene por título
-     */
+    
+     //Búsqueda contiene por título
+     
     List<Receta> findByTituloContaining(String titulo);
     
-    /**
-     * Filtro por categoría (ej: mostrar solo Postres)
-     */
+    
+     //Filtro por categoría (ej: mostrar solo Postres)
+     
     List<Receta> findByCategoriaId(Integer categoriaId);
     
-    /**
-     * Da recetas que se preparan en menos de X minutos
-     * @param tiempo máximo en minutos
-     */
+    
+     //Da recetas que se preparan en menos de X minutos
+     //param es tiempo máximo en minutos
+     
     List<Receta> findByTiempoPreparacionMinLessThanEqual(Integer tiempo);
     
     /**
      * Búsqueda combinada
      * Filtros varios del planificador (título + categoría)
-     * @param titulo Parte del título
-     * @param categoriaId ID de la categoría
+     * param es titulo Parte del título
+     * param es categoriaId ID de la categoría
      */
     List<Receta> findByTituloContainingAndCategoriaId(String titulo, Integer categoriaId);
     
     /**
      * Búsqueda exacta por título
-     * busca en population_weekycook.sql para evitar duplicados
-     * Permite usar receta_id dinámicamente en inserts
      * Esta la he estado trasteando y buscando en varios sitio que por lo visto viene bien
      */
     Optional<Receta> findByTitulo(String titulo);

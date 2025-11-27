@@ -9,7 +9,7 @@ import lombok.Data;
  * FavoritoRequestDTO
  * Marca una receta como favorita
  * 
- * Solo metemos recetaId: El usuarioId se obtiene del login
+ * Solo metemos recetaId: El usuarioId se obtiene
  * No incluimos fechaGuardado, viene del back como LocalDateTime.now()
  * Evitamos que un usuario marque favoritos por otro
  * 

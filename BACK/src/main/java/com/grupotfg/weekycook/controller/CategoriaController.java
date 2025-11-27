@@ -14,7 +14,7 @@ import com.grupotfg.weekycook.service.CategoriaService;
 
 /**
  * CategoriaController
- * No hay DTO de entrada, las categorías SOLO se crean desde backend.
+ * No hay DTO de entrada, las categorías SOLO se crean desde back.
  * Solo devolvemos DTOResponse.
  */
 @RestController

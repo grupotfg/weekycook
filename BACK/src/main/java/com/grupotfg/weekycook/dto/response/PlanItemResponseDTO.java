@@ -13,11 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlanItemResponseDTO {
 
-    private Integer id;
-    private Integer planSemanalId;
-    private Integer recetaId;
-    private DiaSemanaEnum dia;
-    private TurnoEnum turno;
-    private String notas;
+	 private Integer id;
+	    
+	    // he puesto el DTO de listado de Recetas para no cargar la receta completa
+	    private RecetaResponseDTO receta; 
+	    
+	    private DiaSemanaEnum dia;
+	    
+	    private TurnoEnum turno;
+	    
+	    private String notas;
 
 }

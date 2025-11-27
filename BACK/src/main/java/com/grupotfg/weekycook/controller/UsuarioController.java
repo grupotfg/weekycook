@@ -31,9 +31,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
-    /**
-     * Crea usuario
-     */
+    
+     //-----Crea usuario
+     
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> createUsuario(
             @Valid @RequestBody UsuarioRequestDTO request) {
@@ -47,9 +47,9 @@ public class UsuarioController {
         return ResponseEntity.created(location).body(dto);
     }
 
-    /**
-     * Lista de usuarios
-     */
+    
+    //-----Lista de usuarios
+     
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> getAll() {
         List<UsuarioResponseDTO> dtos = usuarioService.findAll()
@@ -60,9 +60,9 @@ public class UsuarioController {
         return ResponseEntity.ok(dtos);
     }
 
-    /**
-     * Pedir usuario por ID
-     */
+    
+     //-----Pedir usuario por ID
+     
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> getById(@PathVariable Integer id) {
         return usuarioService.findById(id)
@@ -70,9 +70,9 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Actualizar usuario
-     */
+    
+     //----Actualizar usuario
+     
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> update(
             @PathVariable Integer id,
@@ -89,9 +89,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioMapper.toDto(actualizado));
     }
 
-    /**
-     * Eliminar usuario
-     */
+    
+    //-----Eliminar usuario
+     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 

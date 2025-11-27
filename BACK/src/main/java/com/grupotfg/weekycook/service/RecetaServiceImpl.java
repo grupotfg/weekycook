@@ -61,7 +61,7 @@ public class RecetaServiceImpl implements RecetaService {
     }
 
    
-    // crear receta admin
+    // --------crear receta admin
     
     @Override
     @Transactional
@@ -100,7 +100,7 @@ public class RecetaServiceImpl implements RecetaService {
                 );
                 
                 // Simplemente añadimos a la lista de la receta.
-                // CascadeType.ALL se encargará de guardarlo.
+                // CascadeType.ALL hace el guardado.
                 recetaGuardada.getRecetaIngredientes().add(ri);
             }
         }
@@ -110,7 +110,7 @@ public class RecetaServiceImpl implements RecetaService {
         return recetaMapper.toRecetaDetailDto(recetaGuardada);
     }
 
- // actualizar admin
+ // ------actualizar admin
  
  @Override
  @Transactional
@@ -166,7 +166,7 @@ public class RecetaServiceImpl implements RecetaService {
  }
 
     
-    // eliminar receta admin
+    // ------eliminar receta admin
     
     @Override
     @Transactional
@@ -181,7 +181,7 @@ public class RecetaServiceImpl implements RecetaService {
     }
 
 
-    //seguridad que para eso están las excepciones
+    //seguridad que para eso están las excepciones chulas
     private Usuario checkAdmin(Integer usuarioId) {
         Usuario user = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + usuarioId));

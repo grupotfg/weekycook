@@ -12,21 +12,21 @@ import com.grupotfg.weekycook.entity.Usuario;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UsuarioMapper {
     
-    // UsuarioRequestDTO → Usuario (crear/modificar)
+    // UsuarioRequestDTO a Usuario (crear/modificar)
     Usuario toEntity(UsuarioRequestDTO requestDTO);
     
-    // Usuario → UsuarioResponseDTO (esto devolve al cliente)
+    // Usuario a UsuarioResponseDTO (esto devolve al cliente)
     
     UsuarioResponseDTO toDto(Usuario usuario);
     
     // Actualizar entidad desde DTO (para modifcar parcialmente)
     @Mapping(target = "id", ignore = true) // No actualiza ID
     @Mapping(target = "fechaCreacion", ignore = true) // No actualiza fecha
-    @Mapping(target = "esAdmin", ignore = true) // No cambiar rol desde API
+    @Mapping(target = "esAdmin", ignore = true)
     
     void updateEntityFromDto(UsuarioRequestDTO requestDTO, @MappingTarget Usuario usuario);
     
-    // Método para fechaCreacion después de que se haga el mapeo -->after
+    // Método para fechaCreacion después de que se haga el mapeo -->por eso el after
     @AfterMapping
     default void setFechaCreacion(@MappingTarget Usuario usuario) {
         if (usuario.getFechaCreacion() == null) {

@@ -18,31 +18,31 @@ public interface RecetasFavoritasRepository extends JpaRepository<RecetasFavorit
     
     /**
      * Da todos los favoritos de un usuario
-     * @param usuarioId ID del usuario
+     * param es usuarioId ID del usuario
      */
     List<RecetasFavoritas> findByUsuarioId(Integer usuarioId);
     
     /**
      * Saca todos los usuarios que tienen como favorita una receta
-     * @param recetaId ID de la receta
+     * param es recetaId ID de la receta
      */
     List<RecetasFavoritas> findByRecetaId(Integer recetaId);
     
     /**
      * Comprueba si una receta ya es favorita del usuario
-     * @return true si ya es favorita
+     * return es true si ya es favorita
      */
     boolean existsByUsuarioIdAndRecetaId(Integer usuarioId, Integer recetaId);
     
     /**
      * Elimina favorito específico
-     * Usado en: Botón "Quitar de favoritos" en la interfaz o lo que sea que hagamos
+     * Botón "Quitar de favoritos" en la interfaz o lo que sea que pongamos en el diseño
      */
     void deleteByUsuarioIdAndRecetaId(Integer usuarioId, Integer recetaId);
     
     /**
      * Muestra un favorito específico
-     * Útil para obtener el ID del favorito antes de borrarlo
+     * podemos obtener el ID del favorito antes de borrarlo
      */
     Optional<RecetasFavoritas> findByUsuarioIdAndRecetaId(Integer usuarioId, Integer recetaId);
 }

@@ -9,7 +9,7 @@ import lombok.Data;
  Combina datos del ingrediente con cantidad/unidad de esta receta 
  Incluye nombre del ingrediente por no llamar más
  Excluye recetaId ya se sabe por contexto
- * 
+ 
  * GET /api/recetas/{id}/ingredientes
  */
 @Data

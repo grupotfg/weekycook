@@ -7,10 +7,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: Categoria
+ * Categoria
  * Clasifica recetas (Desayuno, Italiana, Vegano, etc.)
  * 
- * Es una simple entidad, no tiene relaciones inversas. No necesita @ToString.Exclude
+ * Es una simple entidad, no tiene relaciones inversas. No necesita exclude
  */
 @Data
 @NoArgsConstructor

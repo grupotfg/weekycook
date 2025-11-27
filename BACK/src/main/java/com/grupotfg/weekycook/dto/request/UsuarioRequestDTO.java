@@ -9,9 +9,9 @@ import lombok.Data;
 /**
  * UsuarioRequestDTO
  * Datos que el cliente envía al registrar/editar un usuario
- * quito el id (ya que se genera automáticamente en base), fechaCreacion (que va en backend), 
- * esAdmin (no hay rol)
- * Solo campos editables por el usuario
+ * quito el id (ya que se genera automáticamente en la base), fechaCreacion (que va en back), 
+ * esAdmin 0/1n no hay rol como tal 
+ * Solo campos modificables por el usuario
  * Sin contraseña codificada: Se recibe plana, integración más segura en mejoras posteriores
  * 
  */
@@ -31,10 +31,10 @@ public class UsuarioRequestDTO {
     
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "Contraseña mínimo 6 caracteres")
-    private String contraseña; // Se almacenará como {noop} x ahora
+    private String contraseña; // Se guarda como {noop} x ahora
     
     @Size(max = 500, message = "Descripción máximo 500 caracteres")
     private String descripcion;
     
-    private Integer numComensalesDefecto; // x Defecto: 2, para escalado cuando lo hagamos
+    private Integer numComensalesDefecto; // x Defecto: 2, para escalado de recetas cuando lo hagamos
 }

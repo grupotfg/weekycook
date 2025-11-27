@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * IMPLEMENTACIÓN ABSTRACTA: AbstractCrudService<T, ID, R>
+ * según lo que he visto se hace así
+ * AbstractCrudService<T, ID, R>
  * Con esto se mete la implementación base del CRUD genérico
  * 
  * R: Tipo del repositorio (extends JpaRepository<T, ID>)
- * OJO IMPORT!!!! @Autowired protected repository: Inyección del repositorio específico
+ * OJO IMPORT!!!! autowired protected repository para meterlo
  * GenericRepository: Acceso abstracto a métodos JPA (save, findById, delete)
  * Cada servicio concreto extiende esta clase y hereda el CRUD completo
 
@@ -40,7 +41,7 @@ public abstract class AbstractCrudService<T, ID, R extends JpaRepository<T, ID>>
     
     @Override
     public T update(ID id, T entity) {
-        // Primero verificamos que existe, es importante par act
+        // Primero verificamos que existe, es importante para act
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("Registro con ID " + id + " no existe");
         }

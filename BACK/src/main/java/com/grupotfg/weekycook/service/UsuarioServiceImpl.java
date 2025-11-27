@@ -13,12 +13,12 @@ import java.util.Optional;
  * UsuarioServiceImpl
  * Cosas concretas para operaciones del usuario
  * extiende AbstractCrudServic para heredae el CRUD genérico
- * implementa el UsuarioService con sus métodos especiales
+ * implementa el UsuarioService con sus métodos propios
  * 
- * va asi: Repository → Service → Mapper → Controller
+ * va asi: Repository a Service a Mapper a Controller
  */
 @Service
-@Transactional // Todos los métodos son transaccionales por defecto
+@Transactional 
 public class UsuarioServiceImpl extends AbstractCrudService<Usuario, Integer, UsuarioRepository> implements UsuarioService {
     
     // Repositorio ya inyectado en AbstractCrudService
@@ -50,9 +50,8 @@ public class UsuarioServiceImpl extends AbstractCrudService<Usuario, Integer, Us
     }
     
     /**
-     * Aqui sobreescribo create() para añadir lógica específica
-     *  
-     *Verificamos e.mail que sea único antes de crear
+     * Aqui sobreescribo create() para añadir lógica específica 
+     *Verificar e.mail que sea único antes de crear
      *fechaCreacion
      *numComensalesDefecto = 2 si viene null
      */
@@ -76,7 +75,7 @@ public class UsuarioServiceImpl extends AbstractCrudService<Usuario, Integer, Us
      * sobreescribo tb update() por seguridad
      - No permitir cambiar email a uno existente
      - No permitir cambiar fechaCreacion
-     - No permitir cambiar esAdmin para rol
+     - No permitir cambiar esAdmin
      */
     @Override
     public Usuario update(Integer id, Usuario usuario) {

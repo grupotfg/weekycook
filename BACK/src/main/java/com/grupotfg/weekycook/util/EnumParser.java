@@ -4,23 +4,20 @@ import java.text.Normalizer;
 import java.util.Arrays;
 
 /**
- * Utilidad muy crítica
- *  ya que al tener Enum definidos no me funcionaba nada que los usara practicamente
+ * Import porque no me salía nada
  * -------------------------------
- * Convierte  "lunes", "LUNES", "MiErCoLeS", "miercoles" o lo que sea que se ponga
- * a su Enum correspondiente aunque haya acentos o mayúsculas, que lo he estado buscando para solucionar.
- *
- * Se usa en eliminarItem(), addOrUpdateItem() x ej o cualquier sitio
- * donde el usuario pase dia/turno como String para que no pete y este ok.
+ * Convierte Strings tipo "lunes", "LUNES", "MiErCoLeS", "miercoles"
+ * a su Enum correspondiente aunque haya acentos o mayúsculas o lo que sea
+ * Se usa en cualquier punto que el usuario pase dia/turno como String.
  */
 public class EnumParser {
 
 	private static String normalize(String s) {
 	    if (s == null) return null;
 	    String normalized = Normalizer.normalize(s, Normalizer.Form.NFD);
-	    // quitar acentos
+	    // quitar marcas acentos
 	    normalized = normalized.replaceAll("\\p{M}", "");
-	    // conservar letras como la ñ, por si aca, y quita espacios/símbolos
+	    // conservar letras como la ñ, quita espacios/símbolos
 	    normalized = normalized.replaceAll("[^A-Za-zÑñ]", "");
 	    return normalized.toLowerCase();
 	}
@@ -39,3 +36,4 @@ public class EnumParser {
                 );
     }
 }
+

@@ -7,29 +7,28 @@ import com.grupotfg.weekycook.entity.Categoria;
 
 import java.util.List;
 
-/**
- * CRUD sobre categorías
- * 
- * Métodos para filtros de búsqueda en recetas
- */
+
+ //Crud sobre categorías
+ //Métodos para filtros de búsqueda en recetas
+ 
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
     
     /**
      * Busca categoría exacta por nombre
-     * @param nombre Nombre de la categoría
-     * @return Categoria o null
+     * param nombre es el nombre de la categoría
+     * return la categoria o null
      */
     Categoria findByNombre(String nombre);
     
     /**
      * Búsqueda por contiene
-     * @param nombre /o Parte del nombre
-     * @return Lista de categorías coincidentes
+     * param nombre o parte del nombre
+     * return la lista de categorías coincidentes
      */
     List<Categoria> findByNombreContaining(String nombre);
     
-    /**
-     * Búsqueda por descripción si queremos
-     */
+    
+     //Búsqueda por contiene eb descripción si queremos
+     
     List<Categoria> findByDescripcionContaining(String descripcion);
 }

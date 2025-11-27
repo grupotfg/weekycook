@@ -11,7 +11,7 @@ import java.util.List;
  * RecetaRequestDTO
  * Datos para crear/editar una receta completa
  * Se incluye la lista de ingredientes para que el ServiceImpl pueda
- * crear la receta y sus ingredientes en una sola transacción.
+ * crear la receta y sus ingredientes en una sola operacio.
  */
 @Data
 public class RecetaRequestDTO {
@@ -33,7 +33,7 @@ public class RecetaRequestDTO {
     @NotNull(message = "Las porciones son obligatorias")
     private Integer porciones;
     
-    private String fotoUrl;
+    private String fotoUrl; // a ver como menajamos esto, tenemos que comentarlo!!!!!
     
     @NotNull(message = "La categoría es obligatoria")
     private Integer categoriaId;

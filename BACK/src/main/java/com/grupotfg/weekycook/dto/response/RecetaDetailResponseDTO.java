@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * RecetaDetailResponseDTO esta es la version para el detalle cuando la necesitemos
+ * RecetaDetailResponseDTO esto es para el detalle cuando la necesitemos
  * Toda todita la información de una receta (para página de detalle)
- Incluye todo los de la receta ingredientes, valor nutricional, instrucciones completas para detalle
+ Incluye todo lo de la receta ingredientes, valor nutricional, instrucciones completas para detalle...
  Solo lo usamos al ver 1 receta, no al listar 20
  List<RecetaIngredienteResponseDTO>: Ingredientes con nombres para mostrar
  ValorNutricionalResponseDTO: Totales calculados (ahorro de cálculo para el front más tarde)

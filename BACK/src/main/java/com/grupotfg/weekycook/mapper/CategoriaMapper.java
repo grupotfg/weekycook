@@ -8,9 +8,9 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 
-/**
- * Mapper categoria para mapeo  entre entity y DTOs.
- */
+
+ //Mapper categoria para mapeo  entre entity y DTOs.
+ 
 
 @Mapper(componentModel = "spring")
 public interface CategoriaMapper {

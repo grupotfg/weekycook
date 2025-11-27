@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: RecetaIngrediente
- * Tabla de unión N:M entre Receta e Ingrediente con atributos extra
+ * RecetaIngrediente
+ * une por N:M  Receta e Ingrediente con atributos extra
  * 
  * 
- * - @EmbeddedId: Usa la clave compuesta definida arriba
- * - @MapsId: Mapea cada parte de la clave a su entidad correspondiente
- * - LAZY: No carga receta ni ingrediente hasta que se necesita
+ * -embedid: Usa la clave compuesta definida arriba
+ * -mapsid: lleva cada parte de la clave a su entidad correspondiente
+ * -lazy: No carga receta ni ingrediente hasta que se necesita
  */
 @Data
 @NoArgsConstructor
@@ -25,20 +25,20 @@ public class RecetaIngrediente implements Serializable {
     @EmbeddedId
     private RecetaIngredienteId id;
 
-    // Mapea receta_id de la clave compuesta a la entidad Receta
+    // receta_id de la clave compuesta a la entidad Receta
     @MapsId("recetaId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receta_id")
     private Receta receta;
 
-    // Mapea ingrediente_id de la clave compuesta a la entidad Ingrediente
+    // ingrediente_id de la clave compuesta a la entidad Ingrediente
     @MapsId("ingredienteId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingrediente_id")
     private Ingrediente ingrediente;
 
     // Cantidad del ingrediente en la receta
-    //borro tb precision = 10, scale = 3 xq con double no traga sql
+    //borro tb precision = 10, scale = 3 xq con double no traga sql tendria que ser bigdecimal y paso, asi va ok
     @Column(nullable = false)
     private Double cantidad; // Ej: 200.00
 

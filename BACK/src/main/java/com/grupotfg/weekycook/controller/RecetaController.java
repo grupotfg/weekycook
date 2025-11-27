@@ -21,43 +21,42 @@ public class RecetaController {
     private final RecetaService recetaService;
 
     
-    // publico (Usuarios NO-ADMIN y ADMIN)
+    // -------publico (Usuarios NO-ADMIN y ADMIN)
     
 
-    /**
-     * Obtener una lista de todas las recetas (versión pequeña sin detalle)
-     * GET /api/recetas
-     */
+    
+     // Obtener una lista de todas las recetas (versión pequeña sin detalle)
+     // GET /api/recetas
+     
     @GetMapping
     public ResponseEntity<List<RecetaResponseDTO>> listarTodasLasRecetas() {
         return ResponseEntity.ok(recetaService.listarRecetas());
     }
 
-    /**
-     * Obtener el detalle de una receta por ID
-     * GET /api/recetas/{id}
-     */
+     //Obtener el detalle de una receta por ID
+     //GET /api/recetas/{id}
+     
     @GetMapping("/{id}")
     public ResponseEntity<RecetaDetailResponseDTO> obtenerRecetaPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(recetaService.obtenerRecetaPorId(id));
     }
     
-    /**
-     * Obtener una receta aleatoria por si aca
-     * GET /api/recetas/random
-     */
+    
+     //Obtener una receta aleatoria por si aca
+     //GET /api/recetas/random
+     
     @GetMapping("/random")
     public ResponseEntity<RecetaResponseDTO> obtenerRecetaAleatoria() {
         return ResponseEntity.ok(recetaService.obtenerRecetaAleatoria());
     }
 
-    // Para admin
+    // ---------------Para ADMIN
 
     /**
      * Crear una nueva receta
      * POST /api/recetas
-     * ojojojoo Pasar 'usuarioId' como @RequestParam es INSEGURO y solo para pruebas.
-     * En producción, deberíamos obtener el ID del usuario del TOKEN de autenticación cuando añadamos mejoras.
+     * ojojojoo Pasar 'usuarioId' como requestparam es mu poco seguro
+     * más adelante, deberíamos obtener el ID del usuario del TOKEN de autenticación cuando añadamos mejoras.
      */
     @PostMapping
     public ResponseEntity<RecetaDetailResponseDTO> crearReceta(
@@ -71,10 +70,10 @@ public class RecetaController {
         return ResponseEntity.created(location).body(recetaCreada);
     }
 
-    /**
-     * Actualizar una receta existente
-     * PUT /api/recetas/{id}
-     */
+    
+     //Actualizar una receta existente
+     //PUT /api/recetas/{id}
+     
     @PutMapping("/{id}")
     public ResponseEntity<RecetaDetailResponseDTO> actualizarReceta(
             @PathVariable Integer id,

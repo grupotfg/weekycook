@@ -7,17 +7,17 @@ import com.grupotfg.weekycook.entity.RecetaValorNutricional;
 import java.util.Optional;
 
 /**
- * va sobre los valores nutricionales calculados
+ * Valores nutricionales calculados
  * 
- * - Métodos útiles para mostrar información nutricional en frontend cuando lo hagamos
- * - Optional evita null checks al buscar por receta_id
+ * Métodos útiles para mostrar información nutricional en frontend cuando lo hagamos
+ * Optional evita null checks al buscar por receta_id
  */
 public interface RecetaValorNutricionalRepository extends JpaRepository<RecetaValorNutricional, Integer> {
     
     /**
      * Busca valor nutricional por ID de receta
-     * @param recetaId ID de la receta
-     * @return Optional con datos o vacío si no calculados
+     * param es recetaId ID de la receta
+     * return es Optional con datos o vacío si no calculados
      */
     Optional<RecetaValorNutricional> findByRecetaId(Integer recetaId);
 }

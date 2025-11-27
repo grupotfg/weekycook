@@ -7,13 +7,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: RecetasFavoritas
+ * RecetasFavoritas
  * Para marcar recetas favoritas por usuario (supongo que algo como like en la aplicación o corazón... o lo que sea)
  * 
- * 
- * - UNIQUE (usuario_id, receta_id): Un usuario no puede marcar 2 veces la misma receta
- * - LAZY: No carga usuario completo ni receta completa hasta que se necesita
- * - @ToString.Exclude: Evita recursión usuario → favoritos → receta → creador → ...
+ * unique (usuario_id, receta_id): Un usuario no puede marcar 2 veces la misma receta
+ * lazy: No carga usuario completo ni receta completa hasta que se necesita como las otras
+ * exclude x bucles
  */
 @Data
 @NoArgsConstructor
@@ -40,5 +39,5 @@ public class RecetasFavoritas implements Serializable {
     private Receta receta;
 
     @Column(name = "fecha_guardado")
-    private LocalDateTime fechaGuardado; // Cuándo se añadió a favoritos
+    private LocalDateTime fechaGuardado; // Cuándo se añade a favoritos
 }

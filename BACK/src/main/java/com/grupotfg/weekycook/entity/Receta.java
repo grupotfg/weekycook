@@ -8,14 +8,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: Receta
+ * Receta
  * Esto es la receta completa con ingredientes, instrucciones y valores nutricionales
- * 
- * Info:
- * - LAZY en relaciones: No carga ingredientes ni nutrición hasta que se necesita
- *   (evita consultas masivas al listar recetas, menudo lio)
- * - @OneToMany con cascade: Al borrar receta, se borran sus ingredientes automáticamente
- * - @OneToOne con cascade: Al borrar receta, se borra su valor nutricional
+ * Lazy en relaciones: No carga ingredientes ni nutrición hasta que se necesita
+ *   (evita muchas consultas al listar recetas, menudo lio)
+ * - onetomaby con cascade: Al borrar receta, se borran sus ingredientes
+ * - onetoone con cascade: Al borrar receta, borra tb su valor nutricional
  */
 @Data
 @NoArgsConstructor
@@ -30,7 +28,7 @@ public class Receta implements Serializable {
     private Integer id;
 
     @Column(nullable = false)
-    private String titulo; // Ej: "Pasta al ajo y parmesano"
+    private String titulo; 
 
     @Column(name = "descripcion_corta", length = 500)
     private String descripcionCorta; // Resumen para listados
@@ -39,7 +37,7 @@ public class Receta implements Serializable {
     private String instrucciones; // Paso a paso
 
     @Column(name = "tiempo_preparacion_min")
-    private Integer tiempoPreparacionMin; // Para filtro "Rápidas < 30min"
+    private Integer tiempoPreparacionMin; // Para filtro 
 
     private Integer porciones; // Por defecto 2 (quedasmo así en el anteproyecto)
 
@@ -47,13 +45,13 @@ public class Receta implements Serializable {
     private String fotoUrl; // Ruta imagen (OJO!!!! a ver como lo hacemos)
 
     // Relación N:1 con Categoria
-    // LAZY: No categoria completa hasta que se accede para mas sencillez y menos carga
+    // Lazy: No va la categoria completa hasta que se accede para mas sencillez y menos carga
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
     // Relación N:1 con Usuario (creador)
-    // LAZY: No carga datos del usuario hasta que se accede
+    // lazy: No carga datos del usuario hasta que se accede
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creado_por")
     private Usuario creadoPor;
@@ -63,13 +61,13 @@ public class Receta implements Serializable {
 
     // Relación 1:N con RecetaIngrediente
     // cascade.ALL: Al borrar receta, se borran todos sus ingredientes
-    // @ToString.Exclude: Evita recursión infinita en logs/debug
+    // @ToString.Exclude para evitar bucles
     @ToString.Exclude
     @OneToMany(mappedBy = "receta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RecetaIngrediente> recetaIngredientes;
 
     // Relación 1:1 con RecetaValorNutricional
-    // cascade.ALL: Al borrar receta, se borra su valor nutricional
+    // cascade.ALL: Al borrar receta, se borra su valor nutricional ok
     @ToString.Exclude
     @OneToOne(mappedBy = "receta", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private RecetaValorNutricional valorNutricional;

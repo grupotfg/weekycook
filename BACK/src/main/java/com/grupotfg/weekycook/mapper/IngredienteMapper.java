@@ -20,7 +20,7 @@ import java.util.List;
 public interface IngredienteMapper {
 
 	 // De entidad a Response DTO
-	 // Ingrediente → IngredienteResponseDTO
+	 // Ingrediente a IngredienteResponseDTO
     IngredienteResponseDTO toDto(Ingrediente ingrediente);
 
     List<IngredienteResponseDTO> toResponseDTOList(List<Ingrediente> ingredientes);

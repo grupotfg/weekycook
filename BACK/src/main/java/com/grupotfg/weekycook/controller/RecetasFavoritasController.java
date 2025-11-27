@@ -22,7 +22,8 @@ public class RecetasFavoritasController {
 	 @Autowired
 	    private RecetasFavoritasService favoritasService;
 
-    // Agregar a favoritos
+    // ----Agregar a favoritos
+	 
     @PostMapping("/usuario/{usuarioId}")
     public ResponseEntity<FavoritoResponseDTO> agregarFavorito(
             @PathVariable Integer usuarioId,
@@ -31,7 +32,8 @@ public class RecetasFavoritasController {
         return ResponseEntity.ok(favoritasService.agregarFavorito(usuarioId, request));
     }
 
-    // Eliminar favorito
+    // ----Eliminar favorito
+    
     @DeleteMapping("/usuario/{usuarioId}/receta/{recetaId}")
     public ResponseEntity<Void> eliminarFavorito(
             @PathVariable Integer usuarioId,
@@ -41,7 +43,8 @@ public class RecetasFavoritasController {
         return ResponseEntity.noContent().build();
     }
 
-    // Listar favoritos del usuario
+    // ----Listar favoritos del usuario
+    
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<FavoritoResponseDTO>> listarFavoritos(
             @PathVariable Integer usuarioId) {

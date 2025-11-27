@@ -4,9 +4,9 @@ import lombok.Data;
 /**
  * UsuarioResponseDTO
  * Para los datos del usuario que se devuelven al cliente (sin contraseña)
- * No va la contraseña (x SEGURIDAD), esAdmin (no necesita saberlo el cliente normal)
- - Lleva solamente los datos de perfil público
- - ID aqui si que está incluido ya que es necesario para edición de perfil (el cliente deberia saber su ID!!!)
+ * No va la contraseña (x seg), esAdmin (no necesita saberlo el cliente normal)
+ Lleva solamente los datos de perfil público
+ ID aqui si que está incluido ya que es necesario para edición de perfil (el cliente deberia saber su ID!!!)
  
  */
 @Data

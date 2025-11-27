@@ -6,14 +6,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: RecetaValorNutricional
- * Almacena totales nutricionales calculados de cada receta
- * 
- * 
- * - 1:1 con Receta: Cada receta tiene un único cálculo nutricional
- * - LAZY: No se carga hasta que se consulta específicamente
- * - Precisión 12,3: Más que de sobra para recetas con muchos ingredientes
- * - fecha_calculo: Permite saber si el cálculo está desactualizado
+ * RecetaValorNutricional
+ * guarda totales nutricionales calculados de cada receta
+ * 1:1 con Receta: Cada receta tiene un único cálculo nutricional
+ * Lazy: No se carga hasta que se consulta específicamente
+ * fecha_calculo: para saber si el cálculo no está actualizado
  */
 @Data
 @NoArgsConstructor

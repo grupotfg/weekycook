@@ -7,13 +7,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * ENTIDAD: Usuario
- * Para usuario de WeekyCook (comensal o administrador)
- * 
- * 
- * - @ToString.Exclude en relaciones: Evita StackOverflowError cuando Lombok genera toString()
- *   en relaciones bidireccionales (ej: Usuario → Receta → Usuario → ...)
- * - FetchType.LAZY: No carga recetas/favoritos/planes hasta que se accede específicamente
+ * Usuario
+ * Para usuario de WeekyCook (usuario o administrador)
+ * exclude en relaciones: Evita StackOverflowError cuando Lombok genera toString(), según he visto
+ * lazy: No carga recetas/favoritos/planes hasta que se accede a ello en concreto
  *   Mejora rendimiento y evita N+1 queries
  */
 @Data
@@ -53,18 +50,18 @@ public class Usuario implements Serializable {
     private Integer numComensalesDefecto; // Para escalado de raciones (mejora futura)
 
     // Relación 1:N con Receta (un usuario puede crear muchas recetas)
-    // @ToString.Exclude: Evita un bucle infinito usuario → receta → usuario → ...
-    // FetchType.LAZY: No carga lista de recetas hasta que se llama getRecetas()
+    // exclude: Evita un bucle infinito usuario → receta → usuario → ... he investigado esto¡¡¡
+    // lazy: No carga lista de recetas hasta que se llama getRecetas()
     @ToString.Exclude
     @OneToMany(mappedBy = "creadoPor", fetch = FetchType.LAZY)
     private List<Receta> recetas;
 
-    // Relación 1:N con RecetasFavoritas (un usuario tiene muchos favoritos)
+    // Relación 1:N con RecetasFavoritas (un usuario puede tener muchos favoritos)
     @ToString.Exclude
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<RecetasFavoritas> favoritos;
 
-    // Relación 1:N con PlanSemanal (un usuario crea muchos planes)
+    // Relación 1:N con PlanSemanal (un usuario puede crear muchos planes)
     @ToString.Exclude
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<PlanSemanal> planes;

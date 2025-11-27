@@ -13,15 +13,12 @@ import com.grupotfg.weekycook.entity.RecetaValorNutricional;
 
 /**
  * RecetaMapper
- * 
- * Convierte Receta a DTO (usuando básico y detalle por economia de llamadas)
- * Convierte RecetaIngrediente → DTO
- * Convierte ValorNutricional → DTO
- *
- * 
+ * Convierte Receta a DTO (usuando básico y detalle por ahorrar llamadas)
+ * Convierte RecetaIngrediente a DTO
+ * Convierte ValorNutricional a DTO
  *  Ignoramos campos no presentes en el DTO de request.
- *  IngredienteMapper se usa indirectamente SOLO para ingrediente → DTO,
- *  pero el mapeo RecetaIngrediente a DTO se hace aquí para evitar ambigüedades.
+ *  IngredienteMapper se usa solo para ingrediente a DTO,
+ *  pero el mapeo RecetaIngrediente a DTO se hace aquí para evitar cosas
  */
 @Mapper(
     componentModel = "spring",
@@ -30,7 +27,7 @@ import com.grupotfg.weekycook.entity.RecetaValorNutricional;
 )
 public interface RecetaMapper {
 
-    //vamos en order:
+    //vamos en orden:
     // 1) DTO de entrada a Entidad
    
     @Mapping(target = "id", ignore = true)
@@ -50,7 +47,7 @@ public interface RecetaMapper {
     RecetaResponseDTO toRecetaResponseDto(Receta receta);
 
    
-    // 3) Receta a DTO detalle (con ingredientes + nutrición)
+    // 3) Receta a DTO detalle (con ingredientes y nutrición)
     
     @Mapping(target = "categoriaId", source = "categoria.id")
     @Mapping(target = "categoriaNombre", source = "categoria.nombre")
@@ -63,7 +60,7 @@ public interface RecetaMapper {
 
     
     // 4) RecetaIngrediente a DTO
-    // (Solo debe existir AQUÍ para evitar mierdas con IngredienteMapper)
+    // (Solo debe existir aqui para evitar mierdas con IngredienteMapper)
     
     @Mapping(target = "ingredienteId", source = "ingrediente.id")
     @Mapping(target = "ingredienteNombre", source = "ingrediente.nombre")

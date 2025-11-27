@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * RecetaResponseDTO para listado
  * Lista de recetas sin ingredientes
-   Al listar ochomil recetas, no cargamos 3000 ingredientes que aqui no son necesario
+   Al listar ochomil recetas, no cargamos 300mil ingredientes que aqui no son necesarios
  Título, tiempo, porciones, categoría como campos
  CategoriaNombre: Evita para fornt que haga 20 llamadas extra por categoría
  Sin ingredientes que se obtienen x GET /api/recetas/{id}/ingredientes
