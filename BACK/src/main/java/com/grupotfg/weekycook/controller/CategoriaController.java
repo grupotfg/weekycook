@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * Solo devolvemos DTOResponse.
  */
 @RestController
-@RequestMapping("/api/categorias")
+@RequestMapping("/categorias")
 @Tag(name = "Categorías", description = "Gestión de categorías de recetas y búsquedas por nombre o descripción")
 public class CategoriaController {
 

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 // * Rest Controller para Usuario, endpoints de usuario con funciones crud básicas
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 @Validated
 @CrossOrigin(origins = "*")
 @Tag(name = "Usuarios", description = "Gestión de usuarios de la aplicación (CRUD básico)")

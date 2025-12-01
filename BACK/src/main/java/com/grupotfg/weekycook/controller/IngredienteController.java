@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/ingredientes")
+@RequestMapping("/ingredientes")
 @CrossOrigin(origins = "*")
 @Tag(name = "Ingredientes", description = "Gestión de ingredientes y búsqueda por nombre")
 public class IngredienteController {

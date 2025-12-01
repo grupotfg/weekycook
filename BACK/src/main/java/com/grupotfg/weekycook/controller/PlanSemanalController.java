@@ -32,7 +32,7 @@ import java.util.List;
  *    POST /api/planes/{planId}/aleatorio -> rellenar plan 100% aleatorio
  */
 @RestController
-@RequestMapping("/api/planes")
+@RequestMapping("/planes")
 @Tag(name = "Planes semanales", description = "Gestión de planes semanales, items, generación aleatoria y lista de la compra")
 public class PlanSemanalController {
 

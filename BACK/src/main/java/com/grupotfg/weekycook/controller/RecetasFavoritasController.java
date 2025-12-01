@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/favoritos")
+@RequestMapping("/favoritos")
 @RequiredArgsConstructor
 @Tag(name = "Favoritos", description = "Gestión de recetas favoritas de los usuarios")
 public class RecetasFavoritasController {

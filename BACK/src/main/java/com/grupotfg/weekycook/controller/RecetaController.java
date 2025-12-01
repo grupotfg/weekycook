@@ -18,7 +18,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/recetas")
+@RequestMapping("/recetas")
 @RequiredArgsConstructor
 @Tag(name = "Recetas", description = "Gestión de recetas, búsquedas y administración de recetas")
 public class RecetaController {
