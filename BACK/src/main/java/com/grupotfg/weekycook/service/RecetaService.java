@@ -25,6 +25,12 @@ public interface RecetaService {
     // Búsqueda avanzada por texto (titulo/descripcion) y categoría
     List<RecetaResponseDTO> buscarPorTextoYCategoria(String texto, Integer categoriaId);
 
+    // Búsqueda por ingrediente disponible (recetas que usan ese ingrediente)
+    List<RecetaResponseDTO> buscarPorIngrediente(Integer ingredienteId);
+
+    // Búsqueda por id de ingrediente
+    RecetaResponseDTO buscarPorIdIngrediente(Integer ingredienteId);
+
     // --- Métodos de Admin
 
     /**

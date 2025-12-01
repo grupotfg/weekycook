@@ -69,6 +69,17 @@ public class RecetaServiceImpl implements RecetaService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecetaResponseDTO> buscarPorIngrediente(Integer ingredienteId) {
+        List<RecetaIngrediente> relaciones = recetaIngredienteRepository.findByIngredienteId(ingredienteId);
+        return relaciones.stream()
+                .map(RecetaIngrediente::getReceta)
+                .distinct()
+                .map(recetaMapper::toRecetaResponseDto)
+                .collect(Collectors.toList());
+    }
+
     // --------crear receta admin
     
     @Override

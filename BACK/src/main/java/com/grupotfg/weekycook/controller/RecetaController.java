@@ -61,6 +61,16 @@ public class RecetaController {
         return ResponseEntity.ok(resultados);
     }
 
+    // Búsqueda por ingrediente disponible (recetas que usan ese ingrediente)
+    // GET /api/recetas/search/by-ingrediente?ingredienteId=...
+    @GetMapping("/search/by-ingrediente")
+    public ResponseEntity<List<RecetaResponseDTO>> buscarPorIngrediente(
+            @RequestParam Integer ingredienteId) {
+
+        List<RecetaResponseDTO> resultados = recetaService.buscarPorIngrediente(ingredienteId);
+        return ResponseEntity.ok(resultados);
+    }
+
     // ---------------Para ADMIN
 
     /**
