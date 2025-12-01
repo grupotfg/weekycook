@@ -4,6 +4,7 @@ import com.grupotfg.weekycook.dto.request.CategoriaRequestDTO;
 import com.grupotfg.weekycook.dto.response.CategoriaResponseDTO;
 import com.grupotfg.weekycook.entity.Categoria;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public interface CategoriaMapper {
 
     List<CategoriaResponseDTO> toResponseDTOList(List<Categoria> categorias);
 
+    @Mapping(target = "id", ignore = true)
     Categoria toEntity(CategoriaRequestDTO categoriaRequestDTO);
 
     List<Categoria> toEntityList(List<CategoriaRequestDTO> categoriaRequestDTOs);

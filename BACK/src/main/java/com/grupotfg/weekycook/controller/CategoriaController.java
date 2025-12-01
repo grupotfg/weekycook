@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.grupotfg.weekycook.dto.request.CategoriaRequestDTO;
 import com.grupotfg.weekycook.dto.response.CategoriaResponseDTO;
 import com.grupotfg.weekycook.entity.Categoria;
 import com.grupotfg.weekycook.mapper.CategoriaMapper;
@@ -53,16 +54,18 @@ public class CategoriaController {
 
     // ---------crear--------------
     @PostMapping
-    @Operation(summary = "Crear una nueva categoría", description = "Crea una categoría. Solo se crea desde el backend.")
-    public CategoriaResponseDTO crear(@RequestBody Categoria categoria) {
+    @Operation(summary = "Crear una nueva categoría", description = "Crea una categoría a partir de un DTO de entrada")
+    public CategoriaResponseDTO crear(@RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+        Categoria categoria = categoriaMapper.toEntity(categoriaRequestDTO);
         Categoria nueva = categoriaService.create(categoria);
         return categoriaMapper.toDto(nueva);
     }
 
     // -----actualizar-----------
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar una categoría", description = "Actualiza los datos de una categoría existente")
-    public CategoriaResponseDTO actualizar(@PathVariable Integer id, @RequestBody Categoria categoria) {
+    @Operation(summary = "Actualizar una categoría", description = "Actualiza los datos de una categoría existente a partir de un DTO de entrada")
+    public CategoriaResponseDTO actualizar(@PathVariable Integer id, @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+        Categoria categoria = categoriaMapper.toEntity(categoriaRequestDTO);
         categoria.setId(id);
         Categoria actualizada = categoriaService.update(id, categoria);
         return categoriaMapper.toDto(actualizada);
