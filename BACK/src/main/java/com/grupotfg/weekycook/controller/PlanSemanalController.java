@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.grupotfg.weekycook.dto.request.PlanSemanalRequestDTO;
 import com.grupotfg.weekycook.dto.request.PlanItemRequestDTO;
 import com.grupotfg.weekycook.dto.response.PlanSemanalResponseDTO;
+import com.grupotfg.weekycook.dto.response.ListaCompraItemDto;
+
 import com.grupotfg.weekycook.service.PlanSemanalServiceImpl;
 
 import java.net.URI;
@@ -100,5 +102,14 @@ public class PlanSemanalController {
         return ResponseEntity.ok(dtos);
     }
     
+    // Lista de la compra a partir de un plan semanal
+    // GET /api/planes/{planId}/lista-compra
+    @GetMapping("/{planId}/lista-compra")
+    public ResponseEntity<List<ListaCompraItemDto>> obtenerListaCompra(
+            @RequestHeader("usuarioId") Integer usuarioId,
+            @PathVariable Integer planId) {
+        List<ListaCompraItemDto> lista = service.generarListaCompra(usuarioId, planId);
+        return ResponseEntity.ok(lista);
+    }
 
 }
