@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.grupotfg.weekycook.dto.request.FavoritoRequestDTO;
 import com.grupotfg.weekycook.dto.response.FavoritoResponseDTO;
-import com.grupotfg.weekycook.entity.RecetasFavoritas;
+
 
 public interface RecetasFavoritasService {
 

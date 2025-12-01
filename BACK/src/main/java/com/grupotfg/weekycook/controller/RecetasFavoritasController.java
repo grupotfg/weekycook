@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.grupotfg.weekycook.dto.request.FavoritoRequestDTO;
 import com.grupotfg.weekycook.dto.response.FavoritoResponseDTO;
-import com.grupotfg.weekycook.entity.RecetasFavoritas;
+
 import com.grupotfg.weekycook.service.RecetasFavoritasService;
 
 import jakarta.validation.Valid;

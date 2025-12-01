@@ -21,7 +21,7 @@ import com.grupotfg.weekycook.repository.RecetasFavoritasRepository;
 import com.grupotfg.weekycook.repository.RecetaRepository;
 import com.grupotfg.weekycook.repository.UsuarioRepository;
 import com.grupotfg.weekycook.mapper.RecetasFavoritasMapper;
-import com.grupotfg.weekycook.service.RecetasFavoritasService;
+
 
 import lombok.RequiredArgsConstructor;
 

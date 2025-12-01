@@ -1,7 +1,5 @@
 package com.grupotfg.weekycook.dto.request;
 
-import com.grupotfg.weekycook.entity.DiaSemanaEnum;
-import com.grupotfg.weekycook.entity.TurnoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

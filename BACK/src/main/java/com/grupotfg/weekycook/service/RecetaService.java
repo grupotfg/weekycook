@@ -28,10 +28,8 @@ public interface RecetaService {
     // Búsqueda por ingrediente disponible (recetas que usan ese ingrediente)
     List<RecetaResponseDTO> buscarPorIngrediente(Integer ingredienteId);
 
-    // Búsqueda por id de ingrediente
-    RecetaResponseDTO buscarPorIdIngrediente(Integer ingredienteId);
-
-    // --- Métodos de Admin
+   
+     // --- Métodos de Admin
 
     /**
      * Crear una nueva receta (Solo Admin)
