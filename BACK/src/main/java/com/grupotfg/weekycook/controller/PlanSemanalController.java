@@ -11,6 +11,10 @@ import com.grupotfg.weekycook.dto.response.ListaCompraItemDto;
 
 import com.grupotfg.weekycook.service.PlanSemanalServiceImpl;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.net.URI;
 import java.util.List;
 
@@ -29,13 +33,16 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/planes")
+@Tag(name = "Planes semanales", description = "Gestión de planes semanales, items, generación aleatoria y lista de la compra")
 public class PlanSemanalController {
 
     @Autowired
     private PlanSemanalServiceImpl service;
 
     @PostMapping("/usuario")
+    @Operation(summary = "Crear un plan semanal", description = "Crea un nuevo plan semanal para el usuario indicado")
     public ResponseEntity<PlanSemanalResponseDTO> crearPlan(
+            @Parameter(description = "ID del usuario propietario del plan")
             @RequestHeader("usuarioId") Integer usuarioId,
             @RequestBody PlanSemanalRequestDTO dto) {
         PlanSemanalResponseDTO created = service.crearPlan(usuarioId, dto);
@@ -44,16 +51,22 @@ public class PlanSemanalController {
     }
 
     @GetMapping("/{planId}")
+    @Operation(summary = "Obtener un plan semanal", description = "Recupera un plan semanal concreto por su ID, validando acceso del usuario")
     public ResponseEntity<PlanSemanalResponseDTO> obtenerPlan(
+            @Parameter(description = "ID del usuario que solicita el plan")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal")
             @PathVariable Integer planId) {
         PlanSemanalResponseDTO dto = service.obtenerPlan(usuarioId, planId);
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{planId}")
+    @Operation(summary = "Actualizar un plan semanal", description = "Actualiza los datos básicos de un plan semanal existente")
     public ResponseEntity<PlanSemanalResponseDTO> actualizarPlan(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal a actualizar")
             @PathVariable Integer planId,
             @RequestBody PlanSemanalRequestDTO dto) {
         PlanSemanalResponseDTO updated = service.actualizarPlan(usuarioId, planId, dto);
@@ -61,16 +74,22 @@ public class PlanSemanalController {
     }
 
     @DeleteMapping("/{planId}")
+    @Operation(summary = "Eliminar un plan semanal", description = "Elimina un plan semanal por su ID")
     public ResponseEntity<Void> eliminarPlan(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal a eliminar")
             @PathVariable Integer planId) {
         service.eliminarPlan(usuarioId, planId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{planId}/items")
+    @Operation(summary = "Añadir o actualizar un item del plan", description = "Asigna o actualiza una receta para un día y turno concretos del plan semanal")
     public ResponseEntity<PlanSemanalResponseDTO> addOrUpdateItem(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal")
             @PathVariable Integer planId,
             @RequestBody PlanItemRequestDTO itemDto) {
         PlanSemanalResponseDTO dto = service.addOrUpdateItem(usuarioId, planId, itemDto);
@@ -78,38 +97,50 @@ public class PlanSemanalController {
     }
 
     @DeleteMapping("/{planId}/items")
+    @Operation(summary = "Eliminar un item del plan", description = "Elimina la receta asignada a un día y turno específicos del plan semanal")
     public ResponseEntity<Void> eliminarItem(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal")
             @PathVariable Integer planId,
+            @Parameter(description = "Día de la semana (ej: Lunes)")
             @RequestParam String dia,
+            @Parameter(description = "Turno (Comida/Cena)")
             @RequestParam String turno) {
         service.eliminarItem(usuarioId, planId, dia, turno);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{planId}/aleatorio")
+    @Operation(summary = "Rellenar plan semanal aleatoriamente", description = "Genera un plan semanal completo asignando recetas aleatorias a todos los días y turnos")
     public ResponseEntity<PlanSemanalResponseDTO> rellenarAleatorio(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal")
             @PathVariable Integer planId) {
         PlanSemanalResponseDTO dto = service.rellenarPlanAleatorio(usuarioId, planId);
         return ResponseEntity.ok(dto);
     }
-    
+
     @GetMapping("/usuario/{usuarioId}")
+    @Operation(summary = "Listar planes de un usuario", description = "Obtiene el historial de planes semanales de un usuario")
     public ResponseEntity<List<PlanSemanalResponseDTO>> obtenerPlanesDeUsuario(
+            @Parameter(description = "ID del usuario del que se quieren ver los planes")
             @PathVariable Integer usuarioId) {
         List<PlanSemanalResponseDTO> dtos = service.obtenerPlanesDeUsuario(usuarioId);
         return ResponseEntity.ok(dtos);
     }
-    
+
     // Lista de la compra a partir de un plan semanal
     // GET /api/planes/{planId}/lista-compra
     @GetMapping("/{planId}/lista-compra")
+    @Operation(summary = "Generar lista de la compra", description = "Genera la lista de la compra agregada a partir de las recetas de un plan semanal")
     public ResponseEntity<List<ListaCompraItemDto>> obtenerListaCompra(
+            @Parameter(description = "ID del usuario que realiza la acción")
             @RequestHeader("usuarioId") Integer usuarioId,
+            @Parameter(description = "ID del plan semanal del que generar la lista de la compra")
             @PathVariable Integer planId) {
         List<ListaCompraItemDto> lista = service.generarListaCompra(usuarioId, planId);
         return ResponseEntity.ok(lista);
     }
-
 }

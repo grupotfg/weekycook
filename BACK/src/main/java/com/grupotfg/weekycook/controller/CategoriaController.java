@@ -12,6 +12,10 @@ import com.grupotfg.weekycook.entity.Categoria;
 import com.grupotfg.weekycook.mapper.CategoriaMapper;
 import com.grupotfg.weekycook.service.CategoriaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * CategoriaController
  * No hay DTO de entrada, las categorías SOLO se crean desde back.
@@ -19,6 +23,7 @@ import com.grupotfg.weekycook.service.CategoriaService;
  */
 @RestController
 @RequestMapping("/api/categorias")
+@Tag(name = "Categorías", description = "Gestión de categorías de recetas y búsquedas por nombre o descripción")
 public class CategoriaController {
 
     @Autowired
@@ -29,6 +34,7 @@ public class CategoriaController {
 
     // -----todos-------------
     @GetMapping
+    @Operation(summary = "Listar todas las categorías", description = "Obtiene el listado completo de categorías")
     public List<CategoriaResponseDTO> listarCategorias() {
         return categoriaService.findAll()
                 .stream()
@@ -38,6 +44,7 @@ public class CategoriaController {
 
     // ------por ID-------------
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener categoría por ID", description = "Devuelve una categoría concreta por su identificador")
     public CategoriaResponseDTO buscarPorId(@PathVariable Integer id) {
         Categoria categoria = categoriaService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
@@ -46,6 +53,7 @@ public class CategoriaController {
 
     // ---------crear--------------
     @PostMapping
+    @Operation(summary = "Crear una nueva categoría", description = "Crea una categoría. Solo se crea desde el backend.")
     public CategoriaResponseDTO crear(@RequestBody Categoria categoria) {
         Categoria nueva = categoriaService.create(categoria);
         return categoriaMapper.toDto(nueva);
@@ -53,6 +61,7 @@ public class CategoriaController {
 
     // -----actualizar-----------
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar una categoría", description = "Actualiza los datos de una categoría existente")
     public CategoriaResponseDTO actualizar(@PathVariable Integer id, @RequestBody Categoria categoria) {
         categoria.setId(id);
         Categoria actualizada = categoriaService.update(id, categoria);
@@ -61,13 +70,17 @@ public class CategoriaController {
 
     // ---------borrar-----------
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una categoría", description = "Elimina una categoría por su identificador")
     public void eliminar(@PathVariable Integer id) {
         categoriaService.deleteById(id);
     }
 
     // ------buscar por nombre -----------
     @GetMapping("/search/nombre")
-    public List<CategoriaResponseDTO> buscarPorNombre(@RequestParam String nombre) {
+    @Operation(summary = "Buscar categorías por nombre", description = "Busca categorías cuyo nombre contiene el texto indicado")
+    public List<CategoriaResponseDTO> buscarPorNombre(
+            @Parameter(description = "Texto a buscar en el nombre de la categoría")
+            @RequestParam String nombre) {
         return categoriaService.findByNombreContaining(nombre)
                 .stream()
                 .map(categoriaMapper::toDto)
@@ -76,7 +89,10 @@ public class CategoriaController {
 
     // ---buscar por descripcion contiene-------
     @GetMapping("/search/descripcion")
-    public List<CategoriaResponseDTO> buscarPorDescripcion(@RequestParam String descripcion) {
+    @Operation(summary = "Buscar categorías por descripción", description = "Busca categorías cuya descripción contiene el texto indicado")
+    public List<CategoriaResponseDTO> buscarPorDescripcion(
+            @Parameter(description = "Texto a buscar en la descripción de la categoría")
+            @RequestParam String descripcion) {
         return categoriaService.findByDescripcionContaining(descripcion)
                 .stream()
                 .map(categoriaMapper::toDto)

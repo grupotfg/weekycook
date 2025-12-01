@@ -10,6 +10,10 @@ import com.grupotfg.weekycook.mapper.IngredienteMapper;
 import com.grupotfg.weekycook.repository.IngredienteRepository;
 import com.grupotfg.weekycook.service.IngredienteService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/ingredientes")
 @CrossOrigin(origins = "*")
+@Tag(name = "Ingredientes", description = "Gestión de ingredientes y búsqueda por nombre")
 public class IngredienteController {
 
     @Autowired
@@ -32,6 +37,7 @@ public class IngredienteController {
      // -------Crear ingrediente
      
     @PostMapping
+    @Operation(summary = "Crear un nuevo ingrediente", description = "Crea un ingrediente y devuelve sus datos básicos")
     public ResponseEntity<IngredienteResponseDTO> create(@RequestBody Ingrediente ingrediente) {
 
         Ingrediente created = ingredienteService.create(ingrediente);
@@ -44,7 +50,9 @@ public class IngredienteController {
     //------Listar todos
     
     @GetMapping
+    @Operation(summary = "Listar todos los ingredientes", description = "Obtiene el listado completo de ingredientes")
     public ResponseEntity<List<IngredienteResponseDTO>> getAll() {
+
         List<IngredienteResponseDTO> dtos = ingredienteService.findAll()
                 .stream()
                 .map(ingredienteMapper::toDto)
@@ -56,7 +64,9 @@ public class IngredienteController {
     //-----por ID
     
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener ingrediente por ID", description = "Devuelve un ingrediente concreto por su identificador")
     public ResponseEntity<IngredienteResponseDTO> getById(@PathVariable Integer id) {
+
         return ingredienteService.findById(id)
                 .map(ingrediente -> ResponseEntity.ok(ingredienteMapper.toDto(ingrediente)))
                 .orElse(ResponseEntity.notFound().build());
@@ -65,6 +75,7 @@ public class IngredienteController {
     // ------Actualizar
     
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un ingrediente", description = "Actualiza los datos de un ingrediente existente")
     public ResponseEntity<IngredienteResponseDTO> update(
             @PathVariable Integer id,
             @RequestBody Ingrediente ingrediente) {
@@ -82,6 +93,7 @@ public class IngredienteController {
     //-------Eliminar
     
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un ingrediente", description = "Elimina un ingrediente por su identificador")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         if (!ingredienteService.findById(id).isPresent()) {
@@ -93,7 +105,11 @@ public class IngredienteController {
     }
     
     @GetMapping("/search/nombre")
-    public ResponseEntity<List<IngredienteResponseDTO>> buscarPorNombre(@RequestParam String nombre) {
+    @Operation(summary = "Buscar ingredientes por nombre", description = "Busca ingredientes cuyo nombre contiene el texto indicado")
+    public ResponseEntity<List<IngredienteResponseDTO>> buscarPorNombre(
+            @Parameter(description = "Texto a buscar dentro del nombre del ingrediente")
+            @RequestParam String nombre) {
+
         List<IngredienteResponseDTO> dtos = ingredienteRepository.findByNombreContaining(nombre)
                 .stream()
                 .map(ingrediente -> {
