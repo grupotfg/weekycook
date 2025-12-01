@@ -22,6 +22,9 @@ public interface RecetaService {
      
     RecetaResponseDTO obtenerRecetaAleatoria();
 
+    // Búsqueda avanzada por texto (titulo/descripcion) y categoría
+    List<RecetaResponseDTO> buscarPorTextoYCategoria(String texto, Integer categoriaId);
+
     // --- Métodos de Admin
 
     /**

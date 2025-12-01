@@ -50,6 +50,17 @@ public class RecetaController {
         return ResponseEntity.ok(recetaService.obtenerRecetaAleatoria());
     }
 
+    // Búsqueda avanzada por texto (titulo/descripcion) y categoría
+    // GET /api/recetas/search?texto=...&categoriaId=...
+    @GetMapping("/search")
+    public ResponseEntity<List<RecetaResponseDTO>> buscarPorTextoYCategoria(
+            @RequestParam(required = false) String texto,
+            @RequestParam(required = false) Integer categoriaId) {
+
+        List<RecetaResponseDTO> resultados = recetaService.buscarPorTextoYCategoria(texto, categoriaId);
+        return ResponseEntity.ok(resultados);
+    }
+
     // ---------------Para ADMIN
 
     /**

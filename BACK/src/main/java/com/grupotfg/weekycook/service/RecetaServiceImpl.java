@@ -60,7 +60,15 @@ public class RecetaServiceImpl implements RecetaService {
         return recetaMapper.toRecetaResponseDto(receta);
     }
 
-   
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecetaResponseDTO> buscarPorTextoYCategoria(String texto, Integer categoriaId) {
+        List<Receta> recetas = recetaRepository.buscarPorTextoYCategoria(texto, categoriaId);
+        return recetas.stream()
+                .map(recetaMapper::toRecetaResponseDto)
+                .collect(Collectors.toList());
+    }
+
     // --------crear receta admin
     
     @Override

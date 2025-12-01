@@ -3,6 +3,7 @@ package com.grupotfg.weekycook.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.grupotfg.weekycook.entity.Receta;
 
@@ -57,4 +58,19 @@ public interface RecetaRepository extends JpaRepository<Receta, Integer> {
      */
     @Query(value = "SELECT * FROM recetas ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Optional<Receta> findRandom();
+
+    /**
+     * Búsqueda avanzada por texto y categoría.
+     * - texto: se busca SOLO en título (contiene, case-insensitive).
+     * - categoriaId: si viene informado, filtra por esa categoría; si es null, no filtra.
+     */
+    @Query("""
+            SELECT r FROM Receta r
+            WHERE (:texto IS NULL OR :texto = '' OR
+                   LOWER(r.titulo) LIKE LOWER(CONCAT('%', :texto, '%')))
+              AND (:categoriaId IS NULL OR r.categoria.id = :categoriaId)
+            """)
+    List<Receta> buscarPorTextoYCategoria(
+            @Param("texto") String texto,
+            @Param("categoriaId") Integer categoriaId);
 }
