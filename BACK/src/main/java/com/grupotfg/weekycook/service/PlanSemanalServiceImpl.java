@@ -278,6 +278,28 @@ public class PlanSemanalServiceImpl {
                 .collect(Collectors.toList());
     }
 
+    //Planes por usuario filtrados por rango de semana_inicio
+
+    @Transactional(readOnly = true)
+    public List<PlanSemanalResponseDTO> obtenerPlanesDeUsuarioPorRangoFecha(
+            Integer usuarioId,
+            java.time.LocalDate desdeSemana,
+            java.time.LocalDate hastaSemana) {
+
+        if (desdeSemana == null || hastaSemana == null) {
+            throw new IllegalArgumentException("Las fechas desde y hasta son obligatorias");
+        }
+        if (hastaSemana.isBefore(desdeSemana)) {
+            throw new IllegalArgumentException("La fecha 'hasta' no puede ser anterior a 'desde'");
+        }
+
+        return planRepository
+                .findByUsuarioIdAndSemanaInicioBetween(usuarioId, desdeSemana, hastaSemana)
+                .stream()
+                .map(planSemanalMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
     // ----- lista de la compra a partir del plan semanal -----
     @Transactional(readOnly = true)
     public List<ListaCompraItemDto> generarListaCompra(Integer usuarioId, Integer planId) {

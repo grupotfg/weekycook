@@ -131,6 +131,20 @@ public class PlanSemanalController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/usuario/{usuarioId}/fecha")
+    @Operation(summary = "Listar planes por rango de fechas", description = "Obtiene los planes semanales de un usuario filtrando por un rango de fechas de semana de inicio")
+    public ResponseEntity<List<PlanSemanalResponseDTO>> obtenerPlanesDeUsuarioPorFecha(
+            @Parameter(description = "ID del usuario del que se quieren ver los planes")
+            @PathVariable Integer usuarioId,
+            @Parameter(description = "Fecha de inicio del rango (semana_inicio >= desde, formato yyyy-MM-dd)")
+            @RequestParam("desde") java.time.LocalDate desde,
+            @Parameter(description = "Fecha fin del rango (semana_inicio <= hasta, formato yyyy-MM-dd)")
+            @RequestParam("hasta") java.time.LocalDate hasta) {
+
+        List<PlanSemanalResponseDTO> dtos = service.obtenerPlanesDeUsuarioPorRangoFecha(usuarioId, desde, hasta);
+        return ResponseEntity.ok(dtos);
+    }
+
     // Lista de la compra a partir de un plan semanal
     // GET /api/planes/{planId}/lista-compra
     @GetMapping("/{planId}/lista-compra")

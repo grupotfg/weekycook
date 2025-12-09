@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.grupotfg.weekycook.entity.PlanSemanal;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDate;
 
 /**
  * Gestiona de planes semanales de usuarios
@@ -34,4 +34,15 @@ public interface PlanSemanalRepository extends JpaRepository<PlanSemanal, Intege
      * return Optional con plan o vacío si no existe
      */
     Optional<PlanSemanal> findByUsuarioIdAndSemanaInicio(Integer usuarioId, LocalDate semanaInicio);
+
+    /**
+     * Obtiene todos los planes de un usuario filtrando por un rango de fechas
+     * de semana_inicio (inclusive).
+     *
+     * @param usuarioId     ID del usuario
+     * @param desdeSemana   fecha de inicio del rango (semana_inicio >= desdeSemana)
+     * @param hastaSemana   fecha fin del rango (semana_inicio <= hastaSemana)
+     * @return lista de planes dentro del rango indicado
+     */
+    List<PlanSemanal> findByUsuarioIdAndSemanaInicioBetween(Integer usuarioId, LocalDate desdeSemana, LocalDate hastaSemana);
 }
