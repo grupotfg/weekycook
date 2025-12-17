@@ -1,0 +1,14 @@
+.login-container {
+  background: radial-gradient(circle at center, #5215a0 0%, #2a0a5e 100%);
+}
+.login-card {
+  width: 100%; max-width: 400px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+}
+.gradient-btn {
+  background: linear-gradient(90deg, #8a4fff 0%, #b388ff 100%);
+  color: white;
+  font-weight: 600;
+}

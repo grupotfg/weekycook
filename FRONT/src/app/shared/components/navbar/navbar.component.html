@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-purple sticky-top shadow-lg">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <i class="bi bi-egg-fried me-2"></i>WEEKYCOOK
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/recipes" routerLinkActive="active">Recetas</a>
+        </li>
+
+        @if (authService.isAuthenticated()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/planner" routerLinkActive="active">Planificador</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/favorites" routerLinkActive="active">Favoritos</a>
+          </li>
+        }
+
+        @if (authService.isAdmin()) {
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-bold" routerLink="/admin" routerLinkActive="active">
+              <i class="bi bi-gear-fill"></i> Panel Admin
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="d-flex gap-2 align-items-center">
+        @if (!authService.isAuthenticated()) {
+          <a routerLink="/auth/login" class="btn btn-outline-light btn-sm">Iniciar Sesión</a>
+          <a routerLink="/auth/register" class="btn btn-light btn-sm text-purple fw-bold">Registro</a>
+        } @else {
+          <div class="dropdown">
+            <button class="btn btn-light btn-sm dropdown-toggle text-purple" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Hola, **{{ authService.currentUser()?.nombre }}**
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person-circle me-2"></i> Mi Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-danger fw-bold" (click)="authService.logout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión 
+              </button></li>
+            </ul>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

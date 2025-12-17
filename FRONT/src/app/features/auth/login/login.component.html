@@ -1,0 +1,28 @@
+<div class="login-container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="card login-card shadow-lg border-0 p-4">
+    <div class="card-body">
+      <div class="text-center mb-4">
+        <h3 class="fw-bold text-white mb-1">Iniciar Sesión</h3>
+        <p class="text-white-50 small">Bienvenido de nuevo a WeekyCook</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label text-white small">Correo Electrónico</label>
+          <input type="email" class="form-control bg-light border-0" formControlName="correo" placeholder="usuario@weekycook.com">
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label text-white small">Contraseña</label>
+          <input type="password" class="form-control bg-light border-0" formControlName="contrasena" placeholder="••••••••">
+        </div>
+
+        <div class="d-grid gap-2 mb-3">
+          <button type="submit" class="btn btn-primary btn-lg gradient-btn border-0" [disabled]="loginForm.invalid">
+            Entrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
