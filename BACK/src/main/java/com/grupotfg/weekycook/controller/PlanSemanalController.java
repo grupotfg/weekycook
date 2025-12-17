@@ -33,6 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/planes")
+@CrossOrigin(origins = "*")
 @Tag(name = "Planes semanales", description = "Gestión de planes semanales, items, generación aleatoria y lista de la compra")
 public class PlanSemanalController {
 

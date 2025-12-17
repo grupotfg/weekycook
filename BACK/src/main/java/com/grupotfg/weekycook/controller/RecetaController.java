@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recetas")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Recetas", description = "Gestión de recetas, búsquedas y administración de recetas")
 public class RecetaController {

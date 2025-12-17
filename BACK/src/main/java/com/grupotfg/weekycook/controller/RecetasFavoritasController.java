@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/favoritos")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Favoritos", description = "Gestión de recetas favoritas de los usuarios")
 public class RecetasFavoritasController {
