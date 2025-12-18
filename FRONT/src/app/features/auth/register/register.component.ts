@@ -52,7 +52,8 @@ export class RegisterComponent {
         correo: val.correo,
         nombre: val.nombre,
         apellido: val.apellido || '',
-        contraseña: val.password, // Mapeo por la puñetera ñ que hemos puesto que por eso daba error
+        // AÑADIMOS EL {noop} AQUÍ
+        contraseña: '{noop}' + val.password, // y Mapeo por la puñetera ñ que hemos puesto que por eso daba error
         descripcion: val.descripcion || '',
         numComensalesDefecto: val.numComensalesDefecto || 2
       };
