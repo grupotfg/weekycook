@@ -1,0 +1,42 @@
+<header class="hero-section text-center text-white d-flex align-items-center justify-content-center">
+  <div class="container">
+    <h1 class="display-3 fw-bold mb-3 serif-font">Planifica Tus Comidas <br> Semanalmente</h1>
+    <p class="lead mb-4 mx-auto" style="max-width: 700px;">
+      Organiza tus semanas con recetas deliciosas, crea planes personalizados y disfruta de una alimentación fácil y saludable.
+    </p>
+    <div class="d-flex gap-3 justify-content-center">
+      <a routerLink="/recipes" class="btn btn-outline-light btn-lg px-4 fw-bold">Explorar Recetas</a>
+    </div>
+  </div>
+</header>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="text-purple serif-font">Recetas Destacadas</h2>
+    </div>
+    
+    @if (recetasDestacadas.length === 0) {
+      <div class="alert alert-warning text-center">
+        No se han encontrado recetas destacadas. Asegúrate de que tu backend está funcionando en `http://localhost:8080/api/recetas` y que hay datos en la tabla `recetas`.
+      </div>
+    } @else {
+      <div class="row g-4">
+        @for (receta of recetasDestacadas; track receta.id) {
+          <div class="col-md-4">
+            <div class="card card-recipe h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="badge bg-purple-light text-purple">{{ receta.categoriaNombre }}</span>
+                  <small class="text-muted"><i class="bi bi-clock"></i> {{ receta.tiempoPreparacionMin }} min</small>
+                </div>
+                <h5 class="card-title fw-bold">{{ receta.titulo }}</h5>
+                <p class="card-text text-muted small">{{ receta.descripcionCorta }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

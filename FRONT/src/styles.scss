@@ -1,0 +1,37 @@
+/* DEFINICIÓN DEL TEMA WEEKYCOOK PRINCIPAL ya iremos toqueteando*/
+$primary: #6610f2; /* Morado base, vamos probando*/
+$secondary: #ffc107; /* Amarillo para destacados/estrellas ..*/
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+
+/* para importar mportar Bootstrap y sus iconos, act a 19 xq daba errores*/
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Estilos Globales */
+body {
+  background-color: #f8f9fa; 
+  font-family: $font-family-sans-serif;
+}
+
+/* Sombra para la Navbar y la card de Login */
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* Utilidades de Texto y Fondo */
+.text-purple { color: $primary !important; }
+.bg-purple { background-color: $primary !important; color: white; }
+.bg-purple-light { background-color: lighten($primary, 45%); }
+
+/* Fuentes Serif para títulos elegantes en el Landing y acorde a Ux/Ui */
+.serif-font { font-family: 'Playfair Display', serif; }
+
+/* Efecto Hover para Tarjetas de Recetas inicialmente*/
+.card-recipe {
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  }
+}
+

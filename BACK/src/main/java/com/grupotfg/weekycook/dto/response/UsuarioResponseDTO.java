@@ -23,4 +23,7 @@ public class UsuarioResponseDTO {
     private String descripcion;
     
     private Integer numComensalesDefecto;
+    
+ // Necesario al final meter para que Angular sepa mostrar el menu correcto
+    private Boolean esAdmin;
 }
