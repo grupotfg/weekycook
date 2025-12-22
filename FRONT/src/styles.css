@@ -4,7 +4,7 @@
   --primary-dark: #4b0cc6; /* Aproximación a darken($primary, 20%) */
   --primary-light: #e3d4ff; /* Aproximación a lighten($primary, 45%) */
   --secondary: #ffc107; /* Amarillo destacados */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* Importar Bootstrap y los iconos ya compilados en CSS */
@@ -38,7 +38,7 @@ body {
 
 /* Fuentes Serif para títulos elegantes en el Landing y acorde a UX/UI */
 .serif-font {
-  font-family: "Playfair Display", serif;
+  font-family: 'Playfair Display', serif;
 }
 
 /* Efecto Hover para Tarjetas de Recetas */
@@ -50,3 +50,4 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
+

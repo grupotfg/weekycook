@@ -7,7 +7,7 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
   standalone: true,
   imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss' // debe estrar vacio para que no se meta, ya he definido
+  styleUrl: './app.component.css', // debe estrar vacio para que no se meta, ya he definido
 })
 export class AppComponent {
   title = 'FRONT';

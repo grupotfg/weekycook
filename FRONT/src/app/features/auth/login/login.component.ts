@@ -8,7 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -17,13 +17,14 @@ export class LoginComponent {
 
   loginForm = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
-    contrasena: ['', Validators.required]
+    contrasena: ['', Validators.required],
   });
 
   onSubmit() {
     if (this.loginForm.valid) {
       const { correo, contrasena } = this.loginForm.value;
-      this.authService.login({ correo: correo!, contrasena: contrasena! })
+      this.authService
+        .login({ correo: correo!, contrasena: contrasena! })
         .subscribe({
           next: () => {
             // Redirige según si es Admin (es_admin=1) o Usuario (es_admin=0)
@@ -33,7 +34,7 @@ export class LoginComponent {
               this.router.navigate(['/planner']); // O dashboard
             }
           },
-          error: () => alert('Credenciales incorrectas')
+          error: () => alert('Credenciales incorrectas'),
         });
     }
   }
