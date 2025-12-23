@@ -2,6 +2,10 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
+/* Importar Bootstrap y los iconos ya compilados en CSS */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
 /* DEFINICIÓN DEL TEMA WEEKYCOOK PRINCIPAL (sin preprocesador) */
 :root {
   --primary: #6610f2; /* Morado base */

@@ -22,7 +22,7 @@ public interface UsuarioMapper {
     // Actualizar entidad desde DTO (para modifcar parcialmente)
     @Mapping(target = "id", ignore = true) // No actualiza ID
     @Mapping(target = "fechaCreacion", ignore = true) // No actualiza fecha
-    @Mapping(target = "esAdmin", ignore = true)
+    //@Mapping(target = "esAdmin", ignore = true) quito esto porque no permite poner un usuario como admin si lo crea el admin
     
     void updateEntityFromDto(UsuarioRequestDTO requestDTO, @MappingTarget Usuario usuario);
     

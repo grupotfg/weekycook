@@ -19,7 +19,7 @@ export interface LoginRequest {
   contrasena: string; // Evitamos la 'ñ' en el nombre de variable por buenas practicas
 }
 
-// Si en el futuro implementas JWT se usuará
+// opcional si implementamos JWT o lo que sea
 export interface AuthResponse {
   token: string;
   usuario: User;

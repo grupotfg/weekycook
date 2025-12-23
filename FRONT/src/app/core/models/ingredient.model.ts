@@ -1,6 +1,6 @@
 // Datos completos del ingrediente (IngredienteResponseDTO)
 export interface Ingredient {
-  id: number;
+  id?: number;
   nombre: string;
   unidadBase: string;
   caloriasPorUnidad: number;

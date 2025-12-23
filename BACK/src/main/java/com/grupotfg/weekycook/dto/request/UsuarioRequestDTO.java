@@ -22,6 +22,8 @@ public class UsuarioRequestDTO {
     @Email(message = "Formato de email inválido")
     private String correo; // Para login
     
+    private Boolean esAdmin; // si no lo lleva no podemos cambiar el rol
+    
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 2, max = 100, message = "Nombre debe tener entre 2 y 100 caracteres")
     private String nombre;

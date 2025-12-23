@@ -1,0 +1,24 @@
+.nav-tabs {
+  .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    padding: 1rem 1.5rem;
+
+    &:hover {
+      border-color: transparent;
+      color: var(--primary-color);
+    }
+
+    &.active {
+      color: var(--primary-color);
+      background: none;
+      border-bottom: 3px solid var(--primary-color);
+      font-weight: bold;
+    }
+  }
+}
+
+.text-purple { color: #6f42c1; }
+.bg-purple-light { background-color: #f3e5f5; }

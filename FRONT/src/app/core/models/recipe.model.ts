@@ -1,24 +1,19 @@
-import { IngredientRecipe } from './ingredient.model';
-import { NutritionalValue } from './nutrition.model';
-
-// Interfaz ligera para listados (Home, Buscador, Cards)
-// se basa en RecetaResponseDTO
-export interface Recipe {
-  id: number;
-  titulo: string;
-  descripcionCorta: string;
-  tiempoPreparacionMin: number;
-  porciones: number;
-  fotoUrl?: string; // Opcional
-  categoriaId: number;
-  categoriaNombre: string; // Muy útil para mostrar "Desayuno" sin hacer otra petición
-  creadorNombre: string;
+export interface RecipeIngredientRequest {
+  ingredienteId: number;
+  cantidad: number;
+  unidad: string;
+  nombreAux?: string; // Para mostrar el nombre en el formulario
 }
 
-// Interfaz detallada para la vista de una receta individual
-// se basa en RecetaDetailResponseDTO
-export interface RecipeDetail extends Recipe {
-  instrucciones: string;
-  ingredientes: IngredientRecipe[]; // Lista de ingredientes específicos de esta receta
-  valorNutricional?: NutritionalValue;
+export interface Recipe {
+  id?: number;
+  titulo: string;
+  descripcionCorta: string;
+  instrucciones?: string;      // Opcional para el listado
+  tiempoPreparacionMin: number;
+  porciones: number;
+  fotoUrl?: string;
+  categoriaId: number;
+  categoriaNombre?: string;    // Del DTO de listado
+  ingredientes?: RecipeIngredientRequest[]; // Opcional para el listado
 }
