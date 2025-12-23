@@ -1,0 +1,5 @@
+.hero-section {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  min-height: 75vh;
+  padding-top: 60px;
+}
