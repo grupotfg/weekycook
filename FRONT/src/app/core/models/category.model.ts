@@ -1,8 +1,8 @@
 // Datos de categoría devueltos por el backend
 export interface Category {
-  id: number;
+  id?: number; //?
   nombre: string;
-  descripcion?: string;
+  descripcion?: string; // como opcional
 }
 
 // Payload para crear o editar categorías

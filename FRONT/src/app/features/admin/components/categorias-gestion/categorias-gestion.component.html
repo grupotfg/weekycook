@@ -1,0 +1,75 @@
+<div class="py-3">
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-7">
+      <div class="input-group shadow-sm">
+        <span class="input-group-text bg-white border-end-0 text-muted">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="text" class="form-control border-start-0 ps-0" 
+               placeholder="Buscar categoría..." [(ngModel)]="searchText">
+      </div>
+    </div>
+    <div class="col-md-5 text-end">
+      <button class="btn btn-primary gradient-btn px-4" (click)="showForm = true" *ngIf="!showForm">
+        <i class="bi bi-plus-lg me-2"></i>Nueva Categoría
+      </button>
+    </div>
+  </div>
+
+  @if (showForm) {
+    <div class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn">
+      <h6 class="fw-bold text-purple mb-3">{{ isEditing ? 'Editar' : 'Añadir' }} Categoría</h6>
+      <form (ngSubmit)="guardar()" class="row g-3">
+        <div class="col-md-4">
+          <label class="small fw-bold text-muted">Nombre</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="selectedCat.nombre" 
+                 name="nombre" placeholder="Ej: Postres" required>
+        </div>
+        <div class="col-md-5">
+          <label class="small fw-bold text-muted">Descripción</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="selectedCat.descripcion" 
+                 name="descripcion" placeholder="Breve detalle de la categoría...">
+        </div>
+        <div class="col-md-3 d-flex align-items-end gap-2">
+          <button type="submit" class="btn btn-sm btn-success px-3 flex-grow-1">Confirmar</button>
+          <button type="button" class="btn btn-sm btn-secondary px-3" (click)="cancelar()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle shadow-sm bg-white rounded">
+      <thead class="bg-light text-secondary small">
+        <tr>
+          <th style="width: 30%">Categoría</th>
+          <th style="width: 55%">Descripción</th>
+          <th style="width: 15%" class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cat of categoriasFiltradas; track cat.id) {
+          <tr>
+            <td class="fw-bold text-purple">{{ cat.nombre }}</td>
+            <td class="text-muted small">{{ cat.descripcion || 'Sin descripción' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm text-primary me-2" (click)="editar(cat)" title="Editar">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-sm text-danger" (click)="eliminar(cat.id!)" title="Eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="text-center py-5 text-muted">
+              <i class="bi bi-search display-6 d-block mb-2"></i>
+              No se encontraron categorías.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
