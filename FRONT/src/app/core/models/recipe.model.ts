@@ -9,11 +9,12 @@ export interface Recipe {
   id?: number;
   titulo: string;
   descripcionCorta: string;
-  instrucciones?: string;      // Opcional para el listado
+  instrucciones?: string; // Opcional para el listado
   tiempoPreparacionMin: number;
   porciones: number;
   fotoUrl?: string;
   categoriaId: number;
-  categoriaNombre?: string;    // Del DTO de listado
+  categoriaNombre?: string; // Del DTO de listado
+  creadorNombre?: string;
   ingredientes?: RecipeIngredientRequest[]; // Opcional para el listado
 }
