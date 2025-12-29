@@ -10,8 +10,8 @@ export interface Recipe {
   titulo: string;
   descripcionCorta: string;
   instrucciones?: string; // Opcional para el listado
-  tiempoPreparacionMin: number;
-  porciones: number;
+  tiempoPreparacionMin: number | null;
+  porciones: number | null;
   fotoUrl?: string;
   categoriaId: number;
   categoriaNombre?: string; // Del DTO de listado
