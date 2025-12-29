@@ -172,11 +172,8 @@
 }
 
 .pagination-bar {
-  margin-top: 2rem;
-  padding: 1rem 1.25rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 20px 45px rgba(93, 24, 220, 0.08);
+  margin-top: 1.5rem;
+  padding: 0.5rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
