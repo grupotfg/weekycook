@@ -3,8 +3,7 @@
     <p class="eyebrow">Explorar Recetas</p>
     <h1>Descubre platos para tu planificador semanal</h1>
     <p class="summary">
-      Filtra por categoría, dificultad o tiempo y encuentra la receta perfecta
-      para hoy.
+      Filtra por categoría, dificultad o tiempo y encuentra la receta perfecta.
     </p>
   </div>
 </section>
@@ -79,9 +78,20 @@
   <div class="container">
     <div class="results-header">
       @if (!loading) {
-      <p class="results-count">
-        {{ filteredRecipes.length }} recetas encontradas
-      </p>
+      <div class="results-meta">
+        <p class="results-count">
+          {{ filteredRecipes.length }} recetas encontradas
+        </p>
+        <label class="page-size-picker">
+          Mostrar
+          <select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            @for (size of pageSizeOptions; track size) {
+            <option [value]="size">{{ size }}</option>
+            }
+          </select>
+          por página
+        </label>
+      </div>
       } @if (loading) {
       <div class="status">
         <div class="spinner-border text-primary" role="status"></div>
@@ -104,57 +114,43 @@
     </div>
     } @if (!loading && !errorMessage && filteredRecipes.length > 0) {
     <div class="recipes-grid">
-      @for ( recipe of filteredRecipes; track recipe.id ?? recipe.titulo ??
+      @for ( recipe of paginatedRecipes; track recipe.id ?? recipe.titulo ??
       recipe ) {
-      <article class="recipe-card">
-        <div class="recipe-image">
-          <img [src]="getRecipeImage(recipe)" [alt]="recipe.titulo" />
-          <span class="difficulty-pill" [ngClass]="getDifficultyBadge(recipe)">
-            <i class="bi bi-lightning-charge me-1"></i
-            >{{ getDifficultyLabel(recipe) }}
-          </span>
-        </div>
-        <div class="recipe-body">
-          <div class="meta-row">
-            <span class="category-pill">{{
-              recipe.categoriaNombre ?? "Sin categoría"
-            }}</span>
-            <span class="creator"
-              >Por {{ recipe.creadorNombre ?? "WeekyCook" }}</span
-            >
-          </div>
-          <h3>{{ recipe.titulo }}</h3>
-          <p class="description">{{ recipe.descripcionCorta }}</p>
-          <div class="metrics">
-            <div>
-              <i class="bi bi-clock"></i>
-              <span>{{ recipe.tiempoPreparacionMin ?? 0 }} minutos</span>
-            </div>
-            <div>
-              <i class="bi bi-controller"></i>
-              <span>{{ getDifficultyLabel(recipe) }}</span>
-            </div>
-            <div>
-              <i class="bi bi-people"></i>
-              <span>{{ recipe.porciones ?? 2 }} porciones</span>
-            </div>
-          </div>
-        </div>
-        <div class="recipe-footer">
-          <div class="author">
-            <span class="avatar">{{ getCreatorInitial(recipe) }}</span>
-            <div>
-              <p>{{ recipe.creadorNombre ?? "Chef WeekyCook" }}</p>
-              <small>Planificador semanal</small>
-            </div>
-          </div>
-          <button class="btn btn-outline-primary btn-sm" type="button">
-            Ver receta
-            <i class="bi bi-arrow-up-right ms-1"></i>
-          </button>
-        </div>
-      </article>
+      <app-recipe-card [recipe]="recipe"></app-recipe-card>
       }
+    </div>
+
+    <div class="pagination-bar">
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+      >
+        ← Anterior
+      </button>
+
+      <div class="page-list">
+        @for (page of pageNumbers; track page) {
+        <button
+          type="button"
+          class="page-chip"
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Siguiente →
+      </button>
     </div>
     }
   </div>

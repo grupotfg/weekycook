@@ -115,8 +115,34 @@
   margin-bottom: 1.5rem;
 }
 
+.results-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
 .results-count {
   font-weight: 700;
+  color: #5b1ea6;
+}
+
+.page-size-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: #5b1ea6;
+}
+
+.page-size-picker select {
+  border-radius: 999px;
+  border: 1px solid #d6c4f5;
+  background: #fff;
+  padding: 0.2rem 0.75rem;
+  font-weight: 600;
   color: #5b1ea6;
 }
 
@@ -138,6 +164,48 @@
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+}
+
+.recipes-grid app-recipe-card {
+  height: 100%;
+}
+
+.pagination-bar {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 45px rgba(93, 24, 220, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.page-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-chip {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid #d6c4f5;
+  background: transparent;
+  color: #5b1ea6;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.page-chip.active,
+.page-chip:hover {
+  background: #5b1ea6;
+  color: #fff;
+  border-color: #5b1ea6;
 }
 
 .recipe-card {

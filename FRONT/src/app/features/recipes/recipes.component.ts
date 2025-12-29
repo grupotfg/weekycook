@@ -5,11 +5,12 @@ import { Category } from '../../core/models/category.model';
 import { Recipe } from '../../core/models/recipe.model';
 import { CategoryService } from '../../core/services/category.service';
 import { RecipeService } from '../../core/services/recipe.service';
+import { RecipeCardComponent } from '../../shared/components/recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RecipeCardComponent],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.css',
 })
@@ -26,18 +27,16 @@ export class RecipesComponent implements OnInit {
   loading = true;
   errorMessage = '';
 
-  readonly difficultyLabels: Record<string, string> = {
-    facil: 'Fácil',
-    media: 'Media',
-    dificil: 'Difícil',
-  };
-
   readonly timeOptions = [
     { value: 'all', label: 'Cualquier tiempo' },
     { value: '20', label: '≤ 20 min' },
     { value: '40', label: '≤ 40 min' },
     { value: '60', label: '≤ 60 min' },
   ];
+
+  readonly pageSizeOptions = [4, 8, 12, 20];
+  pageSize = 4;
+  currentPage = 1;
 
   constructor(
     private recipeService: RecipeService,
@@ -101,6 +100,8 @@ export class RecipesComponent implements OnInit {
 
       return matchesTerm && matchesCategory && matchesDifficulty && matchesTime;
     });
+
+    this.currentPage = 1;
   }
 
   resetFilters(): void {
@@ -125,29 +126,38 @@ export class RecipesComponent implements OnInit {
     return 'dificil';
   }
 
-  getDifficultyLabel(recipe: Recipe): string {
-    return this.difficultyLabels[this.getDifficulty(recipe)];
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredRecipes.length / this.pageSize));
   }
 
-  getDifficultyBadge(recipe: Recipe): string {
-    switch (this.getDifficulty(recipe)) {
-      case 'facil':
-        return 'badge-easy';
-      case 'media':
-        return 'badge-medium';
-      default:
-        return 'badge-hard';
+  get paginatedRecipes(): Recipe[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredRecipes.slice(start, start + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+  }
+
+  changePageSize(size: number | string): void {
+    const numericSize = Number(size) || this.pageSize;
+
+    if (numericSize !== this.pageSize) {
+      this.pageSize = numericSize;
+      this.currentPage = 1;
     }
   }
 
-  getRecipeImage(recipe: Recipe): string {
-    return recipe.fotoUrl?.trim()
-      ? recipe.fotoUrl
-      : 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=60';
+  goToPage(page: number): void {
+    const target = Math.min(Math.max(page, 1), this.totalPages);
+    this.currentPage = target;
   }
 
-  getCreatorInitial(recipe: Recipe): string {
-    const source = recipe.creadorNombre ?? recipe.titulo ?? '?';
-    return source.charAt(0).toUpperCase();
+  prevPage(): void {
+    this.goToPage(this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    this.goToPage(this.currentPage + 1);
   }
 }
