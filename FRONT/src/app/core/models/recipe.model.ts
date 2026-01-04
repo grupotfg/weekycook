@@ -1,5 +1,6 @@
 export interface RecipeIngredientRequest {
   ingredienteId: number;
+  ingredienteNombre?: string; //añadi porque daba error
   cantidad: number;
   unidad: string;
   nombreAux?: string; // Para mostrar el nombre en el formulario

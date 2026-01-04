@@ -1,0 +1,104 @@
+<section class="planner-hero">
+    <div class="container hero-row">
+        <div class="hero-left">
+            <p class="hero-tag">PLANIFICADOR SEMANAL</p>
+            <p class="hero-sub">{{ subtitle }}</p>
+        </div>
+
+        <div class="hero-right">
+            <span class="hero-view">{{ viewLabel }}</span>
+            <button class="btn-primary" routerLink="/planner/new">
+                Nuevo plan
+            </button>
+            <button class="btn-outline" type="button" (click)="onRandomize()">
+                Aleatorio
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="planner-wrap">
+    <div class="container">
+        <div class="planner-shell">
+
+            <div class="plan-bar">
+                <div class="plan-left">
+                    <span class="plan-title">Plan actual</span>
+
+                    <div class="dropdown">
+                    <select [(ngModel)]="selectedPlanId" (change)="onPlanChange()" class="dropdown-select">
+                        @for (p of plans; track p.id) {
+                        <option [ngValue]="p.id">{{ p.nombre }}</option>
+                        }
+                    </select>
+
+                        <span class="dropdown-caret">▾</span>
+                    </div>
+
+                    <button class="btn-danger" type="button" (click)="onDeletePlan()">
+                        Eliminar
+                    </button>
+                </div>
+
+            <button class="btn-white" [routerLink]="['/planner/select']"
+                [queryParams]="{ planId: selectedPlanId, dia: 'Viernes', turno: 'Comida' }">
+                Seleccionar recetas <span class="plus">＋</span>
+            </button>
+        
+
+            </div>
+
+            @if (loading) {
+            <div class="status">
+                <span class="dot"></span> Cargando plan...
+            </div>
+            }
+
+            @if (!loading && errorMessage) {
+            <div class="status error">
+                {{ errorMessage }}
+            </div>
+            }
+
+            @if (!loading && selectedPlan) {
+            <div class="planner-grid">
+
+                <div class="grid-head">
+                    <div class="corner"></div>
+                    @for (d of days; track d) {
+                    <div class="day-head">{{ d }}</div>
+                    }
+                </div>
+
+                @for (m of meals; track m) {
+                <div class="grid-row">
+                    <div class="meal-head">
+                        {{ m }}
+
+                    </div>
+
+                    @for (d of days; track d) {
+                        <div class="cell">
+                            @if (getSlotTitle(d, m)) {
+                        <div class="chip">
+                        <span class="chip-text">{{ getSlotTitle(d, m) }}</span>
+                    </div>
+                    } @else {
+                    <button class="add-slot" type="button">+ Añadir</button>
+                    }
+                    </div>
+                }
+
+                </div>
+                }
+            </div>
+            }
+
+            @if (!loading && !selectedPlan) {
+            <div class="empty">
+                No hay planes. Crea uno con “Nuevo plan”.
+            </div>
+            }
+        </div>
+    </div>
+</section>
