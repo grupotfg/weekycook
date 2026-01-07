@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Recipe } from '../../../core/models/recipe.model';
 
 @Component({
@@ -11,6 +12,7 @@ import { Recipe } from '../../../core/models/recipe.model';
 })
 export class RecipeCardComponent {
   @Input({ required: true }) recipe!: Recipe;
+  constructor(private router: Router) {}
 
   private readonly difficultyLabels: Record<
     'facil' | 'media' | 'dificil',
@@ -59,5 +61,13 @@ export class RecipeCardComponent {
     }
 
     return 'dificil';
+  }
+
+  viewRecipe(): void {
+    if (!this.recipe?.id) {
+      return;
+    }
+
+    this.router.navigate(['/recipes', this.recipe.id]);
   }
 }
