@@ -132,10 +132,7 @@
           </td>
           <td class="text-muted small">{{ user.correo }}</td>
           <td>
-            <span
-              class="badge"
-              [ngClass]="user.esAdmin ? 'bg-danger' : 'bg-info text-dark'"
-            >
+            <span class="role-pill" [ngClass]="user.esAdmin ? 'admin' : 'user'">
               {{ user.esAdmin ? "Administrador" : "Usuario" }}
             </span>
           </td>

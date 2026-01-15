@@ -1,0 +1,22 @@
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 0.15rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+}
+
+.role-pill.admin {
+  background: linear-gradient(120deg, #ff8f8f, #f0445c);
+  color: #fff;
+}
+
+.role-pill.user {
+  background: linear-gradient(120deg, #dcd6ff, #a48bff);
+  color: #2b1169;
+}
