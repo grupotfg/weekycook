@@ -151,48 +151,92 @@
 }
 
 .page-size-picker {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
   font-weight: 600;
   color: #5b1ea6;
 }
 
-.page-size-shell {
-  position: relative;
+.page-size-trigger {
+  border: 1px solid #d6c4f5;
+  border-radius: 999px;
+  background: #fff;
+  color: #3f146b;
+  padding: 0.25rem 1.25rem 0.25rem 0.85rem;
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
-  border: 1px solid #d6c4f5;
-  background: #fff;
+  gap: 0.35rem;
   box-shadow: 0 12px 24px rgba(91, 30, 166, 0.12);
-  padding: 0.15rem 0.9rem 0.15rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.page-size-shell select {
+.page-size-trigger:hover,
+.page-size-trigger:focus-visible {
+  border-color: #b084f2;
+  box-shadow: 0 18px 32px rgba(90, 27, 166, 0.18);
+  color: #2b0e47;
+}
+
+.page-size-trigger i {
+  font-size: 0.85rem;
+  color: #a07bd9;
+  transition: transform 0.2s ease;
+}
+
+.page-size-trigger.open i {
+  transform: rotate(180deg);
+}
+
+.page-size-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #efe5ff;
+  box-shadow: 0 24px 50px rgba(60, 23, 108, 0.18);
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  z-index: 10;
+  animation: dropdownFade 0.2s ease forwards;
+}
+
+.page-size-option {
   border: none;
   background: transparent;
-  padding: 0.35rem 1.5rem 0.35rem 0;
+  text-align: left;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
   font-weight: 600;
-  color: #3f146b;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  outline: none;
+  color: #472167;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.page-size-shell i {
-  position: absolute;
-  right: 0.65rem;
-  pointer-events: none;
-  color: #a07bd9;
-  font-size: 0.85rem;
+.page-size-option:hover {
+  background: #f4edff;
+  color: #2b0e47;
 }
 
-.page-size-shell:focus-within {
-  border-color: #b084f2;
-  box-shadow: 0 16px 32px rgba(90, 27, 166, 0.18);
+.page-size-option.active {
+  background: #5b1ea6;
+  color: #fff;
+}
+
+@keyframes dropdownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .empty-state {

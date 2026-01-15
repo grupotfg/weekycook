@@ -82,21 +82,34 @@
         <p class="results-count">
           {{ filteredRecipes.length }} recetas encontradas
         </p>
-        <label class="page-size-picker">
+        <div class="page-size-picker" (click)="$event.stopPropagation()">
           <span>Mostrar</span>
-          <span class="page-size-shell">
-            <select
-              [ngModel]="pageSize"
-              (ngModelChange)="changePageSize($event)"
-            >
-              @for (size of pageSizeOptions; track size) {
-              <option [value]="size">{{ size }}</option>
-              }
-            </select>
+          <button
+            type="button"
+            class="page-size-trigger"
+            [class.open]="pageSizeMenuOpen"
+            (click)="togglePageSizeMenu($event)"
+          >
+            <span>{{ pageSize }}</span>
             <i class="bi bi-chevron-down"></i>
-          </span>
+          </button>
           <span>por página</span>
-        </label>
+
+          @if (pageSizeMenuOpen) {
+          <div class="page-size-menu" [class.open]="pageSizeMenuOpen">
+            @for (size of pageSizeOptions; track size) {
+            <button
+              type="button"
+              class="page-size-option"
+              [class.active]="size === pageSize"
+              (click)="selectPageSize(size)"
+            >
+              {{ size }} recetas
+            </button>
+            }
+          </div>
+          }
+        </div>
       </div>
       } @if (loading) {
       <div class="status">

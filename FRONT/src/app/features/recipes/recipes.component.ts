@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Category } from '../../core/models/category.model';
 import { Recipe } from '../../core/models/recipe.model';
@@ -37,6 +37,7 @@ export class RecipesComponent implements OnInit {
   readonly pageSizeOptions = [4, 8, 12, 20];
   pageSize = 4;
   currentPage = 1;
+  pageSizeMenuOpen = false;
 
   constructor(
     private recipeService: RecipeService,
@@ -146,6 +147,21 @@ export class RecipesComponent implements OnInit {
       this.pageSize = numericSize;
       this.currentPage = 1;
     }
+  }
+
+  togglePageSizeMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.pageSizeMenuOpen = !this.pageSizeMenuOpen;
+  }
+
+  selectPageSize(size: number): void {
+    this.pageSizeMenuOpen = false;
+    this.changePageSize(size);
+  }
+
+  @HostListener('document:click')
+  closePageSizeMenu(): void {
+    this.pageSizeMenuOpen = false;
   }
 
   goToPage(page: number): void {
