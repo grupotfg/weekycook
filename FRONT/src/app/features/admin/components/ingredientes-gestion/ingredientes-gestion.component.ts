@@ -40,6 +40,11 @@ export class IngredientesGestionComponent implements OnInit {
   }
 
   guardar() {
+    this.selectedIng.caloriasPorUnidad = Math.max(
+      0,
+      this.selectedIng.caloriasPorUnidad ?? 0
+    );
+
     const action =
       this.isEditing && this.selectedIng.id
         ? this.ingService.update(this.selectedIng.id, this.selectedIng)

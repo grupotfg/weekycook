@@ -2,83 +2,149 @@
   <div class="row mb-4 align-items-center">
     <div class="col-md-7">
       <div class="input-group shadow-sm">
-        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar receta..." [(ngModel)]="searchText">
+        <span class="input-group-text bg-white border-end-0 text-muted"
+          ><i class="bi bi-search"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0"
+          placeholder="Buscar receta..."
+          [(ngModel)]="searchText"
+        />
       </div>
     </div>
     <div class="col-md-5 text-end">
-      <button class="btn btn-primary px-4" (click)="nuevaReceta()" *ngIf="!showForm">
+      <button
+        class="btn btn-primary px-4"
+        (click)="nuevaReceta()"
+        *ngIf="!showForm"
+      >
         <i class="bi bi-journal-plus me-2"></i>Nueva Receta
       </button>
     </div>
   </div>
 
   @if (showForm) {
-    <div class="card bg-light border-0 shadow-sm mb-4 p-4">
-      <h6 class="fw-bold mb-3">{{ isEditing ? 'Editar' : 'Crear' }} Receta</h6>
-      <form (ngSubmit)="guardar()">
-        <div class="row g-3 mb-3">
+  <div class="card bg-light border-0 shadow-sm mb-4 p-4">
+    <h6 class="fw-bold mb-3">{{ isEditing ? "Editar" : "Crear" }} Receta</h6>
+    <form (ngSubmit)="guardar()">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="small fw-bold">Título</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="selectedRecipe.titulo"
+            name="titulo"
+            required
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="small fw-bold">Categoría</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedRecipe.categoriaId"
+            name="categoria"
+            required
+          >
+            <option [ngValue]="0" disabled>Selecciona...</option>
+            @for (cat of categorias; track cat.id) {
+            <option [ngValue]="cat.id">{{ cat.nombre }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="small fw-bold">Foto URL</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="selectedRecipe.fotoUrl"
+            name="foto"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="small fw-bold">Instrucciones</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          [(ngModel)]="selectedRecipe.instrucciones"
+          name="instr"
+        ></textarea>
+      </div>
+
+      <div class="card p-3 mb-3">
+        <h6 class="small fw-bold mb-3">Ingredientes</h6>
+        <div class="row g-2 mb-3 align-items-end">
           <div class="col-md-6">
-            <label class="small fw-bold">Título</label>
-            <input type="text" class="form-control" [(ngModel)]="selectedRecipe.titulo" name="titulo" required>
-          </div>
-          <div class="col-md-3">
-            <label class="small fw-bold">Categoría</label>
-            <select class="form-select" [(ngModel)]="selectedRecipe.categoriaId" name="categoria" required>
-              <option [ngValue]="0" disabled>Selecciona...</option>
-              @for (cat of categorias; track cat.id) {
-                <option [ngValue]="cat.id">{{ cat.nombre }}</option>
+            <select
+              class="form-select"
+              [(ngModel)]="tempIngrediente.ingredienteId"
+              name="tempIng"
+            >
+              <option [ngValue]="0">-- Seleccionar --</option>
+              @for (ing of ingredientesDisponibles; track ing.id) {
+              <option [ngValue]="ing.id">{{ ing.nombre }}</option>
               }
             </select>
           </div>
-          <div class="col-md-3">
-            <label class="small fw-bold">Foto URL</label>
-            <input type="text" class="form-control" [(ngModel)]="selectedRecipe.fotoUrl" name="foto">
+          <div class="col-md-2">
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="tempIngrediente.cantidad"
+              name="tempCant"
+              placeholder="Cant."
+              min="0"
+              step="0.1"
+            />
+          </div>
+          <div class="col-md-2">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="tempIngrediente.unidad"
+              name="tempUni"
+              placeholder="Unidad"
+            />
+          </div>
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-dark w-100"
+              (click)="agregarIngrediente()"
+            >
+              Añadir
+            </button>
           </div>
         </div>
+        <ul class="list-group">
+          @for (item of selectedRecipe.ingredientes; track $index) {
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {{ item.cantidad }} {{ item.unidad }} de {{ item.nombreAux }}
+            <button
+              type="button"
+              class="btn btn-link text-danger p-0"
+              (click)="quitarIngrediente($index)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </li>
+          }
+        </ul>
+      </div>
 
-        <div class="mb-3">
-          <label class="small fw-bold">Instrucciones</label>
-          <textarea class="form-control" rows="3" [(ngModel)]="selectedRecipe.instrucciones" name="instr"></textarea>
-        </div>
-
-        <div class="card p-3 mb-3">
-          <h6 class="small fw-bold mb-3">Ingredientes</h6>
-          <div class="row g-2 mb-3 align-items-end">
-            <div class="col-md-6">
-              <select class="form-select" [(ngModel)]="tempIngrediente.ingredienteId" name="tempIng">
-                <option [ngValue]="0">-- Seleccionar --</option>
-                @for (ing of ingredientesDisponibles; track ing.id) {
-                  <option [ngValue]="ing.id">{{ ing.nombre }}</option>
-                }
-              </select>
-            </div>
-            <div class="col-md-2">
-              <input type="number" class="form-control" [(ngModel)]="tempIngrediente.cantidad" name="tempCant" placeholder="Cant.">
-            </div>
-            <div class="col-md-2">
-              <input type="text" class="form-control" [(ngModel)]="tempIngrediente.unidad" name="tempUni" placeholder="Unidad">
-            </div>
-            <div class="col-md-2">
-              <button type="button" class="btn btn-dark w-100" (click)="agregarIngrediente()">Añadir</button>
-            </div>
-          </div>
-          <ul class="list-group">
-            @for (item of selectedRecipe.ingredientes; track $index) {
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ item.cantidad }} {{ item.unidad }} de {{ item.nombreAux }}
-                <button type="button" class="btn btn-link text-danger p-0" (click)="quitarIngrediente($index)"><i class="bi bi-trash"></i></button>
-              </li>
-            }
-          </ul>
-        </div>
-
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
-          <button type="submit" class="btn btn-success">Guardar Receta</button>
-        </div>
-      </form>
-    </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-success">Guardar Receta</button>
+      </div>
+    </form>
+  </div>
   }
 
   <div class="table-responsive">
@@ -93,15 +159,32 @@
       </thead>
       <tbody>
         @for (receta of recetasFiltradas; track receta.id) {
-          <tr>
-            <td class="fw-bold text-primary">{{ receta.titulo }}</td>
-            <td><span class="badge bg-light text-dark border">{{ receta.categoriaNombre || 'General' }}</span></td>
-            <td><i class="bi bi-clock me-1"></i>{{ receta.tiempoPreparacionMin }} min</td>
-            <td class="text-end">
-              <button class="btn btn-sm text-primary me-2" (click)="editar(receta)"><i class="bi bi-pencil-square fs-5"></i></button>
-              <button class="btn btn-sm text-danger" (click)="eliminar(receta.id!)"><i class="bi bi-trash fs-5"></i></button>
-            </td>
-          </tr>
+        <tr>
+          <td class="fw-bold text-primary">{{ receta.titulo }}</td>
+          <td>
+            <span class="badge bg-light text-dark border">{{
+              receta.categoriaNombre || "General"
+            }}</span>
+          </td>
+          <td>
+            <i class="bi bi-clock me-1"></i
+            >{{ receta.tiempoPreparacionMin }} min
+          </td>
+          <td class="text-end">
+            <button
+              class="btn btn-sm text-primary me-2"
+              (click)="editar(receta)"
+            >
+              <i class="bi bi-pencil-square fs-5"></i>
+            </button>
+            <button
+              class="btn btn-sm text-danger"
+              (click)="eliminar(receta.id!)"
+            >
+              <i class="bi bi-trash fs-5"></i>
+            </button>
+          </td>
+        </tr>
         }
       </tbody>
     </table>

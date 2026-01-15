@@ -109,6 +109,11 @@ export class RecetasGestionComponent implements OnInit {
   }
 
   agregarIngrediente() {
+    this.tempIngrediente.cantidad = Math.max(
+      0,
+      this.tempIngrediente.cantidad ?? 0
+    );
+
     if (
       this.tempIngrediente.ingredienteId > 0 &&
       this.tempIngrediente.cantidad > 0
