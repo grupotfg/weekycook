@@ -169,9 +169,16 @@ export class RecetasGestionComponent implements OnInit {
   }
 
   cancelar() {
-    this.showForm = false;
-    this.isEditing = false;
-    this.formStateChange.emit(false);
+    this.selectedRecipe = this.initRecipe();
+    this.tempIngrediente = this.initTempIng();
+    if (!this.isEditing) {
+      this.showForm = true;
+      this.formStateChange.emit(true);
+    } else {
+      this.showForm = false;
+      this.isEditing = false;
+      this.formStateChange.emit(false);
+    }
   }
 
   private normalizeSearch(value?: string | null): string {
