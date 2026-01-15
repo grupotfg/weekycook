@@ -32,13 +32,36 @@ export class UsuariosGestionComponent implements OnInit {
   }
   //Busquedas
   get usuariosFiltrados() {
-    const filter = this.searchText.toLowerCase().trim();
-    return this.usuarios.filter(
-      (u) =>
-        u.nombre.toLowerCase().includes(filter) ||
-        (u.apellido?.toLowerCase().includes(filter) ?? false) ||
-        u.correo.toLowerCase().includes(filter)
-    );
+    const filter = this.normalizeForSearch(this.searchText);
+
+    if (!filter) {
+      return this.usuarios;
+    }
+
+    return this.usuarios.filter((u) => {
+      const nombre = this.normalizeForSearch(u.nombre);
+      const apellido = this.normalizeForSearch(u.apellido);
+      const nombreCompleto = this.normalizeForSearch(
+        `${u.nombre ?? ''}${u.apellido ?? ''}`
+      );
+      const correo = this.normalizeForSearch(u.correo);
+
+      return (
+        nombre.includes(filter) ||
+        apellido.includes(filter) ||
+        nombreCompleto.includes(filter) ||
+        correo.includes(filter)
+      );
+    });
+  }
+
+  private normalizeForSearch(value?: string | null): string {
+    return (value ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
   }
 
   nuevoUsuario() {
