@@ -8,7 +8,7 @@ import { User } from '../../../../core/models/user.model';
   selector: 'app-usuarios-gestion',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './usuarios-gestion.component.html'
+  templateUrl: './usuarios-gestion.component.html',
 })
 export class UsuariosGestionComponent implements OnInit {
   private userService = inject(UserService);
@@ -28,16 +28,41 @@ export class UsuariosGestionComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this.userService.getAll().subscribe(data => this.usuarios = data);
+    this.userService.getAll().subscribe((data) => (this.usuarios = data));
   }
   //Busquedas
-get usuariosFiltrados() {
-  const filter = this.searchText.toLowerCase().trim();
-  return this.usuarios.filter(u => 
-    u.nombre.toLowerCase().includes(filter) || 
-    u.correo.toLowerCase().includes(filter)
-  );
-}
+  get usuariosFiltrados() {
+    const filter = this.normalizeForSearch(this.searchText);
+
+    if (!filter) {
+      return this.usuarios;
+    }
+
+    return this.usuarios.filter((u) => {
+      const nombre = this.normalizeForSearch(u.nombre);
+      const apellido = this.normalizeForSearch(u.apellido);
+      const nombreCompleto = this.normalizeForSearch(
+        `${u.nombre ?? ''}${u.apellido ?? ''}`
+      );
+      const correo = this.normalizeForSearch(u.correo);
+
+      return (
+        nombre.includes(filter) ||
+        apellido.includes(filter) ||
+        nombreCompleto.includes(filter) ||
+        correo.includes(filter)
+      );
+    });
+  }
+
+  private normalizeForSearch(value?: string | null): string {
+    return (value ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
+  }
 
   nuevoUsuario() {
     this.selectedUser = this.initUser();
@@ -53,10 +78,14 @@ get usuariosFiltrados() {
 
   guardar() {
     if (this.isEditing && this.selectedUser.id) {
-      this.userService.update(this.selectedUser.id, this.selectedUser).subscribe(() => this.finalizar());
+      this.userService
+        .update(this.selectedUser.id, this.selectedUser)
+        .subscribe(() => this.finalizar());
     } else {
       // Nota: Asegúrate de que tu UserService tenga el método create()
-      this.userService.create(this.selectedUser).subscribe(() => this.finalizar());
+      this.userService
+        .create(this.selectedUser)
+        .subscribe(() => this.finalizar());
     }
   }
 
