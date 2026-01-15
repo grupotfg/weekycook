@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeService } from '../../../../core/services/recipe.service';
@@ -30,6 +30,8 @@ export class RecetasGestionComponent implements OnInit {
 
   selectedRecipe: Recipe = this.initRecipe();
   tempIngrediente: RecipeIngredientRequest = this.initTempIng();
+
+  @Output() formStateChange = new EventEmitter<boolean>();
 
   ngOnInit() {
     this.cargarDatos();
@@ -65,6 +67,7 @@ export class RecetasGestionComponent implements OnInit {
     this.selectedRecipe = this.initRecipe();
     this.isEditing = false;
     this.showForm = true;
+    this.formStateChange.emit(true);
   }
   editar(receta: Recipe) {
     if (!receta.id) return;
@@ -92,6 +95,7 @@ export class RecetasGestionComponent implements OnInit {
         this.selectedRecipe = fullRecipe;
         this.isEditing = true;
         this.showForm = true;
+        this.formStateChange.emit(true);
       },
       error: (e) => console.error('Error al cargar detalle:', e),
     });
@@ -160,12 +164,14 @@ export class RecetasGestionComponent implements OnInit {
   finalizar() {
     this.showForm = false;
     this.isEditing = false;
+    this.formStateChange.emit(false);
     this.cargarDatos();
   }
 
   cancelar() {
     this.showForm = false;
     this.isEditing = false;
+    this.formStateChange.emit(false);
   }
 
   private normalizeSearch(value?: string | null): string {

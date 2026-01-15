@@ -1,6 +1,22 @@
 <div class="container py-5">
-  <div class="d-flex align-items-center mb-4">
+  <div class="d-flex align-items-center justify-content-between mb-4">
     <h2 class="fw-bold text-purple m-0">Panel de Control Admin</h2>
+    <div class="d-flex gap-2">
+      @if (showRecetasShortcut) {
+      <button
+        class="btn btn-outline-primary fw-semibold"
+        (click)="returnToRecetas()"
+      >
+        <i class="bi bi-arrow-left me-2"></i>Volver a Recetas
+      </button>
+      }
+      <button
+        class="btn btn-outline-warning fw-semibold"
+        (click)="setTab('usuarios')"
+      >
+        <i class="bi bi-people-fill me-2"></i>Gestión Usuarios
+      </button>
+    </div>
   </div>
 
   <ul class="nav nav-tabs mb-4 border-bottom-0">
@@ -32,22 +48,14 @@
       </button>
     </li>
 
-    <li class="nav-item ms-auto">
-      <button
-        class="nav-link border-warning text-dark fw-bold"
-        [class.active]="activeTab === 'usuarios'"
-        (click)="setTab('usuarios')"
-        style="background-color: #fff3cd36"
-      >
-        <i class="bi bi-people-fill me-2"></i>Gestión Usuarios
-      </button>
-    </li>
   </ul>
 
   <div class="card shadow-sm border-0 p-4">
     <div class="tab-content">
       @if (activeTab === 'recetas') {
-      <app-recetas-gestion></app-recetas-gestion>
+      <app-recetas-gestion
+        (formStateChange)="handleRecetasFormState($event)"
+      ></app-recetas-gestion>
       <div class="text-center py-5">
         <i class="bi bi-journal-text display-1 text-muted opacity-25"></i>
         <h5 class="mt-3">Módulo de Recetas</h5>

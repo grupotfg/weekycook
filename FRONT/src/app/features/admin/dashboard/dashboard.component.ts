@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // Importamos el componente de ingredientes para usarlo en el HTML
 import { IngredientesGestionComponent } from '../components/ingredientes-gestion/ingredientes-gestion.component';
@@ -14,10 +14,27 @@ import { RecetasGestionComponent } from "../components/recetas-gestion/recetas-g
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
+  @ViewChild(RecetasGestionComponent) recetasComponent?: RecetasGestionComponent;
   // Controlamos qué pestaña está activa
   activeTab: string = 'ingredientes';
 
+  // Flag para mostrar el botón de regreso rápido en la cabecera
+  showRecetasShortcut = false;
+
   setTab(tabName: string) {
     this.activeTab = tabName;
+    if (tabName !== 'recetas') {
+      this.showRecetasShortcut = false;
+    }
+  }
+
+  handleRecetasFormState(open: boolean) {
+    // Solo mostramos el botón cuando la pestaña activa sigue siendo recetas
+    this.showRecetasShortcut = open && this.activeTab === 'recetas';
+  }
+
+  returnToRecetas() {
+    this.recetasComponent?.cancelar();
+    this.setTab('recetas');
   }
 }
