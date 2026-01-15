@@ -175,10 +175,14 @@ export class RecetasGestionComponent implements OnInit {
       this.showForm = true;
       this.formStateChange.emit(true);
     } else {
-      this.showForm = false;
-      this.isEditing = false;
-      this.formStateChange.emit(false);
+      this.closeForm();
     }
+  }
+
+  closeForm() {
+    this.showForm = false;
+    this.isEditing = false;
+    this.formStateChange.emit(false);
   }
 
   private normalizeSearch(value?: string | null): string {

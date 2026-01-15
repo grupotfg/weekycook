@@ -41,7 +41,7 @@ export class DashboardComponent {
   }
 
   returnToRecetas() {
-    this.recetasComponent?.cancelar();
+    this.recetasComponent?.closeForm();
     this.setTab('recetas');
   }
 }
