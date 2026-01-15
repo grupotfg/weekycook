@@ -4,13 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { RecipeService } from '../../../../core/services/recipe.service';
 import { CategoryService } from '../../../../core/services/category.service';
 import { IngredientService } from '../../../../core/services/ingredient.service';
-import { Recipe, RecipeIngredientRequest } from '../../../../core/models/recipe.model';
+import {
+  Recipe,
+  RecipeIngredientRequest,
+} from '../../../../core/models/recipe.model';
 
 @Component({
   selector: 'app-recetas-gestion',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './recetas-gestion.component.html'
+  templateUrl: './recetas-gestion.component.html',
 })
 export class RecetasGestionComponent implements OnInit {
   private recipeService = inject(RecipeService);
@@ -33,9 +36,11 @@ export class RecetasGestionComponent implements OnInit {
   }
 
   cargarDatos() {
-    this.recipeService.getAll().subscribe(data => this.recetas = data);
-    this.categoryService.getAll().subscribe(data => this.categorias = data);
-    this.ingredientService.getAll().subscribe(data => this.ingredientesDisponibles = data);
+    this.recipeService.getAll().subscribe((data) => (this.recetas = data));
+    this.categoryService.getAll().subscribe((data) => (this.categorias = data));
+    this.ingredientService
+      .getAll()
+      .subscribe((data) => (this.ingredientesDisponibles = data));
   }
 
   initRecipe(): Recipe {
@@ -47,7 +52,7 @@ export class RecetasGestionComponent implements OnInit {
       porciones: 2,
       categoriaId: 0,
       ingredientes: [],
-      fotoUrl: ''
+      fotoUrl: '',
     };
   }
 
@@ -61,53 +66,66 @@ export class RecetasGestionComponent implements OnInit {
     this.isEditing = false;
     this.showForm = true;
   }
-editar(receta: Recipe) {
-  if (!receta.id) return;
-  
-  this.recipeService.getById(receta.id).subscribe({
-    next: (fullRecipe) => {
-      // --- TRUCO PARA REUPERAR NOMBRES --- que no me salian ni a tiros, busco info
-      // Antes de asignar la receta, vemos sus ingredientes para buscar el nombre
-      if (fullRecipe.ingredientes) {
-        fullRecipe.ingredientes = fullRecipe.ingredientes.map(ingReceta => {
-          // Buscamos el ingrediente en la lista que ya tenemos cargada
-          const infoIng = this.ingredientesDisponibles.find(i => i.id === ingReceta.ingredienteId);
-          return {
-            ...ingReceta,
-            nombreAux: infoIng ? infoIng.nombre : `Ingrediente ${ingReceta.ingredienteId}`
-          };
-        });
-      }
-      // -----------------------------------
+  editar(receta: Recipe) {
+    if (!receta.id) return;
 
-      this.selectedRecipe = fullRecipe;
-      this.isEditing = true;
-      this.showForm = true;
-    },
-    error: (e) => console.error('Error al cargar detalle:', e)
-  });
-}
+    this.recipeService.getById(receta.id).subscribe({
+      next: (fullRecipe) => {
+        // --- TRUCO PARA REUPERAR NOMBRES --- que no me salian ni a tiros, busco info
+        // Antes de asignar la receta, vemos sus ingredientes para buscar el nombre
+        if (fullRecipe.ingredientes) {
+          fullRecipe.ingredientes = fullRecipe.ingredientes.map((ingReceta) => {
+            // Buscamos el ingrediente en la lista que ya tenemos cargada
+            const infoIng = this.ingredientesDisponibles.find(
+              (i) => i.id === ingReceta.ingredienteId
+            );
+            return {
+              ...ingReceta,
+              nombreAux: infoIng
+                ? infoIng.nombre
+                : `Ingrediente ${ingReceta.ingredienteId}`,
+            };
+          });
+        }
+        // -----------------------------------
 
+        this.selectedRecipe = fullRecipe;
+        this.isEditing = true;
+        this.showForm = true;
+      },
+      error: (e) => console.error('Error al cargar detalle:', e),
+    });
+  }
 
   get recetasFiltradas() {
-    const search = this.searchText.toLowerCase().trim();
-    if (!search) return this.recetas;
-    return this.recetas.filter(r => r.titulo.toLowerCase().includes(search));
+    const search = this.normalizeSearch(this.searchText);
+    if (!search) {
+      return this.recetas;
+    }
+
+    return this.recetas.filter((r) =>
+      this.normalizeSearch(r.titulo).includes(search)
+    );
   }
 
   agregarIngrediente() {
-    if (this.tempIngrediente.ingredienteId > 0 && this.tempIngrediente.cantidad > 0) {
-      const ing = this.ingredientesDisponibles.find(i => i.id === this.tempIngrediente.ingredienteId);
-      
+    if (
+      this.tempIngrediente.ingredienteId > 0 &&
+      this.tempIngrediente.cantidad > 0
+    ) {
+      const ing = this.ingredientesDisponibles.find(
+        (i) => i.id === this.tempIngrediente.ingredienteId
+      );
+
       if (!this.selectedRecipe.ingredientes) {
         this.selectedRecipe.ingredientes = [];
       }
-      
+
       this.selectedRecipe.ingredientes.push({
         ...this.tempIngrediente,
-        nombreAux: ing?.nombre
+        nombreAux: ing?.nombre,
       });
-      
+
       this.tempIngrediente = this.initTempIng();
     }
   }
@@ -118,9 +136,13 @@ editar(receta: Recipe) {
 
   guardar() {
     if (this.isEditing && this.selectedRecipe.id) {
-      this.recipeService.update(this.selectedRecipe.id, this.selectedRecipe).subscribe(() => this.finalizar());
+      this.recipeService
+        .update(this.selectedRecipe.id, this.selectedRecipe)
+        .subscribe(() => this.finalizar());
     } else {
-      this.recipeService.create(this.selectedRecipe).subscribe(() => this.finalizar());
+      this.recipeService
+        .create(this.selectedRecipe)
+        .subscribe(() => this.finalizar());
     }
   }
 
@@ -139,5 +161,14 @@ editar(receta: Recipe) {
   cancelar() {
     this.showForm = false;
     this.isEditing = false;
+  }
+
+  private normalizeSearch(value?: string | null): string {
+    return (value ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
   }
 }
