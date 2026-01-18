@@ -64,7 +64,7 @@
 
       <div class="filter-actions">
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-outline-secondary btn-sm clear-filters-btn"
           (click)="resetFilters()"
         >
           <i class="bi bi-arrow-counterclockwise me-2"></i>Limpiar filtros
@@ -82,15 +82,34 @@
         <p class="results-count">
           {{ filteredRecipes.length }} recetas encontradas
         </p>
-        <label class="page-size-picker">
-          Mostrar
-          <select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+        <div class="page-size-picker" (click)="$event.stopPropagation()">
+          <span>Mostrar</span>
+          <button
+            type="button"
+            class="page-size-trigger"
+            [class.open]="pageSizeMenuOpen"
+            (click)="togglePageSizeMenu($event)"
+          >
+            <span>{{ pageSize }}</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <span>por página</span>
+
+          @if (pageSizeMenuOpen) {
+          <div class="page-size-menu" [class.open]="pageSizeMenuOpen">
             @for (size of pageSizeOptions; track size) {
-            <option [value]="size">{{ size }}</option>
+            <button
+              type="button"
+              class="page-size-option"
+              [class.active]="size === pageSize"
+              (click)="selectPageSize(size)"
+            >
+              {{ size }} recetas
+            </button>
             }
-          </select>
-          por página
-        </label>
+          </div>
+          }
+        </div>
       </div>
       } @if (loading) {
       <div class="status">
