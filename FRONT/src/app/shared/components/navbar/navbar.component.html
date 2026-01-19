@@ -21,15 +21,6 @@
   <div class="nav-menu" [class.nav-menu--open]="isMenuOpen()">
     <div class="nav-links">
       <a
-        routerLink="/"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="nav-link"
-        (click)="closeMenu()"
-        >Inicio</a
-      >
-
-      <a
         routerLink="/recipes"
         routerLinkActive="active"
         class="nav-link"
@@ -37,21 +28,23 @@
         >Recetas</a
       >
 
-      <a
-        routerLink="/planner"
-        routerLinkActive="active"
-        class="nav-link"
-        (click)="closeMenu()"
-        >Planificador</a
-      >
+      @if (authService.isAuthenticated()) {
+        <a
+          routerLink="/planner"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="closeMenu()"
+          >Planificador</a
+        >
 
-      <a
-        routerLink="/favorites"
-        routerLinkActive="active"
-        class="nav-link"
-        (click)="closeMenu()"
-        >Favoritos</a
-      >
+        <a
+          routerLink="/favorites"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="closeMenu()"
+          >Favoritos</a
+        >
+      }
 
       @if (authService.isAdmin()) {
         <a
