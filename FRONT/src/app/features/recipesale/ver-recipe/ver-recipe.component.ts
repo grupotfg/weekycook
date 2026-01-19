@@ -1,9 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { Recipe } from '../../../core/models/recipe.model';
 import { RecipeService } from '../../../core/services/recipe.service';
+import { FavoriteService } from '../../../core/services/favorite.service';
+import { AuthService } from '../../../core/services/auth.service';
+
+interface FavoriteState {
+  saving: boolean;
+  saved: boolean;
+  message: string;
+  error: string;
+}
 
 @Component({
   selector: 'app-ver-recipe',
@@ -16,10 +26,18 @@ export class VerRecipeComponent implements OnInit {
   recipe?: Recipe;
   loading = true;
   error = false;
+  favoriteState: FavoriteState = {
+    saving: false,
+    saved: false,
+    message: '',
+    error: '',
+  };
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +56,53 @@ export class VerRecipeComponent implements OnInit {
         },
       });
     }
+  }
+
+  onFavoriteClick(): void {
+    if (
+      !this.recipe?.id ||
+      this.favoriteState.saving ||
+      this.favoriteState.saved
+    ) {
+      return;
+    }
+
+    const currentUser = this.authService.currentUser();
+
+    if (!currentUser?.id) {
+      this.favoriteState.error =
+        'Inicia sesión para guardar recetas en favoritos.';
+      this.favoriteState.message = '';
+      return;
+    }
+
+    this.favoriteState.saving = true;
+    this.favoriteState.error = '';
+    this.favoriteState.message = '';
+
+    this.favoriteService
+      .create(currentUser.id, { recetaId: this.recipe.id })
+      .subscribe({
+        next: () => {
+          this.favoriteState.saving = false;
+          this.favoriteState.saved = true;
+          this.favoriteState.message = 'Receta guardada en tus favoritos.';
+        },
+        error: (err: HttpErrorResponse) => {
+          this.favoriteState.saving = false;
+
+          if (err.status === 409) {
+            this.favoriteState.saved = true;
+            this.favoriteState.message =
+              'Esta receta ya estaba en tus favoritos.';
+            this.favoriteState.error = '';
+            return;
+          }
+
+          this.favoriteState.error =
+            'No pudimos guardar la receta en favoritos. Inténtalo otra vez.';
+        },
+      });
   }
 
   private scrollToTop(): void {

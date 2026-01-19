@@ -124,6 +124,22 @@
     transform 0.2s ease;
 }
 
+.favorite-btn.is-active {
+  background: #ffe0f3;
+  color: #c81a70;
+}
+
+.favorite-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+  box-shadow: 0 12px 24px rgba(101, 59, 155, 0.15);
+}
+
+.favorite-btn:disabled::after {
+  display: none;
+}
+
 .favorite-btn:hover,
 .favorite-btn:focus-visible {
   transform: translateY(-2px);
@@ -144,6 +160,17 @@
   color: #5b1ea6;
   font-weight: 600;
   margin-bottom: 0.65rem;
+}
+
+.favorite-feedback {
+  margin: -0.25rem 0 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b1f71;
+}
+
+.favorite-feedback.error {
+  color: #c0392b;
 }
 
 .hero-body h1 {
