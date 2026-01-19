@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.app-footer {
+  background: linear-gradient(90deg, #30124f, #4c1c83, #6a26bb);
+  color: #f4e9ff;
+  text-align: center;
+  padding: 1.25rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 -8px 24px rgba(48, 18, 79, 0.35);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.footer-tagline {
+  font-size: 0.95rem;
+  color: rgba(244, 233, 255, 0.8);
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+}

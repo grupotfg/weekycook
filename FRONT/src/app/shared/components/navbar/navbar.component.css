@@ -75,10 +75,11 @@
 }
 
 .nav-links {
-  flex: 1;
+  flex: 0 1 auto;
   display: flex;
-  justify-content: center;
-  gap: 2rem;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  margin-left: 2rem;
 }
 
 .nav-actions {
