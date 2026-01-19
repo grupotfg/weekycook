@@ -1,23 +1,4 @@
-<nav class="navbar">
-
-  <!-- a la izquierda logo y weeky -->
-  <div class="nav-brand">
-    <img class="logo" src="/logo.png" alt="WeekyCook logo" />
-    <a routerLink="/" class="brand">
-      <span class="brand-weeky">WEEKY</span><span class="brand-cook">COOK</span>
-    </a>
-  </div>
-
-  <!-- en el centro -->
-  <div class="nav-menu">
-    <a routerLink="/" routerLinkActive="active" class="nav-link">Inicio</a>
-    <a routerLink="/recipes" routerLinkActive="active" class="nav-link">Recetas</a>
-    <a routerLink="/planificador" routerLinkActive="active" class="nav-link">Planificador</a>
-    <a routerLink="/favoritos" routerLinkActive="active" class="nav-link">Favoritos</a>
-    <a routerLink="/login" routerLinkActive="active" class="nav-link nav-link--cta">Login</a>
-  </div>
-
-</nav>
+<app-navbar></app-navbar>
 
 <main class="app-main">
   <router-outlet></router-outlet>
