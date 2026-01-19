@@ -92,6 +92,12 @@
   color: #4d3b63;
 }
 
+.metric-servings {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+}
+
 .metrics i {
   margin-right: 0.35rem;
   color: #a852ff;
