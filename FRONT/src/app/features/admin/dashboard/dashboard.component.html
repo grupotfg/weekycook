@@ -2,14 +2,6 @@
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h2 class="fw-bold text-purple m-0">Panel de Control Admin</h2>
     <div class="d-flex gap-2">
-      @if (showRecetasShortcut) {
-        <button
-          class="btn btn-outline-primary fw-semibold"
-          (click)="returnToRecetas()"
-        >
-          <i class="bi bi-arrow-left me-2"></i>Volver a Recetas
-        </button>
-      }
       <button class="btn btn-gestion fw-semibold" (click)="setTab('usuarios')">
         <i class="bi bi-people-fill me-2"></i>Gestión Usuarios
       </button>
