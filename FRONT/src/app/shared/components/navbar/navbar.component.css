@@ -101,11 +101,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.45rem;
   border: none;
   background: transparent;
   cursor: pointer;
   font: inherit;
   line-height: 1.1;
+}
+
+.nav-link__icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link:hover {

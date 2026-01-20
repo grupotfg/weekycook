@@ -25,8 +25,10 @@
         routerLinkActive="active"
         class="nav-link"
         (click)="closeMenu()"
-        >Recetas</a
       >
+        <i class="bi bi-journal-text nav-link__icon" aria-hidden="true"></i>
+        <span>Recetas</span>
+      </a>
 
       @if (authService.isAuthenticated()) {
         <a
@@ -34,16 +36,20 @@
           routerLinkActive="active"
           class="nav-link"
           (click)="closeMenu()"
-          >Planificador</a
         >
+          <i class="bi bi-calendar3 nav-link__icon" aria-hidden="true"></i>
+          <span>Planificador</span>
+        </a>
 
         <a
           routerLink="/favorites"
           routerLinkActive="active"
           class="nav-link"
           (click)="closeMenu()"
-          >Favoritos</a
         >
+          <i class="bi bi-heart nav-link__icon" aria-hidden="true"></i>
+          <span>Favoritos</span>
+        </a>
       }
 
       @if (authService.isAdmin()) {
@@ -53,7 +59,8 @@
           class="nav-link nav-link--admin"
           (click)="closeMenu()"
         >
-          Panel Admin
+          <i class="bi bi-speedometer2 nav-link__icon" aria-hidden="true"></i>
+          <span>Panel Admin</span>
         </a>
       }
     </div>
