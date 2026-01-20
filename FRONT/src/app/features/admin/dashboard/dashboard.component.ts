@@ -18,6 +18,7 @@ import { RecetasGestionComponent } from '../components/recetas-gestion/recetas-g
     RecetasGestionComponent,
   ],
   templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
   @ViewChild(RecetasGestionComponent)
@@ -43,5 +44,16 @@ export class DashboardComponent {
   returnToRecetas() {
     this.recetasComponent?.closeForm();
     this.setTab('recetas');
+  }
+
+  isRecetasFormOpen(): boolean {
+    return this.recetasComponent?.showForm ?? false;
+  }
+
+  openNuevaReceta(): void {
+    if (this.activeTab !== 'recetas') {
+      this.setTab('recetas');
+    }
+    this.recetasComponent?.nuevaReceta();
   }
 }
