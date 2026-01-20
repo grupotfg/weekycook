@@ -29,89 +29,89 @@
   </div>
 
   @if (showForm) {
-  <div
-    class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn"
-  >
-    <h6 class="fw-bold text-purple mb-3">
-      {{ isEditing ? "Editar" : "Crear" }} Usuario
-    </h6>
-    <form (ngSubmit)="guardar()" class="row g-3">
-      <div class="col-md-3">
-        <label class="small fw-bold text-muted">Nombre</label>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedUser.nombre"
-          name="nombre"
-          required
-        />
-      </div>
-      <div class="col-md-3">
-        <label class="small fw-bold text-muted">Apellido</label>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedUser.apellido"
-          name="apellido"
-        />
-      </div>
-      <div class="col-md-3">
-        <label class="small fw-bold text-muted">Correo</label>
-        <input
-          type="email"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedUser.correo"
-          name="correo"
-          required
-        />
-      </div>
-      <div class="col-md-3">
-        <label class="small fw-bold text-muted">{{
-          isEditing ? "Nueva Clave" : "Contraseña"
-        }}</label>
-        <input
-          type="password"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedUser.contrasena"
-          name="contrasena"
-          [required]="!isEditing"
-          minlength="6"
-        />
-      </div>
-      <div class="col-md-4">
-        <label class="small fw-bold text-muted">Descripción (Perfil)</label>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedUser.descripcion"
-          name="desc"
-        />
-      </div>
-      <div class="col-md-2">
-        <label class="small fw-bold text-muted">Rol</label>
-        <select
-          class="form-select form-select-sm"
-          [(ngModel)]="selectedUser.esAdmin"
-          name="rol"
-        >
-          <option [ngValue]="false">Usuario Estándar</option>
-          <option [ngValue]="true">Administrador</option>
-        </select>
-      </div>
-      <div class="col-md-6 d-flex align-items-end gap-2">
-        <button type="submit" class="btn btn-sm btn-success px-4 flex-grow-1">
-          Confirmar
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-secondary px-4"
-          (click)="cancelar()"
-        >
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </div>
+    <div
+      class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn"
+    >
+      <h6 class="fw-bold text-purple mb-3">
+        {{ isEditing ? "Editar" : "Crear" }} Usuario
+      </h6>
+      <form (ngSubmit)="guardar()" class="row g-3">
+        <div class="col-md-3">
+          <label class="small fw-bold text-muted">Nombre</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedUser.nombre"
+            name="nombre"
+            required
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="small fw-bold text-muted">Apellido</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedUser.apellido"
+            name="apellido"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="small fw-bold text-muted">Correo</label>
+          <input
+            type="email"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedUser.correo"
+            name="correo"
+            required
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="small fw-bold text-muted">{{
+            isEditing ? "Nueva Clave" : "Contraseña"
+          }}</label>
+          <input
+            type="password"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedUser.contrasena"
+            name="contrasena"
+            [required]="!isEditing"
+            minlength="6"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="small fw-bold text-muted">Descripción (Perfil)</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedUser.descripcion"
+            name="desc"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="small fw-bold text-muted">Rol</label>
+          <select
+            class="form-select form-select-sm"
+            [(ngModel)]="selectedUser.esAdmin"
+            name="rol"
+          >
+            <option [ngValue]="false">Usuario Estándar</option>
+            <option [ngValue]="true">Administrador</option>
+          </select>
+        </div>
+        <div class="col-md-6 d-flex align-items-end gap-2">
+          <button type="submit" class="btn btn-sm btn-success px-4 flex-grow-1">
+            Confirmar
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary px-4"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
   }
 
   <div class="table-responsive">
@@ -126,31 +126,43 @@
       </thead>
       <tbody>
         @for (user of usuariosFiltrados; track user.id) {
-        <tr>
-          <td class="fw-bold text-purple">
-            {{ user.nombre }} {{ user.apellido }}
-          </td>
-          <td class="text-muted small">{{ user.correo }}</td>
-          <td>
-            <span class="role-pill" [ngClass]="user.esAdmin ? 'admin' : 'user'">
-              {{ user.esAdmin ? "Administrador" : "Usuario" }}
-            </span>
-          </td>
-          <td class="text-end">
-            <button class="btn btn-sm text-primary me-2" (click)="editar(user)">
-              <i class="bi bi-pencil-square"></i>
-            </button>
-            <button class="btn btn-sm text-danger" (click)="eliminar(user.id!)">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        </tr>
+          <tr>
+            <td class="fw-bold text-purple">
+              {{ user.nombre }} {{ user.apellido }}
+            </td>
+            <td class="text-muted small">{{ user.correo }}</td>
+            <td>
+              <span
+                class="role-pill"
+                [ngClass]="user.esAdmin ? 'admin' : 'user'"
+              >
+                {{ user.esAdmin ? "Administrador" : "Usuario" }}
+              </span>
+            </td>
+            <td class="text-end">
+              <span class="action-btn-wrapper me-2">
+                <button class="btn btn-sm text-primary" (click)="editar(user)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <span class="tooltip-action">Editar usuario</span>
+              </span>
+              <span class="action-btn-wrapper">
+                <button
+                  class="btn btn-sm text-danger"
+                  (click)="eliminar(user.id!)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+                <span class="tooltip-action">Eliminar usuario</span>
+              </span>
+            </td>
+          </tr>
         } @empty {
-        <tr>
-          <td colspan="4" class="text-center py-5 text-muted">
-            No se encontraron usuarios.
-          </td>
-        </tr>
+          <tr>
+            <td colspan="4" class="text-center py-5 text-muted">
+              No se encontraron usuarios.
+            </td>
+          </tr>
         }
       </tbody>
     </table>

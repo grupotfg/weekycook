@@ -2,7 +2,7 @@
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h2 class="fw-bold text-purple m-0">Panel de Control Admin</h2>
     <div class="d-flex gap-2">
-      @if (activeTab === 'recetas' && !isRecetasFormOpen()) {
+      @if (activeTab === "recetas" && !isRecetasFormOpen()) {
         <button
           class="btn btn-nueva-receta fw-semibold"
           (click)="openNuevaReceta()"

@@ -54,3 +54,45 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
+
+.tooltip-action {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2b1642;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  box-shadow: 0 8px 16px rgba(43, 22, 66, 0.25);
+}
+
+.tooltip-action::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: #2b1642 transparent transparent transparent;
+}
+
+.action-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn-wrapper:hover .tooltip-action {
+  opacity: 1;
+  transform: translate(-50%, -4px);
+}
