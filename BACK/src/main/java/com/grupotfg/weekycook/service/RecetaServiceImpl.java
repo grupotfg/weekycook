@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.grupotfg.weekycook.dto.request.RecetaIngredienteRequestDTO;
 import com.grupotfg.weekycook.dto.request.RecetaRequestDTO;
+import com.grupotfg.weekycook.dto.request.RecetaValorNutricionalRequestDTO;
 import com.grupotfg.weekycook.dto.response.RecetaDetailResponseDTO;
 import com.grupotfg.weekycook.dto.response.RecetaResponseDTO;
 import com.grupotfg.weekycook.entity.*;
@@ -94,6 +95,7 @@ public class RecetaServiceImpl implements RecetaService {
         receta.setCategoria(categoria);
         receta.setCreadoPor(creador);
         receta.setFechaCreacion(LocalDateTime.now());
+        applyValorNutricional(receta, dto.getValorNutricional());
         
         //Inicializamos la lista si no lo está (es importante)
         receta.setRecetaIngredientes(new ArrayList<>());
@@ -152,7 +154,7 @@ public class RecetaServiceImpl implements RecetaService {
      receta.setFotoUrl(dto.getFotoUrl());
      receta.setCategoria(categoria);
 
-     // 2. Gestión de ingredientes: Borrar antiguos y añadir nuevos (vamos por orden)
+    // 2. Gestión de ingredientes: Borrar antiguos y añadir nuevos (vamos por orden)
      
      // Borrado (gracias a orphanRemoval=true de la bd que pa esto lo pusimos)
      if (receta.getRecetaIngredientes() != null) {
@@ -178,7 +180,10 @@ public class RecetaServiceImpl implements RecetaService {
          }
      }
      
-     // 3. Guardar la receta
+    // 3. Actualizar valor nutricional
+    applyValorNutricional(receta, dto.getValorNutricional());
+
+    // 4. Guardar la receta
      Receta recetaActualizada = recetaRepository.save(receta);
      
      return recetaMapper.toRecetaDetailDto(recetaActualizada);
@@ -209,5 +214,26 @@ public class RecetaServiceImpl implements RecetaService {
             throw new ForbiddenException("Acción no permitida. Se requieren permisos de administrador.");
         }
         return user;
+    }
+
+    private void applyValorNutricional(Receta receta, RecetaValorNutricionalRequestDTO valorDTO) {
+        if (valorDTO == null) {
+            receta.setValorNutricional(null);
+            return;
+        }
+
+        RecetaValorNutricional valor = receta.getValorNutricional();
+        if (valor == null) {
+            valor = new RecetaValorNutricional();
+        }
+
+        valor.setReceta(receta);
+        valor.setCaloriasTotales(valorDTO.getCalorias());
+        valor.setProteinasTotales(valorDTO.getProteinas());
+        valor.setGrasasTotales(valorDTO.getGrasas());
+        valor.setHidratosTotales(valorDTO.getHidratos());
+        valor.setFechaCalculo(LocalDateTime.now());
+
+        receta.setValorNutricional(valor);
     }
 }

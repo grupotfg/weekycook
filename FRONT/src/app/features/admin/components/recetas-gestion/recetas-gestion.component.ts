@@ -56,6 +56,7 @@ export class RecetasGestionComponent implements OnInit {
       ingredientes: [],
       fotoUrl: '',
       creadorNombre: '',
+      valorNutricional: this.initValoresNutricionales(),
     };
   }
 
@@ -94,6 +95,10 @@ export class RecetasGestionComponent implements OnInit {
         // -----------------------------------
 
         this.selectedRecipe = fullRecipe;
+        if (!this.selectedRecipe.valorNutricional) {
+          this.selectedRecipe.valorNutricional =
+            this.initValoresNutricionales();
+        }
         this.isEditing = true;
         this.showForm = true;
         this.formStateChange.emit(true);
@@ -184,6 +189,15 @@ export class RecetasGestionComponent implements OnInit {
     this.showForm = false;
     this.isEditing = false;
     this.formStateChange.emit(false);
+  }
+
+  private initValoresNutricionales() {
+    return {
+      calorias: 0,
+      proteinas: 0,
+      grasas: 0,
+      hidratos: 0,
+    };
   }
 
   private normalizeSearch(value?: string | null): string {

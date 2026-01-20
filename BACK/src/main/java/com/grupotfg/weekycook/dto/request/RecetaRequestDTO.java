@@ -43,4 +43,7 @@ public class RecetaRequestDTO {
     
     @Valid // Valida los objetos dentro de la lista
     private List<RecetaIngredienteRequestDTO> ingredientes;
+
+    @Valid
+    private RecetaValorNutricionalRequestDTO valorNutricional;
 }

@@ -6,6 +6,13 @@ export interface RecipeIngredientRequest {
   nombreAux?: string; // Para mostrar el nombre en el formulario
 }
 
+export interface RecipeNutrition {
+  calorias?: number;
+  proteinas?: number;
+  grasas?: number;
+  hidratos?: number;
+}
+
 export interface Recipe {
   id?: number;
   titulo: string;
@@ -18,4 +25,5 @@ export interface Recipe {
   categoriaNombre?: string; // Del DTO de listado
   creadorNombre?: string;
   ingredientes?: RecipeIngredientRequest[]; // Opcional para el listado
+  valorNutricional: RecipeNutrition;
 }
