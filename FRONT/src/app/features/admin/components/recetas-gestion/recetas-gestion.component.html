@@ -163,6 +163,18 @@
                 placeholder="Unidad"
               />
             </div>
+            <div class="col-md-2 d-flex flex-column">
+              <label class="small fw-bold invisible" aria-hidden="true"
+                >Acción</label
+              >
+              <button
+                type="button"
+                class="btn btn-primary gradient-btn w-100 mt-auto"
+                (click)="agregarIngrediente()"
+              >
+                Añadir
+              </button>
+            </div>
           </div>
           <ul class="list-group">
             @for (item of selectedRecipe.ingredientes; track $index) {
