@@ -22,7 +22,7 @@
           <i class="bi bi-plus-lg me-2"></i>Nueva Receta
         </button>
       } @else {
-        <button class="btn btn-outline-primary px-4" (click)="closeForm()">
+        <button class="btn btn-primary gradient-btn px-4" (click)="closeForm()">
           <i class="bi bi-arrow-left me-2"></i>Volver a Recetas
         </button>
       }
@@ -43,21 +43,7 @@
               required
             />
           </div>
-          <div class="col-md-3">
-            <label class="small fw-bold">Categoría</label>
-            <select
-              class="form-select"
-              [(ngModel)]="selectedRecipe.categoriaId"
-              name="categoria"
-              required
-            >
-              <option [ngValue]="0" disabled>Selecciona...</option>
-              @for (cat of categorias; track cat.id) {
-                <option [ngValue]="cat.id">{{ cat.nombre }}</option>
-              }
-            </select>
-          </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label class="small fw-bold">Foto URL</label>
             <input
               type="text"
@@ -65,6 +51,56 @@
               [(ngModel)]="selectedRecipe.fotoUrl"
               name="foto"
             />
+          </div>
+        </div>
+
+        <h6 class="small fw-bold mb-2">Detalles</h6>
+        <div class="card p-3 mb-3">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="small fw-bold">Tiempo preparación (min)</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="selectedRecipe.tiempoPreparacionMin"
+                name="tiempo"
+                min="0"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-bold">Porciones</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="selectedRecipe.porciones"
+                name="porciones"
+                min="1"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-bold">Categoría</label>
+              <select
+                class="form-select"
+                [(ngModel)]="selectedRecipe.categoriaId"
+                name="categoria"
+                required
+              >
+                <option [ngValue]="0" disabled>Selecciona...</option>
+                @for (cat of categorias; track cat.id) {
+                  <option [ngValue]="cat.id">{{ cat.nombre }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-bold">Creado por</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="selectedRecipe.creadorNombre"
+                name="creador"
+                placeholder="Nombre del autor"
+              />
+            </div>
           </div>
         </div>
 

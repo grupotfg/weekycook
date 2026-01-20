@@ -55,6 +55,7 @@ export class RecetasGestionComponent implements OnInit {
       categoriaId: 0,
       ingredientes: [],
       fotoUrl: '',
+      creadorNombre: '',
     };
   }
 
@@ -80,7 +81,7 @@ export class RecetasGestionComponent implements OnInit {
           fullRecipe.ingredientes = fullRecipe.ingredientes.map((ingReceta) => {
             // Buscamos el ingrediente en la lista que ya tenemos cargada
             const infoIng = this.ingredientesDisponibles.find(
-              (i) => i.id === ingReceta.ingredienteId
+              (i) => i.id === ingReceta.ingredienteId,
             );
             return {
               ...ingReceta,
@@ -108,14 +109,14 @@ export class RecetasGestionComponent implements OnInit {
     }
 
     return this.recetas.filter((r) =>
-      this.normalizeSearch(r.titulo).includes(search)
+      this.normalizeSearch(r.titulo).includes(search),
     );
   }
 
   agregarIngrediente() {
     this.tempIngrediente.cantidad = Math.max(
       0,
-      this.tempIngrediente.cantidad ?? 0
+      this.tempIngrediente.cantidad ?? 0,
     );
 
     if (
@@ -123,7 +124,7 @@ export class RecetasGestionComponent implements OnInit {
       this.tempIngrediente.cantidad > 0
     ) {
       const ing = this.ingredientesDisponibles.find(
-        (i) => i.id === this.tempIngrediente.ingredienteId
+        (i) => i.id === this.tempIngrediente.ingredienteId,
       );
 
       if (!this.selectedRecipe.ingredientes) {
