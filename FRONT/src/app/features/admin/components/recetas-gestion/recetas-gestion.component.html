@@ -69,6 +69,17 @@
         </div>
 
         <div class="mb-3">
+          <label class="small fw-bold">Descripción</label>
+          <textarea
+            class="form-control"
+            rows="2"
+            [(ngModel)]="selectedRecipe.descripcionCorta"
+            name="desc"
+            placeholder="Breve resumen de la receta"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
           <label class="small fw-bold">Instrucciones</label>
           <textarea
             class="form-control"
