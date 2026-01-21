@@ -13,8 +13,6 @@ import {
 import { DayOfWeek } from '../../core/enums/day.enum';
 import { MealTurn } from '../../core/enums/meal-turn.enum';
 
-// Planner semanal - Alejandra
-
 @Component({
   selector: 'app-planner',
   standalone: true,
@@ -31,7 +29,6 @@ export class PlannerComponent implements OnInit {
   loading = true;
   errorMessage = '';
   subtitle = 'Organiza los platos de lunes a domingo';
-  viewLabel = 'Vista semanal';
 
   // Usa enums si son string
   readonly days: DayOfWeek[] = [
@@ -103,6 +100,14 @@ export class PlannerComponent implements OnInit {
     return this.selectedPlan?.items?.find(
       (item) => item.dia === day && item.turno === meal,
     );
+  }
+
+  // Permite reducir lso nombres de las recetas, cuando son muy largas y poderse visulizar bien.
+  displayTitle(recipeTitle?: string | null): string {
+    if (!recipeTitle) return '';
+    const words = recipeTitle.trim().split(/\s+/);
+    if (words.length <= 3) return recipeTitle;
+    return `${words.slice(0, 3).join(' ')}…`;
   }
 
   // Navega a la vista de seleccion de recetas pasando por el plan, dia y turno como parametros si hay plan seleccionado

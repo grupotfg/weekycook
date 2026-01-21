@@ -7,7 +7,6 @@
     </div>
 
     <div class="hero-cta">
-      <span class="hero-view">{{ viewLabel }}</span>
       <button
         class="btn-primary"
         type="button"
@@ -58,6 +57,7 @@
           (click)="onDeletePlan()"
           [disabled]="!selectedPlanId"
         >
+          <span class="btn-icon">✕</span>
           Eliminar plan
         </button>
       </div>
@@ -76,8 +76,6 @@
       }
 
       @if (!loading && selectedPlan) {
-        <p class="view-label">{{ viewLabel }}</p>
-
         <div class="planner-grid">
           <div class="grid-head">
             <div class="corner">Comida / Cena</div>
@@ -94,7 +92,7 @@
                 <div class="cell">
                   @if (getSlot(d, m); as slot) {
                     <div
-                      class="slot-card"
+                      class="slot-card occupied"
                       role="button"
                       [class.disabled]="!selectedPlanId"
                       [attr.tabindex]="selectedPlanId ? 0 : -1"
@@ -102,20 +100,17 @@
                       (keydown)="onSlotKey($event, d, m)"
                       [attr.aria-disabled]="!selectedPlanId"
                     >
-                      <div class="slot-title">{{ slot.receta?.titulo }}</div>
-                      <div class="slot-meta">
-                        @if (
-                          slot.receta?.tiempoPreparacionMin !== null &&
-                          slot.receta?.tiempoPreparacionMin !== undefined
-                        ) {
-                          <span
-                            >{{ slot.receta?.tiempoPreparacionMin }} min</span
-                          >
-                        }
-                        @if (slot.receta?.categoriaNombre) {
-                          <span>{{ slot.receta?.categoriaNombre }}</span>
-                        }
+                      <div class="slot-title">
+                        {{ displayTitle(slot.receta?.titulo) }}
                       </div>
+                      @if (
+                        slot.receta?.tiempoPreparacionMin !== null &&
+                        slot.receta?.tiempoPreparacionMin !== undefined
+                      ) {
+                        <div class="slot-time">
+                          {{ slot.receta?.tiempoPreparacionMin }} min
+                        </div>
+                      }
                       <button
                         class="slot-remove"
                         type="button"
