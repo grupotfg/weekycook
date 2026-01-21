@@ -22,7 +22,7 @@ export interface PlanDetail extends PlanSummary {
 // Item individual dentro del plan (PlanItemResponseDTO)
 export interface PlanItem {
   id: number;
-  receta: Recipe;
+  receta?: Recipe | null;
   dia: DayOfWeek;
   turno: MealTurn;
   notas?: string;
