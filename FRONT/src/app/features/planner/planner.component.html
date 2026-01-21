@@ -148,20 +148,6 @@
             </div>
           </div>
         }
-
-        @if (!loading && !selectedPlan) {
-          <div class="empty">
-            <p>No hay planes guardados. Crea uno para empezar.</p>
-            <button
-              class="btn-primary"
-              type="button"
-              (click)="onCreatePlan()"
-              [disabled]="creatingPlan"
-            >
-              Crear plan vacío
-            </button>
-          </div>
-        }
       </div>
     </div>
   </div>

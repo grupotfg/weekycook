@@ -61,12 +61,12 @@ export class PlannerComponent implements OnInit {
         this.plans = data ?? [];
         this.selectedPlanId = this.plans[0]?.id ?? null;
 
-        if (this.selectedPlanId) {
-          this.loadPlanDetail(this.selectedPlanId);
-        } else {
-          this.selectedPlan = undefined;
-          this.loading = false;
+        if (!this.selectedPlanId) {
+          this.onCreatePlan();
+          return;
         }
+
+        this.loadPlanDetail(this.selectedPlanId);
       },
       error: () => {
         this.errorMessage = 'No se pudieron cargar los planes.';
