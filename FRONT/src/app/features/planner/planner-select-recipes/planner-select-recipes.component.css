@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background: linear-gradient(180deg, #f8f1ff 0%, #f0e5ff 40%, #ffffff 100%);
+  background: #fff;
   padding-bottom: 4rem;
 }
 
@@ -40,18 +40,10 @@
 }
 
 .planner-shell {
-  background: #efeff2;
-  border-radius: 18px;
-  padding: 1.25rem;
-  box-shadow: 0 18px 40px rgba(99, 60, 154, 0.12);
-}
-
-.list-card {
-  background: #fff;
-  border: 1px solid #e1d4ff;
-  border-radius: 16px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 .section-title {
@@ -67,11 +59,18 @@
 }
 
 .selectors {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.75rem;
-  align-items: end;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
   margin-bottom: 1rem;
+}
+
+.field.search {
+  flex: 1 1 60%;
+  min-width: 260px;
 }
 
 .field label {
@@ -85,16 +84,17 @@
 .field input {
   width: 100%;
   border-radius: 999px;
-  border: 1px solid #d6c4f5;
+  border: 1px solid #cdb5ff;
   padding: 0.55rem 1rem;
   outline: none;
   color: #472167;
-  background: #665090;
+  background: transparent;
   font-weight: 700;
 }
 
 .field input {
-  background: #5d44a1;
+  background: transparent;
+  border-color: #cdb5ff;
 }
 
 .msg {
@@ -148,12 +148,30 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 860px) {
   .selectors {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    max-width: none;
+  }
+
+  .field.search {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    align-items: stretch;
   }
 }

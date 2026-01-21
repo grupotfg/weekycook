@@ -18,7 +18,6 @@ import { PlanItemPayload } from '../../../core/models/plan.model';
   styleUrls: ['./planner-select-recipes.component.css'],
 })
 export class PlannerSelectRecipesComponent implements OnInit {
-
   // cabecera igual que planner
   subtitle = 'Organiza los platos de lunes a domingo';
   viewLabel = 'Visto de frente';
@@ -40,11 +39,10 @@ export class PlannerSelectRecipesComponent implements OnInit {
   message = '';
   saving = false;
 
-
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private planService: PlanService
+    private planService: PlanService,
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +70,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
         this.recipes = [];
         this.filteredRecipes = [];
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -82,9 +80,10 @@ export class PlannerSelectRecipesComponent implements OnInit {
 
     this.filteredRecipes = !term
       ? this.recipes
-      : this.recipes.filter(r =>
-          r.titulo.toLowerCase().includes(term) ||
-          (r.descripcionCorta ?? '').toLowerCase().includes(term)
+      : this.recipes.filter(
+          (r) =>
+            r.titulo.toLowerCase().includes(term) ||
+            (r.descripcionCorta ?? '').toLowerCase().includes(term),
         );
   }
 
@@ -96,7 +95,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
       recetaId: recipe.id,
       dia: this.day,
       turno: this.turn,
-      notas: ''
+      notas: '',
     };
 
     this.planService.addOrUpdateItem(this.planId, payload).subscribe({
@@ -105,7 +104,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
       },
       error: () => {
         this.message = 'No se pudo asignar la receta';
-      }
+      },
     });
   }
 
@@ -119,7 +118,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
       },
       error: () => {
         this.message = 'No se pudo eliminar la receta';
-      }
+      },
     });
   }
 }
