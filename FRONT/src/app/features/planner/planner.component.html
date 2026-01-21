@@ -62,98 +62,106 @@
         </button>
       </div>
 
-      @if (loading) {
-        <div class="status" aria-live="polite">
-          <span class="dot"></span>
-          Cargando plan...
-        </div>
-      }
-
-      @if (!loading && errorMessage) {
-        <div class="status error" aria-live="assertive">
-          {{ errorMessage }}
-        </div>
-      }
-
-      @if (!loading && selectedPlan) {
-        <div class="planner-grid">
-          <div class="grid-head">
-            <div class="corner">Comida / Cena</div>
-            @for (d of days; track d) {
-              <div class="day-head">{{ d }}</div>
-            }
+      <div class="panel-body">
+        @if (loading) {
+          <div class="status" aria-live="polite">
+            <span class="dot"></span>
+            Cargando plan...
           </div>
+        }
 
-          @for (m of meals; track m) {
-            <div class="grid-row">
-              <div class="meal-head">{{ m }}</div>
+        @if (!loading && errorMessage) {
+          <div class="status error" aria-live="assertive">
+            {{ errorMessage }}
+          </div>
+        }
 
-              @for (d of days; track d) {
-                <div class="cell">
-                  @if (getSlot(d, m); as slot) {
-                    <div
-                      class="slot-card occupied"
-                      role="button"
-                      [class.disabled]="!selectedPlanId"
-                      [attr.tabindex]="selectedPlanId ? 0 : -1"
-                      (click)="handleSlotClick(d, m)"
-                      (keydown)="onSlotKey($event, d, m)"
-                      [attr.aria-disabled]="!selectedPlanId"
-                    >
-                      <div class="slot-title">
-                        {{ displayTitle(slot.receta?.titulo) }}
-                      </div>
-                      @if (
-                        slot.receta?.tiempoPreparacionMin !== null &&
-                        slot.receta?.tiempoPreparacionMin !== undefined
-                      ) {
-                        <div class="slot-time">
-                          {{ slot.receta?.tiempoPreparacionMin }} min
+        @if (!loading && selectedPlan) {
+          <div class="grid-shell">
+            <div class="planner-grid">
+              <div class="grid-head">
+                <div class="corner">Comida / Cena</div>
+                @for (d of days; track d) {
+                  <div class="day-head">{{ d }}</div>
+                }
+              </div>
+
+              @for (m of meals; track m) {
+                <div class="grid-row">
+                  <div class="meal-head">{{ m }}</div>
+
+                  @for (d of days; track d) {
+                    <div class="cell">
+                      @if (getSlot(d, m); as slot) {
+                        <div
+                          class="slot-card occupied"
+                          role="button"
+                          [class.disabled]="!selectedPlanId"
+                          [attr.tabindex]="selectedPlanId ? 0 : -1"
+                          (click)="handleSlotClick(d, m)"
+                          (keydown)="onSlotKey($event, d, m)"
+                          [attr.aria-disabled]="!selectedPlanId"
+                        >
+                          <div class="slot-body">
+                            <div class="slot-title">
+                              {{ displayTitle(slot.receta?.titulo) }}
+                            </div>
+                            @if (
+                              slot.receta?.tiempoPreparacionMin !== null &&
+                              slot.receta?.tiempoPreparacionMin !== undefined
+                            ) {
+                              <div class="slot-time">
+                                {{ slot.receta?.tiempoPreparacionMin }} min
+                              </div>
+                            }
+                          </div>
+                          <button
+                            class="slot-remove"
+                            type="button"
+                            [attr.aria-label]="
+                              'Quitar receta de ' + d + ' ' + m
+                            "
+                            (click)="removeSlot(d, m, $event)"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      } @else {
+                        <div
+                          class="slot-card is-empty"
+                          role="button"
+                          [class.disabled]="!selectedPlanId"
+                          [attr.tabindex]="selectedPlanId ? 0 : -1"
+                          (click)="handleSlotClick(d, m)"
+                          (keydown)="onSlotKey($event, d, m)"
+                          [attr.aria-disabled]="!selectedPlanId"
+                        >
+                          <span class="add-icon">+</span>
+                          <span class="add-label">Añadir</span>
                         </div>
                       }
-                      <button
-                        class="slot-remove"
-                        type="button"
-                        [attr.aria-label]="'Quitar receta de ' + d + ' ' + m"
-                        (click)="removeSlot(d, m, $event)"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  } @else {
-                    <div
-                      class="slot-card is-empty"
-                      role="button"
-                      [class.disabled]="!selectedPlanId"
-                      [attr.tabindex]="selectedPlanId ? 0 : -1"
-                      (click)="handleSlotClick(d, m)"
-                      (keydown)="onSlotKey($event, d, m)"
-                      [attr.aria-disabled]="!selectedPlanId"
-                    >
-                      <span class="add-icon">+</span>
-                      <span class="add-label">Añadir</span>
                     </div>
                   }
                 </div>
               }
             </div>
-          }
-        </div>
-      }
+          </div>
+        }
 
-      @if (!loading && !selectedPlan) {
-        <div class="empty">
-          <p>No hay planes guardados. Crea uno para empezar.</p>
-          <button
-            class="btn-primary"
-            type="button"
-            (click)="onCreatePlan()"
-            [disabled]="creatingPlan"
-          >
-            Crear plan vacio
-          </button>
-        </div>
-      }
+        @if (!loading && !selectedPlan) {
+          <div class="empty">
+            <p>No hay planes guardados. Crea uno para empezar.</p>
+            <button
+              class="btn-primary"
+              type="button"
+              (click)="onCreatePlan()"
+              [disabled]="creatingPlan"
+            >
+              Crear plan vacío
+            </button>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </section>
