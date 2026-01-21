@@ -1,93 +1,66 @@
-<section class="planner-hero">
-    <div class="container hero-row">
-        <div class="hero-left">
-            <p class="hero-tag">PLANIFICADOR SEMANAL</p>
-            <p class="hero-sub">{{ subtitle }}</p>
-        </div>
-
-        <div class="hero-right">
-            <span class="hero-view">{{ viewLabel }}</span>
-            <button class="btn-primary" routerLink="/planner/new">Nuevo plan</button>
-            <button class="btn-outline" routerLink="/planner">Aleatorio</button>
-        </div>
-    </div>
-</section>
-
 <section class="planner-wrap">
-    <div class="container">
-        <div class="planner-shell">
+  <div class="container">
+    <div class="planner-shell">
+      <h2 class="section-title">Seleccionar recetas</h2>
 
-            <div class="top-card">
-                <h2>Seleccionar recetas</h2>
+      <p class="hint">
+        Elige receta para <strong>{{ day }} - {{ turn }}</strong>
+      </p>
 
-                <p class="hint">
-                    Elige receta para <strong>{{ day }} - {{ turn }}</strong>
-                </p>
-
-                <div class="selectors">
-                    <div class="field">
-                        <label>Día</label>
-                        <select [(ngModel)]="day">
-                            @for (d of days; track d) {
-                            <option [ngValue]="d">{{ d }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Turno</label>
-                        <select [(ngModel)]="turn">
-                            @for (t of turns; track t) {
-                            <option [ngValue]="t">{{ t }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="field search">
-                        <label>Buscar</label>
-                        <input type="text" [(ngModel)]="searchTerm" (input)="applyFilter()"
-                            placeholder="Ensalada, pasta, sopa..." />
-                    </div>
-
-                    <button class="btn-danger" type="button" (click)="removeRecipe()">
-                        Eliminar selección
-                    </button>
-                </div>
-
-                @if (message) {
-                <p class="msg">{{ message }}</p>
-                }
-            </div>
-
-            <div class="list-card">
-                @if (loading) {
-                <p>Cargando recetas...</p>
-                } @else {
-                <div class="recipes-grid">
-                    @for (r of filteredRecipes; track (r.id ?? r.titulo)) {
-                    <button class="recipe-pick" type="button" (click)="selectRecipe(r)" [disabled]="saving">
-                        <div class="title">{{ r.titulo }}</div>
-                        <div class="desc">{{ r.descripcionCorta }}</div>
-
-                        <div class="meta">
-                            @if (r.tiempoPreparacionMin !== null) {
-                            <span>⏱ {{ r.tiempoPreparacionMin }} min</span>
-                            }
-                            @if (r.categoriaNombre) {
-                            <span>🏷 {{ r.categoriaNombre }}</span>
-                            }
-                        </div>
-                    </button>
-                    }
-                </div>
-                }
-            </div>
-
-            <div class="actions">
-                <button class="btn-outline" routerLink="/planner">← Volver al plan</button>
-            </div>
-
+      <div class="selectors">
+        <div class="field search">
+          <label>Buscar</label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+            placeholder="Ensalada, pasta, sopa..."
+          />
         </div>
-    </div>
-</section>
 
+        <button class="btn-danger" type="button" (click)="removeRecipe()">
+          Eliminar selección
+        </button>
+      </div>
+
+      @if (message) {
+        <p class="msg">{{ message }}</p>
+      }
+
+      <div class="list-card">
+        @if (loading) {
+          <p>Cargando recetas...</p>
+        } @else {
+          <div class="recipes-grid">
+            @for (r of filteredRecipes; track r.id ?? r.titulo) {
+              <button
+                class="recipe-pick"
+                type="button"
+                (click)="selectRecipe(r)"
+                [disabled]="saving"
+              >
+                <div class="title">{{ r.titulo }}</div>
+                <div class="desc">{{ r.descripcionCorta }}</div>
+
+                <div class="meta">
+                  @if (r.tiempoPreparacionMin !== null) {
+                    <span>⏱ {{ r.tiempoPreparacionMin }} min</span>
+                  }
+                  @if (r.categoriaNombre) {
+                    <span>🏷 {{ r.categoriaNombre }}</span>
+                  }
+                </div>
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="actions">
+        <button class="btn-outline" routerLink="/planner">
+          ← Volver al plan
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

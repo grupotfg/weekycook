@@ -1,7 +1,6 @@
 <section class="planner-hero">
   <div class="container hero-row">
     <div class="hero-copy">
-      <p class="hero-flag">Planifica sin estres</p>
       <h1 class="hero-title">Planificador Semanal</h1>
       <p class="hero-sub">{{ subtitle }}</p>
     </div>
@@ -80,7 +79,7 @@
           <div class="grid-shell">
             <div class="planner-grid">
               <div class="grid-head">
-                <div class="corner">Comida / Cena</div>
+                <div></div>
                 @for (d of days; track d) {
                   <div class="day-head">{{ d }}</div>
                 }
@@ -106,6 +105,8 @@
                             <div class="slot-title">
                               {{ displayTitle(slot.receta?.titulo) }}
                             </div>
+                          </div>
+                          <div class="slot-meta">
                             @if (
                               slot.receta?.tiempoPreparacionMin !== null &&
                               slot.receta?.tiempoPreparacionMin !== undefined
@@ -114,17 +115,17 @@
                                 {{ slot.receta?.tiempoPreparacionMin }} min
                               </div>
                             }
+                            <button
+                              class="slot-remove"
+                              type="button"
+                              [attr.aria-label]="
+                                'Quitar receta de ' + d + ' ' + m
+                              "
+                              (click)="removeSlot(d, m, $event)"
+                            >
+                              ×
+                            </button>
                           </div>
-                          <button
-                            class="slot-remove"
-                            type="button"
-                            [attr.aria-label]="
-                              'Quitar receta de ' + d + ' ' + m
-                            "
-                            (click)="removeSlot(d, m, $event)"
-                          >
-                            ×
-                          </button>
                         </div>
                       } @else {
                         <div
