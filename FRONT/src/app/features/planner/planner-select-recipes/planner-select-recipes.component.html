@@ -18,49 +18,46 @@
           />
         </div>
 
-        <button class="btn-danger" type="button" (click)="removeRecipe()">
-          Eliminar selección
-        </button>
+        <div class="actions">
+          <button class="btn-outline" routerLink="/planner">
+            ← Volver al plan
+          </button>
+          <button class="btn-danger" type="button" (click)="removeRecipe()">
+            Limpiar
+          </button>
+        </div>
       </div>
 
       @if (message) {
         <p class="msg">{{ message }}</p>
       }
 
-      <div class="list-card">
-        @if (loading) {
-          <p>Cargando recetas...</p>
-        } @else {
-          <div class="recipes-grid">
-            @for (r of filteredRecipes; track r.id ?? r.titulo) {
-              <button
-                class="recipe-pick"
-                type="button"
-                (click)="selectRecipe(r)"
-                [disabled]="saving"
-              >
-                <div class="title">{{ r.titulo }}</div>
-                <div class="desc">{{ r.descripcionCorta }}</div>
+      @if (loading) {
+        <p>Cargando recetas...</p>
+      } @else {
+        <div class="recipes-grid">
+          @for (r of filteredRecipes; track r.id ?? r.titulo) {
+            <button
+              class="recipe-pick"
+              type="button"
+              (click)="selectRecipe(r)"
+              [disabled]="saving"
+            >
+              <div class="title">{{ r.titulo }}</div>
+              <div class="desc">{{ r.descripcionCorta }}</div>
 
-                <div class="meta">
-                  @if (r.tiempoPreparacionMin !== null) {
-                    <span>⏱ {{ r.tiempoPreparacionMin }} min</span>
-                  }
-                  @if (r.categoriaNombre) {
-                    <span>🏷 {{ r.categoriaNombre }}</span>
-                  }
-                </div>
-              </button>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="actions">
-        <button class="btn-outline" routerLink="/planner">
-          ← Volver al plan
-        </button>
-      </div>
+              <div class="meta">
+                @if (r.tiempoPreparacionMin !== null) {
+                  <span>⏱ {{ r.tiempoPreparacionMin }} min</span>
+                }
+                @if (r.categoriaNombre) {
+                  <span>🏷 {{ r.categoriaNombre }}</span>
+                }
+              </div>
+            </button>
+          }
+        </div>
+      }
     </div>
   </div>
 </section>

@@ -15,7 +15,7 @@ import { PlanItemPayload } from '../../../core/models/plan.model';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './planner-select-recipes.component.html',
-  styleUrl: './planner-select-recipes.component.css',
+  styleUrls: ['./planner-select-recipes.component.css'],
 })
 export class PlannerSelectRecipesComponent implements OnInit {
 
