@@ -20,12 +20,14 @@ interface FavoriteState {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './ver-recipe.component.html',
-  styleUrl: './ver-recipe.component.css',
+  styleUrls: ['./ver-recipe.component.css'],
+
 })
 export class VerRecipeComponent implements OnInit {
   recipe?: Recipe;
   loading = true;
   error = false;
+
   favoriteState: FavoriteState = {
     saving: false,
     saved: false,
@@ -37,7 +39,7 @@ export class VerRecipeComponent implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private favoriteService: FavoriteService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +57,9 @@ export class VerRecipeComponent implements OnInit {
           this.loading = false;
         },
       });
+    } else {
+      this.error = true;
+      this.loading = false;
     }
   }
 
@@ -91,10 +96,17 @@ export class VerRecipeComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.favoriteState.saving = false;
 
-          if (err.status === 409) {
+          const backendMsg = (err.error?.message ?? '')
+            .toString()
+            .toLowerCase();
+
+          // 409 = conflicto (por ejemplo: ya existe en favoritos)
+          if (
+            err.status === 409 ||
+            backendMsg.includes('ya está marcada como favorita')
+          ) {
             this.favoriteState.saved = true;
-            this.favoriteState.message =
-              'Esta receta ya estaba en tus favoritos.';
+            this.favoriteState.message = 'Esta receta ya estaba en tus favoritos.';
             this.favoriteState.error = '';
             return;
           }
@@ -109,36 +121,25 @@ export class VerRecipeComponent implements OnInit {
     if (typeof window === 'undefined') {
       return;
     }
-
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }
 
   public get difficultyLabel(): string {
     const minutes = this.recipe?.tiempoPreparacionMin ?? 0;
 
-    if (minutes <= 20) {
-      return 'Fácil';
-    }
-
-    if (minutes <= 40) {
-      return 'Media';
-    }
-
+    if (minutes <= 20) return 'Fácil';
+    if (minutes <= 40) return 'Media';
     return 'Difícil';
   }
 
   public get totalTimeLabel(): string {
     const total = this.recipe?.tiempoPreparacionMin;
-    return total === null || total === undefined
-      ? 'Sin dato'
-      : `${total} minutos`;
+    return total === null || total === undefined ? 'Sin dato' : `${total} minutos`;
   }
 
   public get instructionSteps(): string[] {
     const raw = this.recipe?.instrucciones ?? '';
-    if (!raw.trim()) {
-      return [];
-    }
+    if (!raw.trim()) return [];
 
     const cleanSteps = (steps: string[]): string[] =>
       steps
@@ -146,14 +147,10 @@ export class VerRecipeComponent implements OnInit {
         .filter(Boolean);
 
     const byNewline = cleanSteps(raw.split(/\r?\n+/));
-    if (byNewline.length > 1) {
-      return byNewline;
-    }
+    if (byNewline.length > 1) return byNewline;
 
     const byNumbering = cleanSteps(raw.split(/\d+[)\.]\s*/));
-    if (byNumbering.length > 1) {
-      return byNumbering;
-    }
+    if (byNumbering.length > 1) return byNumbering;
 
     return cleanSteps([raw]);
   }

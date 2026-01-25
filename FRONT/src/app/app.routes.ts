@@ -7,7 +7,7 @@ import { RecipesComponent } from './features/recipes/recipes.component';
 import { VerRecipeComponent } from './features/recipesale/ver-recipe/ver-recipe.component';
 import { PlannerComponent } from './features/planner/planner.component';
 import { PlannerSelectRecipesComponent } from './features/planner/planner-select-recipes/planner-select-recipes.component';
-
+import { FavoritosComponent } from './features/favoritos/favoritos.component';
 
 
 export const routes: Routes = [
@@ -26,6 +26,9 @@ export const routes: Routes = [
   { path: 'recipes/:id', component: VerRecipeComponent },
   //PLANIFICADOR
   { path: 'planner', component: PlannerComponent },
+
+  //favoritos
+{ path: 'favoritos', component: FavoritosComponent },
 
   // admin
   {

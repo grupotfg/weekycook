@@ -1,0 +1,114 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f8f1ff 0%, #f0e5ff 40%, #ffffff 100%);
+    padding-top: 90px;
+    padding-bottom: 3rem;
+}
+
+
+.favorites-hero {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: 2.5rem clamp(0.75rem, 3vw, 2rem) 1.75rem;
+    color: #2b1642;
+}
+
+.favorites-hero h1 {
+    font-weight: 700;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.favorites-hero p {
+    color: #6a5a7c;
+    margin-top: 0.25rem;
+}
+
+
+.favorites-content {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: 1.5rem clamp(0.75rem, 3vw, 2rem) 0;
+}
+
+
+.recipes-grid {
+    width: 100%;
+    display: grid !important;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+
+:host,
+.favorites-content {
+    overflow-x: hidden;
+}
+
+.favorite-wrapper {
+    position: relative;
+}
+
+
+.remove-fav-btn {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: #f7ecff;
+    color: #c81a70;
+    box-shadow: 0 12px 24px rgba(99, 60, 154, 0.18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.remove-fav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px rgba(99, 60, 154, 0.25);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px dashed #c9b4ff;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    color: #a852ff;
+    margin-bottom: 0.5rem;
+}
+
+.status {
+    text-align: center;
+    font-weight: 600;
+    color: #5b1ea6;
+}
+
+.status.error {
+    color: #d9534f;
+}
+
+
+@media (max-width: 768px) {
+    :host {
+        padding-top: 78px;
+    }
+
+    .recipes-grid {
+        grid-template-columns: 1fr;
+    }
+}
