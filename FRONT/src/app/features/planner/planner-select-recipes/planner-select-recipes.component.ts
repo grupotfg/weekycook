@@ -46,7 +46,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Leer parámetros de la URL (?planId=..&dia=..&turno=..)
+    //  parámetros de la URL (?planId=..&dia=..&turno=..)
     const params = this.route.snapshot.queryParamMap;
 
     this.planId = Number(params.get('planId'));
