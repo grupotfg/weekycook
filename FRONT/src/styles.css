@@ -219,6 +219,17 @@ a:hover {
   color: var(--primary-dark);
 }
 
+.btn-danger-wk {
+  background: rgba(199, 54, 102, 0.08);
+  color: #c73666;
+  border: 1px solid rgba(199, 54, 102, 0.25);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-danger-wk:hover {
+  background: rgba(199, 54, 102, 0.15);
+}
+
 .btn-ghost-light {
   background: transparent;
   color: var(--text-on-dark);
@@ -265,6 +276,60 @@ a:hover {
   max-width: 46rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.select-shell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select-shell select {
+  appearance: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid #d7c6fb;
+  background: #fff;
+  padding: 0.6rem 2.4rem 0.6rem 1rem;
+  font-weight: 600;
+  color: var(--primary);
+  min-width: 220px;
+}
+
+.select-shell select:disabled {
+  opacity: 0.6;
+}
+
+.select-shell .caret {
+  position: absolute;
+  right: 0.9rem;
+  pointer-events: none;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.status-banner {
+  padding: 0.95rem 1.15rem;
+  border-radius: var(--radius-sm);
+  background: #fdf9ff;
+  border: 1px solid #e2d4ff;
+  color: #4f3c63;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.status-banner.error {
+  background: #fff6f8;
+  border-color: #f2b6ca;
+  color: #c73866;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #7a38c7;
+  display: inline-block;
 }
 
 .form-shell {
