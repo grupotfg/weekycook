@@ -1,63 +1,105 @@
-<div class="login-container d-flex align-items-center justify-content-center min-vh-100">
-  <div class="card login-card shadow-lg border-0 p-4" style="max-width: 500px; width: 100%;">
-    <div class="card-body">
-      <div class="text-center mb-4">
-        <h3 class="fw-bold text-white mb-1">Crear Cuenta</h3>
-        <p class="text-white-50 small">Únete a WeekyCook y empieza a planificar</p>
+<section class="auth-hero">
+  <div class="auth-card">
+    <div class="auth-header">
+      <p class="eyebrow text-soft">Crea tu cuenta</p>
+      <h1 class="serif-font">Únete a WeekyCook</h1>
+      <p>Planifica tus menús y guarda tus recetas favoritas.</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label>Nombre</label>
+        <input
+          type="text"
+          class="form-control form-control-wk"
+          formControlName="nombre"
+          placeholder="Tu nombre"
+        />
+        @if (
+          registerForm.get("nombre")?.touched &&
+          registerForm.get("nombre")?.invalid
+        ) {
+          <div class="form-hint form-hint--warn">
+            El nombre es obligatorio (mín. 2 letras)
+          </div>
+        }
       </div>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        
-        <div class="mb-3">
-          <label class="form-label text-white small">Nombre</label>
-          <input type="text" class="form-control bg-light border-0" formControlName="nombre" placeholder="Tu nombre">
-          @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.invalid) {
-            <div class="form-text text-warning fw-bold">El nombre es obligatorio (mín. 2 letras)</div>
-          }
-        </div>
+      <div class="form-field">
+        <label>Correo electrónico</label>
+        <input
+          type="email"
+          class="form-control form-control-wk"
+          formControlName="correo"
+          placeholder="usuario&#64;weekycook.com"
+        />
+        @if (
+          registerForm.get("correo")?.touched &&
+          registerForm.get("correo")?.invalid
+        ) {
+          <div class="form-hint form-hint--warn">
+            Introduce un correo válido (ej: nombre&#64;web.com)
+          </div>
+        }
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label text-white small">Correo Electrónico</label>
-          <input type="email" class="form-control bg-light border-0" formControlName="correo" placeholder="usuario&#64;weekycook.com">
-          @if (registerForm.get('correo')?.touched && registerForm.get('correo')?.invalid) {
-            <div class="form-text text-warning fw-bold">Introduce un correo válido (ej: nombre&#64;web.com)</div>
-          }
-        </div>
+      <div class="form-field">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          class="form-control form-control-wk"
+          formControlName="password"
+          placeholder="Mínimo 6 caracteres"
+        />
+        @if (
+          registerForm.get("password")?.touched &&
+          registerForm.get("password")?.invalid
+        ) {
+          <div class="form-hint form-hint--warn">
+            Mínimo 6 caracteres requeridos
+          </div>
+        }
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label text-white small">Contraseña</label>
-          <input type="password" class="form-control bg-light border-0" formControlName="password" placeholder="Mínimo 6 caracteres">
-          @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-            <div class="form-text text-warning fw-bold">Mínimo 6 caracteres requeridos</div>
+      <div class="form-field">
+        <label>Confirmar contraseña</label>
+        <input
+          type="password"
+          class="form-control form-control-wk"
+          formControlName="confirmarContrasena"
+          placeholder="Repite la contraseña"
+        />
+        @if (registerForm.get("confirmarContrasena")?.touched) {
+          @if (registerForm.hasError("passwordMismatch")) {
+            <div class="form-hint form-hint--warn">
+              Las contraseñas no coinciden
+            </div>
+          } @else if (
+            registerForm.get("password")?.value &&
+            !registerForm.hasError("passwordMismatch")
+          ) {
+            <div class="form-hint form-hint--success">
+              ✓ Las contraseñas coinciden
+            </div>
           }
-        </div>
+        }
+      </div>
 
-        <div class="mb-4">
-          <label class="form-label text-white small">Confirmar Contraseña</label>
-          <input type="password" class="form-control bg-light border-0" formControlName="confirmarContrasena" placeholder="Repite la contraseña">
-          
-          @if (registerForm.get('confirmarContrasena')?.touched) {
-            @if (registerForm.hasError('passwordMismatch')) {
-              <div class="form-text text-warning fw-bold">Las contraseñas no coinciden</div>
-            } @else if (registerForm.get('password')?.value && !registerForm.hasError('passwordMismatch')) {
-              <div class="form-text text-success fw-bold">✓ Las contraseñas coinciden</div>
-            }
-          }
-        </div>
-        
-        <div class="d-grid gap-2 mb-3">
-          <button type="submit" class="btn btn-light btn-lg text-purple fw-bold shadow-sm" [disabled]="registerForm.invalid">
-            Crear Cuenta
-          </button>
-        </div>
+      <button
+        type="submit"
+        class="btn-wk btn-primary-wk btn-pill auth-submit"
+        [disabled]="registerForm.invalid"
+      >
+        Crear Cuenta
+      </button>
+    </form>
 
-        <div class="text-center">
-          <p class="text-white-50 small mb-2">
-            ¿Ya tienes cuenta? <a routerLink="/auth/login" class="text-white fw-bold text-decoration-none">Inicia sesión</a>
-          </p>
-          <a routerLink="/" class="text-white-50 small text-decoration-none">← Volver al inicio</a>
-        </div>
-      </form>
+    <div class="auth-links">
+      ¿Ya tienes cuenta?
+      <a routerLink="/auth/login">Inicia sesión</a>
+      <div>
+        <a routerLink="/">← Volver al inicio</a>
+      </div>
     </div>
   </div>
-</div>
+</section>
