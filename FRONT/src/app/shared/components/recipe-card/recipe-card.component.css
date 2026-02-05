@@ -63,14 +63,6 @@
   margin-bottom: 0.5rem;
 }
 
-.category-pill {
-  background: #efe5ff;
-  color: #5b1ea6;
-  padding: 0.2rem 0.75rem;
-  border-radius: 999px;
-  font-weight: 600;
-}
-
 .recipe-body h3 {
   margin: 0.5rem 0;
   font-size: 1.25rem;

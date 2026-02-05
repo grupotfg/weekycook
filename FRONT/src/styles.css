@@ -2,33 +2,98 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-/* Importar Bootstrap y los iconos ya compilados en CSS */
-@import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";
-
-/* DEFINICIÓN DEL TEMA WEEKYCOOK PRINCIPAL (sin preprocesador) */
+/* DEFINICIÓN DEL TEMA WEEKYCOOK PRINCIPAL */
 :root {
-  --primary: #6610f2; /* Morado base */
-  --primary-dark: #4b0cc6; /* Aproximación a darken($primary, 20%) */
-  --primary-light: #e3d4ff; /* Aproximación a lighten($primary, 45%) */
-  --secondary: #ffc107; /* Amarillo destacados */
+  /* Colores base */
+  --primary: #6610f2;
+  --primary-dark: #4b0cc6;
+  --primary-light: #e3d4ff;
+  --secondary: #ffc107;
+  --accent: #ff6f61;
+  --success: #3cb371;
+  --danger: #ff5c5c;
+  --gradient-primary: linear-gradient(120deg, #3f146b, #5b1ea6, #a852ff);
+  --gradient-deep: linear-gradient(90deg, #30124f, #4c1c83, #6a26bb);
+
+  /* Superficies sobre fondo oscuro */
+  --text-on-dark: rgba(255, 255, 255, 0.92);
+  --text-on-dark-muted: rgba(255, 255, 255, 0.75);
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  /* Escala de neutros */
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e5e7eb;
+  --gray-400: #94a3b8;
+  --gray-600: #475569;
+  --gray-800: #1e1b2e;
+
+  /* Tipografía */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", serif;
+
+  /* Bordes y sombras */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 4px 10px rgba(19, 18, 38, 0.08);
+  --shadow-md: 0 12px 30px rgba(43, 22, 66, 0.15);
+  --shadow-lg: 0 20px 40px rgba(19, 18, 38, 0.22);
+
+  /* Escala de espaciado */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
 }
 
 /* Estilos Globales */
-body {
-  background-color: #f8f9fa;
-  font-family: var(--font-sans);
+* {
+  box-sizing: border-box;
 }
 
-/* Sombra para la Navbar y la card de Login */
+body {
+  background-color: var(--gray-50);
+  font-family: var(--font-sans);
+  color: var(--gray-800);
+  line-height: 1.5;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  color: var(--gray-800);
+  margin-bottom: var(--space-3);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
 .shadow-lg {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
 /* Utilidades de Texto y Fondo */
 .text-purple {
   color: var(--primary) !important;
+}
+
+.text-muted {
+  color: var(--gray-400) !important;
 }
 
 .bg-purple {
@@ -40,21 +105,231 @@ body {
   background-color: var(--primary-light);
 }
 
-/* Fuentes Serif para títulos elegantes en el Landing y acorde a UX/UI */
-.serif-font {
-  font-family: "Playfair Display", serif;
+.surface-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
 }
 
-/* Efecto Hover para Tarjetas de Recetas */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.85rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pill-primary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Tipografía auxiliar */
+.serif-font {
+  font-family: var(--font-serif);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gray-400);
+}
+
+.text-inverse {
+  color: var(--text-on-dark) !important;
+}
+
+.text-soft {
+  color: var(--text-on-dark-muted) !important;
+}
+
+.layout-container {
+  width: min(1200px, 94%);
+  margin: 0 auto;
+}
+
+/* Botones base */
+.btn-wk {
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-wk:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.btn-primary-wk {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary-wk:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary-wk {
+  background: var(--secondary);
+  color: #3c2c00;
+}
+
+.btn-ghost-wk {
+  background: transparent;
+  color: var(--gray-800);
+  border-color: var(--gray-200);
+}
+
+.btn-pill {
+  border-radius: 999px;
+}
+
+.btn-soft {
+  background: #fff;
+  color: var(--primary);
+  border: 1px solid rgba(91, 30, 166, 0.25);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-soft:hover {
+  .btn-wk:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.btn-ghost-light {
+  background: transparent;
+  color: var(--text-on-dark);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-ghost-light:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* Fichas y tarjetas */
 .card-recipe {
   transition: transform 0.2s ease-in-out;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
 }
 
 .card-recipe:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
+.section-padding {
+  padding: var(--space-6) var(--space-4);
+}
+
+.section-muted {
+  background: linear-gradient(180deg, var(--primary-light), #fff);
+}
+
+.badge-accent {
+  background: rgba(255, 111, 97, 0.12);
+  color: var(--accent);
+  border-radius: var(--radius-xs);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.copy-constrain {
+  max-width: 46rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-shell {
+  position: relative;
+  border: 1px solid #ded3f3;
+  border-radius: 999px;
+  padding: 0.35rem 1rem 0.35rem 2.5rem;
+  background: #f9f6ff;
+}
+
+.form-shell input,
+.form-shell select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.95rem;
+  color: #472167;
+}
+
+.form-shell i {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #a07bd9;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px dashed #c9b4ff;
+}
+
+.empty-state i {
+  font-size: 2rem;
+  color: #a852ff;
+  margin-bottom: 0.5rem;
+}
+
+.chip-control {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid #d6c4f5;
+  background: transparent;
+  color: var(--primary);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.9rem;
+}
+
+.chip-control.is-active,
+.chip-control:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Tooltips de acciones */
 .tooltip-action {
   position: absolute;
   top: -36px;
