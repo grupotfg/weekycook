@@ -1,83 +1,108 @@
-<div class="container py-5">
-  <div class="d-flex align-items-center justify-content-between mb-4">
-    <h2 class="fw-bold text-purple m-0">Panel de Control Admin</h2>
-    <div class="d-flex gap-2">
-      <button class="btn btn-gestion fw-semibold" (click)="setTab('usuarios')">
-        <i class="bi bi-people-fill me-2"></i>Gestión Usuarios
+<section class="layout-container admin-shell">
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">Panel Administrativo</p>
+      <h2 class="serif-font">Panel de Control Admin</h2>
+      <p>
+        Gestiona recetas, ingredientes, categorías y accesos de la plataforma.
+      </p>
+    </div>
+    <div class="admin-header-actions">
+      <button
+        type="button"
+        class="btn-wk btn-soft btn-pill"
+        (click)="setTab('usuarios')"
+      >
+        <i class="bi bi-people-fill"></i>
+        <span>Gestión usuarios</span>
       </button>
     </div>
-  </div>
+  </header>
 
-  <ul class="nav nav-tabs mb-4 border-bottom-0">
-    <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'recetas'"
-        (click)="setTab('recetas')"
-      >
-        <i class="bi bi-journal-text me-2"></i>Recetas
-      </button>
-    </li>
-    <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'ingredientes'"
-        (click)="setTab('ingredientes')"
-      >
-        <i class="bi bi-basket me-2"></i>Ingredientes
-      </button>
-    </li>
-    <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'categorias'"
-        (click)="setTab('categorias')"
-      >
-        <i class="bi bi-tags me-2"></i>Categorías
-      </button>
-    </li>
-  </ul>
+  <nav class="admin-tabs" aria-label="Módulos de administración">
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'recetas'"
+      (click)="setTab('recetas')"
+    >
+      <i class="bi bi-journal-text"></i>
+      <span>Recetas</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'ingredientes'"
+      (click)="setTab('ingredientes')"
+    >
+      <i class="bi bi-basket"></i>
+      <span>Ingredientes</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'categorias'"
+      (click)="setTab('categorias')"
+    >
+      <i class="bi bi-tags"></i>
+      <span>Categorías</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'usuarios'"
+      (click)="setTab('usuarios')"
+    >
+      <i class="bi bi-person-badge"></i>
+      <span>Usuarios</span>
+    </button>
+  </nav>
 
-  <div class="card shadow-sm border-0 p-4">
-    <div class="tab-content">
-      @if (activeTab === "recetas") {
-        <app-recetas-gestion
-          (formStateChange)="handleRecetasFormState($event)"
-        ></app-recetas-gestion>
-        <div class="text-center py-5">
-          <i class="bi bi-journal-text display-1 text-muted opacity-25"></i>
-          <h5 class="mt-3">Módulo de Recetas</h5>
-          <p class="text-muted">
-            Aquí podrás crear y editar los platos de la web.
+  <div class="surface-card admin-panel">
+    @if (activeTab === "recetas") {
+      <app-recetas-gestion
+        (formStateChange)="handleRecetasFormState($event)"
+      ></app-recetas-gestion>
+      <div class="admin-note">
+        <i class="bi bi-journal-text"></i>
+        <div>
+          <h5>Módulo de Recetas</h5>
+          <p>Crea, edita y gestiona los platos publicados en WeekyCook.</p>
+        </div>
+      </div>
+    }
+    @if (activeTab === "ingredientes") {
+      <app-ingredientes-gestion></app-ingredientes-gestion>
+      <div class="admin-note">
+        <i class="bi bi-basket"></i>
+        <div>
+          <h5>Módulo de Ingredientes</h5>
+          <p>Define ingredientes base para nutrir el catálogo de recetas.</p>
+        </div>
+      </div>
+    }
+    @if (activeTab === "categorias") {
+      <app-categorias-gestion></app-categorias-gestion>
+      <div class="admin-note">
+        <i class="bi bi-tags"></i>
+        <div>
+          <h5>Módulo de Categorías</h5>
+          <p>
+            Organiza etiquetas como "Vegano" o "Cenas rápidas" para filtrar
+            recetas.
           </p>
         </div>
-      }
-      @if (activeTab === "ingredientes") {
-        <app-ingredientes-gestion></app-ingredientes-gestion>
-        <div class="text-center py-5">
-          <i class="bi bi-tags display-1 text-muted opacity-25"></i>
-          <h5 class="mt-3">Módulo de Ingredientes</h5>
-          <p class="text-muted">Gestiona ingredientes para tus recetas.</p>
+      </div>
+    }
+    @if (activeTab === "usuarios") {
+      <app-usuarios-gestion></app-usuarios-gestion>
+      <div class="admin-note">
+        <i class="bi bi-person-badge"></i>
+        <div>
+          <h5>Control de usuarios</h5>
+          <p>Administra roles, accesos y credenciales de la comunidad.</p>
         </div>
-      }
-      @if (activeTab === "categorias") {
-        <app-categorias-gestion></app-categorias-gestion>
-        <div class="text-center py-5">
-          <i class="bi bi-tags display-1 text-muted opacity-25"></i>
-          <h5 class="mt-3">Módulo de Categorías</h5>
-          <p class="text-muted">
-            Gestiona etiquetas como "Vegano", "Cenas Rápidas", etc.
-          </p>
-        </div>
-      }
-      @if (activeTab === "usuarios") {
-        <app-usuarios-gestion></app-usuarios-gestion>
-        <div class="text-center py-5 border border-warning rounded">
-          <i class="bi bi-person-badge display-1 text-warning opacity-50"></i>
-          <h5 class="mt-3 text-dark">Control de Acceso y Usuarios</h5>
-          <p class="text-muted">Gestión de usuarios.</p>
-        </div>
-      }
-    </div>
+      </div>
+    }
   </div>
-</div>
+</section>

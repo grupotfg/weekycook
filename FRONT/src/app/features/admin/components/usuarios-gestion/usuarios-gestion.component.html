@@ -1,112 +1,108 @@
-<div class="py-3">
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-7">
-      <div class="input-group shadow-sm">
-        <span class="input-group-text bg-white border-end-0 text-muted"
-          ><i class="bi bi-search"></i
-        ></span>
-        <input
-          type="text"
-          class="form-control border-start-0 ps-0"
-          placeholder="Buscar por nombre o email..."
-          [(ngModel)]="searchText"
-          autocomplete="off"
-          autocorrect="off"
-          autocapitalize="none"
-          spellcheck="false"
-        />
-      </div>
+<section class="admin-module">
+  <header class="admin-toolbar">
+    <div class="form-shell form-shell--square" role="search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Buscar por nombre o email..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
+      />
     </div>
-    <div class="col-md-5 text-end">
-      <button
-        class="btn btn-primary gradient-btn px-4"
-        (click)="nuevoUsuario()"
-        *ngIf="!showForm"
-      >
-        <i class="bi bi-person-plus-fill me-2"></i>Nuevo Usuario
-      </button>
+    <div class="admin-toolbar-actions">
+      @if (!showForm) {
+        <button
+          type="button"
+          class="btn-wk btn-primary-wk btn-pill"
+          (click)="nuevoUsuario()"
+        >
+          <i class="bi bi-person-plus-fill"></i>
+          <span>Nuevo usuario</span>
+        </button>
+      }
     </div>
-  </div>
+  </header>
 
   @if (showForm) {
-    <div
-      class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn"
-    >
-      <h6 class="fw-bold text-purple mb-3">
-        {{ isEditing ? "Editar" : "Crear" }} Usuario
-      </h6>
-      <form (ngSubmit)="guardar()" class="row g-3">
-        <div class="col-md-3">
-          <label class="small fw-bold text-muted">Nombre</label>
+    <div class="surface-card admin-form-card animate__animated animate__fadeIn">
+      <div class="admin-form-card__head">
+        <p class="eyebrow">Formulario</p>
+        <h3 class="serif-font">{{ isEditing ? "Editar" : "Crear" }} usuario</h3>
+      </div>
+      <form
+        (ngSubmit)="guardar()"
+        class="admin-form-grid admin-form-grid--dense"
+      >
+        <div>
+          <label class="form-label-wk">Nombre</label>
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedUser.nombre"
             name="nombre"
             required
           />
         </div>
-        <div class="col-md-3">
-          <label class="small fw-bold text-muted">Apellido</label>
+        <div>
+          <label class="form-label-wk">Apellido</label>
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedUser.apellido"
             name="apellido"
           />
         </div>
-        <div class="col-md-3">
-          <label class="small fw-bold text-muted">Correo</label>
+        <div>
+          <label class="form-label-wk">Correo</label>
           <input
             type="email"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedUser.correo"
             name="correo"
             required
           />
         </div>
-        <div class="col-md-3">
-          <label class="small fw-bold text-muted">{{
-            isEditing ? "Nueva Clave" : "Contraseña"
-          }}</label>
+        <div>
+          <label class="form-label-wk">
+            {{ isEditing ? "Nueva clave" : "Contraseña" }}
+          </label>
           <input
             type="password"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedUser.contrasena"
             name="contrasena"
             [required]="!isEditing"
             minlength="6"
           />
         </div>
-        <div class="col-md-4">
-          <label class="small fw-bold text-muted">Descripción (Perfil)</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            [(ngModel)]="selectedUser.descripcion"
-            name="desc"
-          />
+        <div class="admin-form-grid admin-form-grid--split admin-form-span">
+          <div>
+            <label class="form-label-wk">Descripción (perfil)</label>
+            <input
+              type="text"
+              class="field-control field-control--sm"
+              [(ngModel)]="selectedUser.descripcion"
+              name="desc"
+            />
+          </div>
+          <div>
+            <label class="form-label-wk">Rol</label>
+            <select
+              class="field-control field-control--sm"
+              [(ngModel)]="selectedUser.esAdmin"
+              name="rol"
+            >
+              <option [ngValue]="false">Usuario estándar</option>
+              <option [ngValue]="true">Administrador</option>
+            </select>
+          </div>
         </div>
-        <div class="col-md-2">
-          <label class="small fw-bold text-muted">Rol</label>
-          <select
-            class="form-select form-select-sm"
-            [(ngModel)]="selectedUser.esAdmin"
-            name="rol"
-          >
-            <option [ngValue]="false">Usuario Estándar</option>
-            <option [ngValue]="true">Administrador</option>
-          </select>
-        </div>
-        <div class="col-md-6 d-flex align-items-end gap-2">
-          <button type="submit" class="btn btn-sm btn-success px-4 flex-grow-1">
-            Confirmar
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-secondary px-4"
-            (click)="cancelar()"
-          >
+        <div class="admin-form-actions admin-form-span">
+          <button type="submit" class="btn-wk btn-primary-wk">Confirmar</button>
+          <button type="button" class="btn-wk btn-soft" (click)="cancelar()">
             Cancelar
           </button>
         </div>
@@ -114,42 +110,51 @@
     </div>
   }
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle shadow-sm bg-white rounded">
-      <thead class="bg-light text-secondary small">
+  <div class="table-shell">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th>Nombre Completo</th>
-          <th>Email</th>
-          <th>Rol</th>
-          <th class="text-end">Acciones</th>
+          <th scope="col" data-column="primary">Nombre completo</th>
+          <th scope="col">Email</th>
+          <th scope="col">Rol</th>
+          <th scope="col" data-column="actions">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (user of usuariosFiltrados; track user.id) {
           <tr>
-            <td class="fw-bold text-purple">
-              {{ user.nombre }} {{ user.apellido }}
+            <td data-column="primary">
+              <span class="fw-semibold text-purple">
+                {{ user.nombre }} {{ user.apellido }}
+              </span>
             </td>
-            <td class="text-muted small">{{ user.correo }}</td>
+            <td class="text-muted">{{ user.correo }}</td>
             <td>
               <span
-                class="role-pill"
-                [ngClass]="user.esAdmin ? 'admin' : 'user'"
+                class="pill"
+                [ngClass]="user.esAdmin ? 'pill-admin' : 'pill-user'"
               >
                 {{ user.esAdmin ? "Administrador" : "Usuario" }}
               </span>
             </td>
-            <td class="text-end">
-              <span class="action-btn-wrapper me-2">
-                <button class="btn btn-sm text-primary" (click)="editar(user)">
+            <td data-column="actions">
+              <span class="action-btn-wrapper">
+                <button
+                  type="button"
+                  class="icon-btn"
+                  (click)="editar(user)"
+                  aria-label="Editar usuario"
+                >
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <span class="tooltip-action">Editar usuario</span>
               </span>
               <span class="action-btn-wrapper">
                 <button
-                  class="btn btn-sm text-danger"
+                  type="button"
+                  class="icon-btn icon-btn--danger"
                   (click)="eliminar(user.id!)"
+                  aria-label="Eliminar usuario"
                 >
                   <i class="bi bi-trash"></i>
                 </button>
@@ -159,7 +164,7 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="4" class="text-center py-5 text-muted">
+            <td colspan="4" class="admin-table-empty">
               No se encontraron usuarios.
             </td>
           </tr>
@@ -167,4 +172,4 @@
       </tbody>
     </table>
   </div>
-</div>
+</section>

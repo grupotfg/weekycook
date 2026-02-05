@@ -1,47 +1,58 @@
-<div class="py-3">
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-7">
-      <div class="input-group shadow-sm">
-        <span class="input-group-text bg-white border-end-0 text-muted">
-          <i class="bi bi-search"></i>
-        </span>
-        <input
-          type="text"
-          class="form-control border-start-0 ps-0"
-          placeholder="Buscar categoría..."
-          [(ngModel)]="searchText"
-        />
-      </div>
+<section class="admin-module">
+  <header class="admin-toolbar">
+    <div class="form-shell form-shell--square" role="search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Buscar categoría..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
+      />
     </div>
-    <div class="col-md-5 text-end">
+    <div class="admin-toolbar-actions">
       @if (!showForm) {
         <button
-          class="btn btn-primary gradient-btn px-4"
+          type="button"
+          class="btn-wk btn-primary-wk btn-pill"
           (click)="showForm = true"
         >
-          <i class="bi bi-plus-lg me-2"></i>Nueva Categoría
+          <i class="bi bi-plus-lg"></i>
+          <span>Nueva categoría</span>
         </button>
       } @else {
-        <button class="btn btn-outline-primary px-4" (click)="cancelar()">
-          <i class="bi bi-arrow-left me-2"></i>Volver a Categorías
+        <button
+          type="button"
+          class="btn-wk btn-soft btn-pill"
+          (click)="cancelar()"
+        >
+          <i class="bi bi-arrow-left"></i>
+          <span>Volver a categorías</span>
         </button>
       }
     </div>
-  </div>
+  </header>
 
   @if (showForm) {
-    <div
-      class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn"
-    >
-      <h6 class="fw-bold text-purple mb-3">
-        {{ isEditing ? "Editar" : "Añadir" }} Categoría
-      </h6>
-      <form (ngSubmit)="guardar()" class="row g-3" autocomplete="off">
-        <div class="col-md-4">
-          <label class="small fw-bold text-muted">Nombre</label>
+    <div class="surface-card admin-form-card animate__animated animate__fadeIn">
+      <div class="admin-form-card__head">
+        <p class="eyebrow">Formulario</p>
+        <h3 class="serif-font">
+          {{ isEditing ? "Editar" : "Añadir" }} categoría
+        </h3>
+      </div>
+      <form
+        (ngSubmit)="guardar()"
+        class="admin-form-grid admin-form-grid--split"
+        autocomplete="off"
+      >
+        <div>
+          <label class="form-label-wk">Nombre</label>
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedCat.nombre"
             name="nombre"
             placeholder="Ej: Postres"
@@ -52,26 +63,20 @@
             spellcheck="false"
           />
         </div>
-        <div class="col-md-5">
-          <label class="small fw-bold text-muted">Descripción</label>
+        <div>
+          <label class="form-label-wk">Descripción</label>
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedCat.descripcion"
             name="descripcion"
             placeholder="Breve detalle de la categoría..."
             autocomplete="off"
           />
         </div>
-        <div class="col-md-3 d-flex align-items-end gap-2">
-          <button type="submit" class="btn btn-sm btn-success px-3 flex-grow-1">
-            Confirmar
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-secondary px-3"
-            (click)="cancelar()"
-          >
+        <div class="admin-form-actions">
+          <button type="submit" class="btn-wk btn-primary-wk">Confirmar</button>
+          <button type="button" class="btn-wk btn-soft" (click)="cancelar()">
             Cancelar
           </button>
         </div>
@@ -79,33 +84,42 @@
     </div>
   }
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle shadow-sm bg-white rounded">
-      <thead class="bg-light text-secondary small">
+  <div class="table-shell">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th style="width: 30%">Categoría</th>
-          <th style="width: 55%">Descripción</th>
-          <th style="width: 15%" class="text-end">Acciones</th>
+          <th scope="col" data-column="primary">Categoría</th>
+          <th scope="col" data-column="grow">Descripción</th>
+          <th scope="col" data-column="actions">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (cat of categoriasFiltradas; track cat.id) {
           <tr>
-            <td class="fw-bold text-purple">{{ cat.nombre }}</td>
-            <td class="text-muted small">
+            <td data-column="primary">
+              <span class="fw-semibold text-purple">{{ cat.nombre }}</span>
+            </td>
+            <td data-column="grow" class="text-muted">
               {{ cat.descripcion || "Sin descripción" }}
             </td>
-            <td class="text-end">
-              <span class="action-btn-wrapper me-2">
-                <button class="btn btn-sm text-primary" (click)="editar(cat)">
+            <td data-column="actions">
+              <span class="action-btn-wrapper">
+                <button
+                  type="button"
+                  class="icon-btn"
+                  (click)="editar(cat)"
+                  aria-label="Editar categoría"
+                >
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <span class="tooltip-action">Editar categoría</span>
               </span>
               <span class="action-btn-wrapper">
                 <button
-                  class="btn btn-sm text-danger"
+                  type="button"
+                  class="icon-btn icon-btn--danger"
                   (click)="eliminar(cat.id!)"
+                  aria-label="Eliminar categoría"
                 >
                   <i class="bi bi-trash"></i>
                 </button>
@@ -115,8 +129,8 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="3" class="text-center py-5 text-muted">
-              <i class="bi bi-search display-6 d-block mb-2"></i>
+            <td colspan="3" class="admin-table-empty">
+              <i class="bi bi-search"></i>
               No se encontraron categorías.
             </td>
           </tr>
@@ -124,4 +138,4 @@
       </tbody>
     </table>
   </div>
-</div>
+</section>

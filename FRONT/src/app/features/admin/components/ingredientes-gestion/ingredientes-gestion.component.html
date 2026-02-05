@@ -1,56 +1,63 @@
-<div class="py-3">
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-7">
-      <div class="input-group shadow-sm">
-        <span class="input-group-text bg-white border-end-0 text-muted">
-          <i class="bi bi-search"></i>
-        </span>
-        <input
-          type="text"
-          class="form-control border-start-0 ps-0"
-          placeholder="Buscar ingrediente por nombre..."
-          [(ngModel)]="searchText"
-        />
-      </div>
+<section class="admin-module">
+  <header class="admin-toolbar">
+    <div class="form-shell form-shell--square" role="search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Buscar ingrediente por nombre..."
+        autocomplete="off"
+      />
     </div>
-    <div class="col-md-5 text-end">
+    <div class="admin-toolbar-actions">
       @if (!showForm) {
         <button
-          class="btn btn-primary gradient-btn px-4"
+          type="button"
+          class="btn-wk btn-primary-wk btn-pill"
           (click)="showForm = true"
         >
-          <i class="bi bi-plus-lg me-2"></i>Nuevo Ingrediente
+          <i class="bi bi-plus-lg"></i>
+          <span>Nuevo ingrediente</span>
         </button>
       } @else {
-        <button class="btn btn-outline-primary px-4" (click)="cancelar()">
-          <i class="bi bi-arrow-left me-2"></i>Volver a Ingredientes
+        <button
+          type="button"
+          class="btn-wk btn-soft btn-pill"
+          (click)="cancelar()"
+        >
+          <i class="bi bi-arrow-left"></i>
+          <span>Volver a ingredientes</span>
         </button>
       }
     </div>
-  </div>
+  </header>
 
   @if (showForm) {
-    <div
-      class="card bg-light border-0 shadow-sm mb-4 p-4 animate__animated animate__fadeIn"
-    >
-      <h6 class="fw-bold text-purple mb-3">
-        {{ isEditing ? "Editar" : "Añadir" }} Ingrediente
-      </h6>
-      <form (ngSubmit)="guardar()" class="row g-3">
-        <div class="col-md-4">
-          <label class="small fw-bold text-muted">Nombre</label>
+    <div class="surface-card admin-form-card animate__animated animate__fadeIn">
+      <div class="admin-form-card__head">
+        <p class="eyebrow">Formulario</p>
+        <h3 class="serif-font">
+          {{ isEditing ? "Editar" : "Añadir" }} ingrediente
+        </h3>
+      </div>
+      <form
+        (ngSubmit)="guardar()"
+        class="admin-form-grid admin-form-grid--dense"
+      >
+        <div>
+          <label class="form-label-wk">Nombre</label>
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedIng.nombre"
             name="nombre"
             required
           />
         </div>
-        <div class="col-md-2">
-          <label class="small fw-bold text-muted">Unidad</label>
+        <div>
+          <label class="form-label-wk">Unidad</label>
           <select
-            class="form-select form-select-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedIng.unidadBase"
             name="unidad"
           >
@@ -59,26 +66,20 @@
             <option value="un">Unidad (un)</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <label class="small fw-bold text-muted">Kcal (100g/ml)</label>
+        <div>
+          <label class="form-label-wk">Kcal (100g/ml)</label>
           <input
             type="number"
-            class="form-control form-control-sm"
+            class="field-control field-control--sm"
             [(ngModel)]="selectedIng.caloriasPorUnidad"
             name="cal"
             min="0"
             step="0.1"
           />
         </div>
-        <div class="col-md-4 d-flex align-items-end gap-2">
-          <button type="submit" class="btn btn-sm btn-success px-4">
-            Confirmar
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-secondary px-4"
-            (click)="cancelar()"
-          >
+        <div class="admin-form-actions">
+          <button type="submit" class="btn-wk btn-primary-wk">Confirmar</button>
+          <button type="button" class="btn-wk btn-soft" (click)="cancelar()">
             Cancelar
           </button>
         </div>
@@ -86,35 +87,45 @@
     </div>
   }
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle shadow-sm bg-white rounded">
-      <thead class="bg-light text-secondary small">
+  <div class="table-shell">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Unidad</th>
-          <th>Kcal</th>
-          <th class="text-end">Acciones</th>
+          <th scope="col" data-column="primary">Nombre</th>
+          <th scope="col">Unidad</th>
+          <th scope="col">Kcal</th>
+          <th scope="col" data-column="actions">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (ing of ingredientesFiltrados; track ing.id) {
           <tr>
-            <td class="fw-bold text-purple">{{ ing.nombre }}</td>
+            <td data-column="primary">
+              <span class="fw-semibold text-purple">{{ ing.nombre }}</span>
+            </td>
             <td>
-              <span class="badge bg-light text-dark border">{{
-                ing.unidadBase
-              }}</span>
+              <span class="pill pill-soft">{{ ing.unidadBase }}</span>
             </td>
             <td>{{ ing.caloriasPorUnidad }}</td>
-            <td class="text-end">
-              <span class="action-btn-wrapper me-2">
-                <button class="btn btn-sm text-primary" (click)="editar(ing)">
+            <td data-column="actions">
+              <span class="action-btn-wrapper">
+                <button
+                  type="button"
+                  class="icon-btn"
+                  (click)="editar(ing)"
+                  aria-label="Editar ingrediente"
+                >
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <span class="tooltip-action">Editar ingrediente</span>
               </span>
               <span class="action-btn-wrapper">
-                <button class="btn btn-sm text-danger" (click)="eliminar(ing)">
+                <button
+                  type="button"
+                  class="icon-btn icon-btn--danger"
+                  (click)="eliminar(ing)"
+                  aria-label="Eliminar ingrediente"
+                >
                   <i class="bi bi-trash"></i>
                 </button>
                 <span class="tooltip-action">Eliminar ingrediente</span>
@@ -123,8 +134,8 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="4" class="text-center py-5 text-muted">
-              <i class="bi bi-search display-6 d-block mb-2"></i>
+            <td colspan="4" class="admin-table-empty">
+              <i class="bi bi-search"></i>
               No se encontraron ingredientes.
             </td>
           </tr>
@@ -132,4 +143,4 @@
       </tbody>
     </table>
   </div>
-</div>
+</section>

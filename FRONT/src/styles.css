@@ -542,3 +542,348 @@ a:hover {
   opacity: 1;
   transform: translate(-50%, -4px);
 }
+
+/* Controles e iconos */
+.icon-btn {
+  border: none;
+  background: transparent;
+  color: var(--primary);
+  padding: 0.25rem;
+  font-size: 1.05rem;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.icon-btn:hover {
+  color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.icon-btn--danger {
+  color: #c73666;
+}
+
+.icon-btn--danger:hover {
+  color: #931a47;
+}
+
+.form-label-wk {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+}
+
+.field-control {
+  width: 100%;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.95rem;
+  color: var(--gray-800);
+  background: #fff;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.field-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102, 16, 242, 0.12);
+  outline: none;
+}
+
+.field-control--sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.form-shell--square {
+  border-radius: var(--radius-sm);
+  border-color: var(--gray-200);
+  background: #fff;
+  padding: 0.25rem 1rem 0.25rem 2.5rem;
+}
+
+.form-shell--square input {
+  color: var(--gray-800);
+}
+
+.form-shell--square i {
+  color: var(--gray-400);
+}
+
+.pill-soft {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.pill-admin {
+  background: linear-gradient(120deg, #ff8f8f, #f0445c);
+  color: #fff;
+}
+
+.pill-user {
+  background: linear-gradient(120deg, #dcd6ff, #a48bff);
+  color: #2b1169;
+}
+
+.table-shell {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border: 1px solid var(--gray-100);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: var(--gray-100);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--gray-600);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 1rem 1.25rem;
+}
+
+.admin-table tbody tr + tr {
+  border-top: 1px solid var(--gray-100);
+}
+
+.admin-table [data-column="actions"] {
+  text-align: right;
+  width: 160px;
+}
+
+.admin-table [data-column="primary"] {
+  width: 30%;
+}
+
+.admin-table-empty {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--gray-400);
+  font-size: 0.95rem;
+}
+
+.admin-table-empty i {
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Zona de administración */
+.admin-shell {
+  padding: var(--space-6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.admin-header p {
+  margin: 0;
+  color: var(--gray-600);
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: var(--space-2);
+}
+
+.admin-tab {
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-tab.is-active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-100);
+}
+
+.admin-note i {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.admin-module {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.admin-toolbar-actions {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.admin-form-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  border: 1px solid var(--gray-100);
+}
+
+.admin-form-card__head {
+  margin-bottom: var(--space-4);
+}
+
+.admin-form-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.admin-form-grid--split {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.admin-form-grid--dense {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.admin-form-span {
+  grid-column: 1 / -1;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.admin-form-actions .btn-wk {
+  flex: 1;
+  justify-content: center;
+}
+
+.admin-form-section {
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-sm);
+  background: var(--gray-50);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-form-section h6 {
+  margin: 0;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--gray-600);
+}
+
+.admin-ingredients-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+
+.admin-ingredients-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 0.95rem;
+  color: var(--gray-600);
+}
+
+.admin-ingredients-list li:last-child {
+  border-bottom: none;
+}
+
+.admin-table .pill {
+  font-size: 0.8rem;
+}
+
+.admin-table .text-muted {
+  font-size: 0.85rem;
+}
+
+.admin-table [data-column="grow"] {
+  width: 55%;
+}
+
+.admin-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .admin-table [data-column="actions"] {
+    width: auto;
+  }
+
+  .admin-form-actions .btn-wk {
+    flex: unset;
+    width: 100%;
+  }
+}

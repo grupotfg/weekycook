@@ -1,86 +1,93 @@
-<div class="py-3">
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-7">
-      <div class="input-group shadow-sm">
-        <span class="input-group-text bg-white border-end-0 text-muted">
-          <i class="bi bi-search"></i>
-        </span>
-        <input
-          type="text"
-          class="form-control border-start-0 ps-0"
-          placeholder="Buscar receta por nombre..."
-          [(ngModel)]="searchText"
-        />
-      </div>
+<section class="admin-module">
+  <header class="admin-toolbar">
+    <div class="form-shell form-shell--square" role="search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Buscar receta por nombre..."
+        autocomplete="off"
+      />
     </div>
-    <div class="col-md-5 text-end">
+    <div class="admin-toolbar-actions">
       @if (!showForm) {
         <button
-          class="btn btn-primary gradient-btn px-4"
+          type="button"
+          class="btn-wk btn-primary-wk btn-pill"
           (click)="nuevaReceta()"
         >
-          <i class="bi bi-plus-lg me-2"></i>Nueva Receta
+          <i class="bi bi-plus-lg"></i>
+          <span>Nueva receta</span>
         </button>
       } @else {
-        <button class="btn btn-primary gradient-btn px-4" (click)="closeForm()">
-          <i class="bi bi-arrow-left me-2"></i>Volver a Recetas
+        <button
+          type="button"
+          class="btn-wk btn-soft btn-pill"
+          (click)="closeForm()"
+        >
+          <i class="bi bi-arrow-left"></i>
+          <span>Volver a recetas</span>
         </button>
       }
     </div>
-  </div>
+  </header>
+
   @if (showForm) {
-    <div class="card bg-light border-0 shadow-sm mb-4 p-4">
-      <h6 class="fw-bold mb-3">{{ isEditing ? "Editar" : "Crear" }} Receta</h6>
-      <form (ngSubmit)="guardar()">
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="small fw-bold">Título</label>
+    <div class="surface-card admin-form-card">
+      <div class="admin-form-card__head">
+        <p class="eyebrow">Formulario</p>
+        <h3 class="serif-font">{{ isEditing ? "Editar" : "Crear" }} receta</h3>
+      </div>
+      <form (ngSubmit)="guardar()" class="admin-form-stack">
+        <div class="admin-form-grid admin-form-grid--split">
+          <div>
+            <label class="form-label-wk">Título</label>
             <input
               type="text"
-              class="form-control"
+              class="field-control"
               [(ngModel)]="selectedRecipe.titulo"
               name="titulo"
               required
             />
           </div>
-          <div class="col-md-6">
-            <label class="small fw-bold">Foto URL</label>
+          <div>
+            <label class="form-label-wk">Foto URL</label>
             <input
               type="text"
-              class="form-control"
+              class="field-control"
               [(ngModel)]="selectedRecipe.fotoUrl"
               name="foto"
             />
           </div>
         </div>
 
-        <h6 class="small fw-bold mb-2">Detalles</h6>
-        <div class="card p-3 mb-3">
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="small fw-bold">Tiempo preparación (min)</label>
+        <div class="admin-form-section">
+          <h6>Detalles</h6>
+          <div class="admin-form-grid admin-form-grid--dense">
+            <div>
+              <label class="form-label-wk">Tiempo preparación (min)</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.tiempoPreparacionMin"
                 name="tiempo"
                 min="0"
               />
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Porciones</label>
+            <div>
+              <label class="form-label-wk">Porciones</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.porciones"
                 name="porciones"
                 min="1"
               />
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Categoría</label>
+            <div>
+              <label class="form-label-wk">Categoría</label>
               <select
-                class="form-select"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.categoriaId"
                 name="categoria"
                 required
@@ -91,11 +98,11 @@
                 }
               </select>
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Creado por</label>
+            <div>
+              <label class="form-label-wk">Creado por</label>
               <input
                 type="text"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.creadorNombre"
                 name="creador"
                 placeholder="Nombre del autor"
@@ -104,68 +111,69 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label class="small fw-bold">Descripción</label>
-          <textarea
-            class="form-control"
-            rows="2"
-            [(ngModel)]="selectedRecipe.descripcionCorta"
-            name="desc"
-            placeholder="Breve resumen de la receta"
-          ></textarea>
+        <div class="admin-form-grid">
+          <div>
+            <label class="form-label-wk">Descripción</label>
+            <textarea
+              class="field-control"
+              rows="2"
+              [(ngModel)]="selectedRecipe.descripcionCorta"
+              name="desc"
+              placeholder="Breve resumen de la receta"
+            ></textarea>
+          </div>
+          <div>
+            <label class="form-label-wk">Instrucciones</label>
+            <textarea
+              class="field-control"
+              rows="3"
+              [(ngModel)]="selectedRecipe.instrucciones"
+              name="instr"
+            ></textarea>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label class="small fw-bold">Instrucciones</label>
-          <textarea
-            class="form-control"
-            rows="3"
-            [(ngModel)]="selectedRecipe.instrucciones"
-            name="instr"
-          ></textarea>
-        </div>
-
-        <h6 class="small fw-bold mb-2">Valores Nutricionales</h6>
-        <div class="card p-3 mb-3">
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="small fw-bold">Calorías (kcal)</label>
+        <div class="admin-form-section">
+          <h6>Valores nutricionales</h6>
+          <div class="admin-form-grid admin-form-grid--dense">
+            <div>
+              <label class="form-label-wk">Calorías (kcal)</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.valorNutricional.calorias"
                 name="nutCal"
                 min="0"
                 step="0.1"
               />
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Proteínas (g)</label>
+            <div>
+              <label class="form-label-wk">Proteínas (g)</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.valorNutricional.proteinas"
                 name="nutProt"
                 min="0"
                 step="0.1"
               />
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Grasas (g)</label>
+            <div>
+              <label class="form-label-wk">Grasas (g)</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.valorNutricional.grasas"
                 name="nutGrasas"
                 min="0"
                 step="0.1"
               />
             </div>
-            <div class="col-md-3">
-              <label class="small fw-bold">Hidratos (g)</label>
+            <div>
+              <label class="form-label-wk">Hidratos (g)</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="selectedRecipe.valorNutricional.hidratos"
                 name="nutHidratos"
                 min="0"
@@ -175,13 +183,13 @@
           </div>
         </div>
 
-        <div class="card p-3 mb-3">
-          <h6 class="small fw-bold mb-3">Ingredientes</h6>
-          <div class="row g-2 mb-3 align-items-start">
-            <div class="col-md-6">
-              <label class="small fw-bold">Nombre</label>
+        <div class="admin-form-section">
+          <h6>Ingredientes</h6>
+          <div class="admin-form-grid admin-form-grid--dense">
+            <div>
+              <label class="form-label-wk">Nombre</label>
               <select
-                class="form-select"
+                class="field-control"
                 [(ngModel)]="tempIngrediente.ingredienteId"
                 name="tempIng"
               >
@@ -191,51 +199,50 @@
                 }
               </select>
             </div>
-            <div class="col-md-2">
-              <label class="small fw-bold">Unidad</label>
+            <div>
+              <label class="form-label-wk">Cantidad</label>
               <input
                 type="number"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="tempIngrediente.cantidad"
                 name="tempCant"
-                placeholder="Cant."
+                placeholder="Cantidad"
                 min="0"
                 step="0.1"
               />
             </div>
-            <div class="col-md-2">
-              <label class="small fw-bold">Unidad de Medida</label>
+            <div>
+              <label class="form-label-wk">Unidad</label>
               <input
                 type="text"
-                class="form-control"
+                class="field-control"
                 [(ngModel)]="tempIngrediente.unidad"
                 name="tempUni"
                 placeholder="Unidad"
               />
             </div>
-            <div class="col-md-2 d-flex flex-column">
-              <label class="small fw-bold invisible" aria-hidden="true"
-                >Acción</label
-              >
+            <div class="admin-form-actions">
               <button
                 type="button"
-                class="btn btn-primary gradient-btn w-100 mt-auto"
+                class="btn-wk btn-primary-wk"
                 (click)="agregarIngrediente()"
               >
-                Añadir
+                Añadir ingrediente
               </button>
             </div>
           </div>
-          <ul class="list-group">
+          <ul class="admin-ingredients-list">
             @for (item of selectedRecipe.ingredientes; track $index) {
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-              >
-                {{ item.cantidad }} {{ item.unidad }} de {{ item.nombreAux }}
+              <li>
+                <span
+                  >{{ item.cantidad }} {{ item.unidad }} de
+                  {{ item.nombreAux }}</span
+                >
                 <button
                   type="button"
-                  class="btn btn-link text-danger p-0"
+                  class="icon-btn icon-btn--danger"
                   (click)="quitarIngrediente($index)"
+                  aria-label="Eliminar ingrediente"
                 >
                   <i class="bi bi-trash"></i>
                 </button>
@@ -244,32 +251,34 @@
           </ul>
         </div>
 
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-secondary" (click)="cancelar()">
+        <div class="admin-form-actions">
+          <button type="button" class="btn-wk btn-soft" (click)="cancelar()">
             Cancelar
           </button>
-          <button type="submit" class="btn btn-success">Confirmar</button>
+          <button type="submit" class="btn-wk btn-primary-wk">Confirmar</button>
         </div>
       </form>
     </div>
   }
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle bg-white rounded shadow-sm">
-      <thead class="bg-light">
+  <div class="table-shell">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th style="width: 50%">Título</th>
-          <th style="width: 20%">Categoría</th>
-          <th style="width: 15%">Tiempo</th>
-          <th style="width: 15%" class="text-end">Acciones</th>
+          <th scope="col" data-column="primary">Título</th>
+          <th scope="col">Categoría</th>
+          <th scope="col">Tiempo</th>
+          <th scope="col" data-column="actions">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (receta of recetasFiltradas; track receta.id) {
           <tr>
-            <td class="fw-bold text-primary">{{ receta.titulo }}</td>
+            <td data-column="primary">
+              <span class="fw-semibold text-purple">{{ receta.titulo }}</span>
+            </td>
             <td>
-              <span class="badge bg-light text-dark border">{{
+              <span class="pill pill-soft">{{
                 receta.categoriaNombre || "General"
               }}</span>
             </td>
@@ -277,22 +286,26 @@
               <i class="bi bi-clock me-1"></i
               >{{ receta.tiempoPreparacionMin }} min
             </td>
-            <td class="text-end">
-              <span class="action-btn-wrapper me-2">
+            <td data-column="actions">
+              <span class="action-btn-wrapper">
                 <button
-                  class="btn btn-sm text-primary"
+                  type="button"
+                  class="icon-btn"
                   (click)="editar(receta)"
+                  aria-label="Editar receta"
                 >
-                  <i class="bi bi-pencil-square fs-5"></i>
+                  <i class="bi bi-pencil-square"></i>
                 </button>
                 <span class="tooltip-action">Editar receta</span>
               </span>
               <span class="action-btn-wrapper">
                 <button
-                  class="btn btn-sm text-danger"
+                  type="button"
+                  class="icon-btn icon-btn--danger"
                   (click)="eliminar(receta.id!)"
+                  aria-label="Eliminar receta"
                 >
-                  <i class="bi bi-trash fs-5"></i>
+                  <i class="bi bi-trash"></i>
                 </button>
                 <span class="tooltip-action">Eliminar receta</span>
               </span>
@@ -302,4 +315,4 @@
       </tbody>
     </table>
   </div>
-</div>
+</section>
