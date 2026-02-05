@@ -1,30 +1,36 @@
 @if (loading) {
-<p class="status loading">Cargando favoritos...</p>
+  <p class="status loading">Cargando favoritos...</p>
 }
 
 @if (!loading && error) {
-<p class="status error">{{ error }}</p>
+  <p class="status error">{{ error }}</p>
 }
 
 @if (!loading && !error && favoriteRecipes.length === 0) {
-<div class="empty-state">
+  <div class="empty-state">
     <i class="bi bi-heart"></i>
     <p>Aún no has guardado ninguna receta.</p>
-    <a class="btn btn-primary btn-sm" routerLink="/recipes">Explorar recetas</a>
-</div>
+    <a class="btn-wk btn-primary-wk btn-pill" routerLink="/recipes"
+      >Explorar recetas</a
+    >
+  </div>
 }
 
 @if (!loading && !error && favoriteRecipes.length > 0) {
-<div class="recipes-grid">
+  <div class="recipes-grid">
     @for (recipe of favoriteRecipes; track recipe.id) {
-    <div class="favorite-wrapper">
+      <div class="favorite-wrapper">
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
 
-        <button type="button" class="remove-fav-btn" (click)="recipe.id && removeFromFavorites(recipe.id)"
-            aria-label="Quitar de favoritos">
-            <i class="bi bi-heart-fill"></i>
+        <button
+          type="button"
+          class="remove-fav-btn"
+          (click)="recipe.id && removeFromFavorites(recipe.id)"
+          aria-label="Quitar de favoritos"
+        >
+          <i class="bi bi-heart-fill"></i>
         </button>
-    </div>
+      </div>
     }
-</div>
+  </div>
 }

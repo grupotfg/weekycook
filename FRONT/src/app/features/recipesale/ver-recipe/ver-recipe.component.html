@@ -7,9 +7,9 @@
 }
 
 @if (recipe && !loading) {
-  <section class="detail-surface">
+  <section class="detail-surface layout-container">
     <div class="detail-header">
-      <a routerLink="/recipes" class="back-link">
+      <a routerLink="/recipes" class="back-link btn-wk btn-soft btn-pill">
         <i class="bi bi-arrow-left-short"></i>
         Volver a recetas
       </a>
@@ -17,7 +17,7 @@
 
     <div class="detail-grid">
       <div class="detail-main">
-        <article class="hero-card">
+        <article class="hero-card surface-card">
           <div class="hero-image">
             <img
               [src]="recipe.fotoUrl || '/placeholder.jpg'"
@@ -28,7 +28,9 @@
           <div class="hero-body">
             <div class="hero-header">
               @if (recipe.categoriaNombre) {
-                <span class="hero-category">{{ recipe.categoriaNombre }}</span>
+                <span class="pill pill-primary hero-category">{{
+                  recipe.categoriaNombre
+                }}</span>
               }
               <button
                 class="favorite-btn"
@@ -76,7 +78,7 @@
           </div>
         </article>
 
-        <section class="instructions-card">
+        <section class="instructions-card surface-card">
           <h2>Instrucciones</h2>
           @if (instructionSteps.length > 0) {
             <ol class="instruction-steps">
@@ -96,7 +98,7 @@
       </div>
 
       <aside class="detail-aside">
-        <div class="info-card">
+        <div class="info-card surface-card">
           <h3>Ingredientes</h3>
           @if ((recipe.ingredientes ?? []).length > 0) {
             <ul class="ingredient-list">
@@ -119,7 +121,7 @@
           }
         </div>
 
-        <div class="info-card">
+        <div class="info-card surface-card">
           <h3>Información</h3>
           <dl class="info-list">
             <div>
@@ -139,7 +141,11 @@
           </dl>
         </div>
 
-        <button class="planner-btn" type="button" routerLink="/planner">
+        <button
+          class="planner-btn btn-wk btn-primary-wk btn-pill"
+          type="button"
+          routerLink="/planner"
+        >
           <i class="bi bi-calendar-plus"></i>
           Añadir al planificador
         </button>
