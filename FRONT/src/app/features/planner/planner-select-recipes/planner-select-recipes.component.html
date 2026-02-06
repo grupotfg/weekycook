@@ -1,70 +1,52 @@
-<section class="planner-wrap">
-  <div class="layout-container">
-    <div class="planner-shell">
-      <h2 class="section-title">Seleccionar recetas</h2>
-
-      <p class="hint">
-        Elige receta para <strong>{{ day }} - {{ turn }}</strong>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="hero-title mb-1">Elige una receta</h2>
+      <p class="text-muted m-0">
+        Para: <span class="badge bg-info text-dark">{{ dia }} - {{ turno }}</span>
       </p>
+    </div>
+    <button class="btn btn-outline-secondary" (click)="volver()">Cancelar</button>
+  </div>
 
-      <div class="selectors">
-        <div class="field search">
-          <label>Buscar</label>
-          <div class="form-shell">
-            <i class="bi bi-search"></i>
-            <input
-              type="text"
-              [(ngModel)]="searchTerm"
-              (input)="applyFilter()"
-              placeholder="Ensalada, pasta, sopa..."
-            />
+  <div class="mb-4">
+    <input 
+      type="text" 
+      class="form-control form-control-lg shadow-sm" 
+      placeholder="Buscar por nombre (ej: Pasta, Ensalada...)" 
+      [(ngModel)]="filtroTexto">
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Cargando recetario...</p>
+    </div>
+  } @else {
+    <div class="row g-4">
+      @for (receta of recetasFiltradas; track receta.id) {
+        <div class="col-md-4 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm recipe-card" (click)="seleccionarReceta(receta)">
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 180px;">
+              @if (receta.fotoUrl) {
+                <img [src]="receta.fotoUrl" class="w-100 h-100 object-fit-cover" alt="...">
+              } @else {
+                <i class="bi bi-camera fs-1"></i>
+              }
+            </div>
+            <div class="card-body">
+              <h5 class="card-title fw-bold text-dark">{{ receta.titulo }}</h5>
+              <p class="card-text small text-muted">
+                <i class="bi bi-clock me-1"></i> {{ receta.tiempoPreparacionMin }} min
+              </p>
+            </div>
           </div>
         </div>
-
-        <div class="actions">
-          <button
-            class="btn-wk btn-pill btn-danger-wk"
-            type="button"
-            (click)="removeRecipe()"
-          >
-            Limpiar
-          </button>
-          <button class="btn-wk btn-soft btn-pill" routerLink="/planner">
-            ← Volver al plan
-          </button>
-        </div>
-      </div>
-
-      @if (message) {
-        <p class="msg">{{ message }}</p>
-      }
-
-      @if (loading) {
-        <p>Cargando recetas...</p>
-      } @else {
-        <div class="recipes-grid">
-          @for (r of filteredRecipes; track r.id ?? r.titulo) {
-            <button
-              class="recipe-pick"
-              type="button"
-              (click)="selectRecipe(r)"
-              [disabled]="saving"
-            >
-              <div class="title">{{ r.titulo }}</div>
-              <div class="desc">{{ r.descripcionCorta }}</div>
-
-              <div class="meta">
-                @if (r.tiempoPreparacionMin !== null) {
-                  <span>⏱ {{ r.tiempoPreparacionMin }} min</span>
-                }
-                @if (r.categoriaNombre) {
-                  <span>🏷 {{ r.categoriaNombre }}</span>
-                }
-              </div>
-            </button>
-          }
+      } @empty {
+        <div class="col-12 text-center py-5">
+          <p class="text-muted fs-5">No se encontraron recetas con ese nombre.</p>
         </div>
       }
     </div>
-  </div>
-</section>
+  }
+</div>

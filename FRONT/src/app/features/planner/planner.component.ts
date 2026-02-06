@@ -1,235 +1,183 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { PlanService } from '../../core/services/plan.service';
-import {
-  PlanDetail,
-  PlanItem,
-  PlanPayload,
-  PlanSummary,
-} from '../../core/models/plan.model';
+import { PlanDetail, PlanItem, PlanPayload, PlanSummary } from '../../core/models/plan.model';
 import { DayOfWeek } from '../../core/enums/day.enum';
 import { MealTurn } from '../../core/enums/meal-turn.enum';
 
 @Component({
   selector: 'app-planner',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, DatePipe],
   templateUrl: './planner.component.html',
   styleUrl: './planner.component.css',
 })
 export class PlannerComponent implements OnInit {
+  // uso de inject 
+  private planService = inject(PlanService);
+  private route = inject(ActivatedRoute);
+  
+  // uso public para que el html no de error de acceso privado que daba fallos el html
+  public router = inject(Router); 
+
+  // Estado de la pantalla
   plans: PlanSummary[] = [];
   selectedPlanId: number | null = null;
   selectedPlan?: PlanDetail;
-  creatingPlan = false;
-
+  viewMode: 'list' | 'detail' | 'create' = 'list';
   loading = true;
   errorMessage = '';
-  subtitle = 'Organiza los platos de lunes a domingo';
 
-  // Usa enums si son string
-  readonly days: DayOfWeek[] = [
-    DayOfWeek.Lunes,
-    DayOfWeek.Martes,
-    DayOfWeek.Miércoles,
-    DayOfWeek.Jueves,
-    DayOfWeek.Viernes,
-    DayOfWeek.Sábado,
-    DayOfWeek.Domingo,
-  ];
+  //formulario de nuevo plan
+  newPlan: PlanPayload = { 
+    nombre: '', 
+    semanaInicio: '', 
+    numComensales: 2, 
+    observaciones: '', 
+    items: [] 
+  };
 
-  readonly meals: MealTurn[] = [MealTurn.Comida, MealTurn.Cena];
-
-  constructor(
-    private planService: PlanService,
-    private router: Router,
-  ) {}
+  // Mapa para encontrar rápido qué receta va en qué hueco
+  private planMap = new Map<string, PlanItem>();
+  
+  // pintamos días y turnos
+  readonly days = [DayOfWeek.Lunes, DayOfWeek.Martes, DayOfWeek.Miércoles, DayOfWeek.Jueves, DayOfWeek.Viernes, DayOfWeek.Sábado, DayOfWeek.Domingo];
+  readonly meals = [MealTurn.Comida, MealTurn.Cena];
 
   ngOnInit(): void {
-    this.loadPlans();
+    // para saber si hay que mostrar la lista o un plan concreto
+    this.route.queryParams.subscribe(params => {
+      const planId = params['planId'];
+      if (planId) {
+        this.selectedPlanId = +planId;
+        this.loadPlanDetail(this.selectedPlanId);
+      } else {
+        this.loadPlans();
+      }
+    });
   }
 
   loadPlans(): void {
     this.loading = true;
-    this.errorMessage = '';
-
     this.planService.getUserPlans().subscribe({
-      next: (data) => {
-        this.plans = data ?? [];
-        this.selectedPlanId = this.plans[0]?.id ?? null;
-
-        if (!this.selectedPlanId) {
-          this.onCreatePlan();
-          return;
-        }
-
-        this.loadPlanDetail(this.selectedPlanId);
+      next: (data) => { 
+        this.plans = data; 
+        this.loading = false; 
+        this.viewMode = 'list'; 
       },
-      error: () => {
-        this.errorMessage = 'No se pudieron cargar los planes.';
-        this.loading = false;
-      },
+      error: () => this.loading = false
     });
-  }
-
-  onPlanChange(): void {
-    if (this.selectedPlanId) this.loadPlanDetail(this.selectedPlanId);
   }
 
   loadPlanDetail(planId: number): void {
     this.loading = true;
-    this.errorMessage = '';
-
     this.planService.getById(planId).subscribe({
       next: (plan) => {
-        this.selectedPlan = { ...plan, items: plan.items ?? [] };
+        this.selectedPlan = plan;
+        this.buildPlanMap(); // Organiza las recetas en el mapa que para eso se ha hecho
+        this.viewMode = 'detail';
         this.loading = false;
       },
-      error: () => {
-        this.errorMessage = 'No se pudo cargar el plan seleccionado.';
-        this.loading = false;
-      },
+      error: () => this.irALista()
     });
   }
 
-  // Busca y devuelve el item del plan correspondiente a un dia y turno especifico o undefine si no exisste
-  getSlot(day: DayOfWeek, meal: MealTurn): PlanItem | undefined {
-    return this.selectedPlan?.items?.find(
-      (item) => item.dia === day && item.turno === meal,
-    );
+  // Elimina un plan completo de la base de datos
+  borrarPlan(id: number, event: MouseEvent): void {
+    event.stopPropagation(); // Evitamos que al hacer clic sobre ello se abra el detalle del plan que es el resto
+    if (confirm('¿Seguro que quieres eliminar este plan semanal? No se puede deshacer.')) {
+      this.planService.delete(id).subscribe({
+        next: () => {
+          this.plans = this.plans.filter(p => p.id !== id);
+          if (this.selectedPlanId === id) this.irALista();
+        },
+        error: () => alert('Vaya, no hemos podido eliminar el plan ahora mismo.')
+      });
+    }
   }
 
-  // Permite reducir lso nombres de las recetas, cuando son muy largas y poderse visulizar bien.
-  displayTitle(recipeTitle?: string | null): string {
-    if (!recipeTitle) return '';
-    const words = recipeTitle.trim().split(/\s+/);
-    if (words.length <= 3) return recipeTitle;
-    return `${words.slice(0, 3).join(' ')}…`;
-  }
-
-  // Navega a la vista de seleccion de recetas pasando por el plan, dia y turno como parametros si hay plan seleccionado
-  handleSlotClick(day: DayOfWeek, meal: MealTurn): void {
+  //de relleno aleatorio
+  rellenarAleatorio(): void {
     if (!this.selectedPlanId) return;
-
-    this.router.navigate(['/planner/select'], {
-      queryParams: { planId: this.selectedPlanId, dia: day, turno: meal },
+    this.planService.randomize(this.selectedPlanId).subscribe({
+      next: () => this.loadPlanDetail(this.selectedPlanId!),
+      error: () => alert('Error al intentar generar recetas automáticas.')
     });
   }
-  // maneja la interacion po rtecladoy, al presionar Enter o Espacio, ejecuta la misma accion que un clic en el slot
-  onSlotKey(event: KeyboardEvent, day: DayOfWeek, meal: MealTurn): void {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    this.handleSlotClick(day, meal);
+
+  confirmCreate() {
+    this.errorMessage = '';
+    
+    // Validamos que haya fecha
+    if (!this.newPlan.semanaInicio) {
+      this.errorMessage = 'Debes seleccionar una fecha de inicio.';
+      return;
+    }
+
+    // Validamos que sea LUNES (back y fron alineados)
+    const date = new Date(this.newPlan.semanaInicio);
+    if (date.getUTCDay() !== 1) { // 1 es Lunes, lo he tenido que mirar sugún js
+      this.errorMessage = 'Lo sentimos, los planes deben empezar obligatoriamente un Lunes.';
+      return;
+    }
+
+    this.planService.create(this.newPlan).subscribe({
+      next: (res) => {
+        // Limpiamos el formulario después de crear que se quedaba todo
+        this.newPlan = { 
+          nombre: '', 
+          semanaInicio: '', 
+          numComensales: 2, 
+          observaciones: '', 
+          items: [] 
+        };
+        this.errorMessage = '';
+        // creamos y vamos
+        this.router.navigate([], { queryParams: { planId: res.id } });
+      },
+      error: (err) => {
+        // mensajes de error
+        this.errorMessage = 'Ya tienes una planificación para esa semana';
+      }
+    });
   }
-  //Elimina un item del paln para un dia y turno dados, actualizando el estado local o mostrando un error si falla
+
+  irALista(): void {
+    this.selectedPlanId = null;
+    this.newPlan = { 
+      nombre: '', 
+      semanaInicio: '', 
+      numComensales: 2, 
+      observaciones: '', 
+      items: [] 
+    };
+    this.errorMessage = '';
+    this.router.navigate(['/planner']); // Limpiamos
+  }
+
+  handleSlotClick(day: DayOfWeek, meal: MealTurn): void {
+    this.router.navigate(['/planner/select'], {
+      queryParams: { planId: this.selectedPlanId, dia: day, turno: meal }
+    });
+  }
+
   removeSlot(day: DayOfWeek, meal: MealTurn, event: MouseEvent): void {
     event.stopPropagation();
     if (!this.selectedPlanId) return;
-
     this.planService.deleteItem(this.selectedPlanId, day, meal).subscribe({
       next: () => {
-        if (!this.selectedPlan) return;
-        this.selectedPlan = {
-          ...this.selectedPlan,
-          items: this.selectedPlan.items.filter(
-            (item) => !(item.dia === day && item.turno === meal),
-          ),
-        };
-      },
-      error: () => {
-        this.errorMessage = 'No se pudo eliminar la receta del plan.';
-      },
+        this.selectedPlan!.items = this.selectedPlan!.items.filter(i => !(i.dia === day && i.turno === meal));
+        this.buildPlanMap();
+      }
     });
   }
 
-  onDeletePlan(): void {
-    if (!this.selectedPlanId) return;
-
-    this.planService.delete(this.selectedPlanId).subscribe({
-      next: () => this.loadPlans(),
-      error: () => (this.errorMessage = 'No se pudo eliminar el plan.'),
-    });
+  private buildPlanMap(): void {
+    this.planMap.clear();
+    this.selectedPlan?.items.forEach(item => this.planMap.set(`${item.dia}-${item.turno}`, item));
   }
 
-  onRandomize(): void {
-    if (!this.selectedPlanId) return;
-
-    this.planService.randomize(this.selectedPlanId).subscribe({
-      next: (plan) =>
-        (this.selectedPlan = { ...plan, items: plan.items ?? [] }),
-      error: () =>
-        (this.errorMessage = 'No se pudo generar el plan aleatorio.'),
-    });
-  }
-
-  onCreatePlan(): void {
-    if (this.creatingPlan) return;
-
-    this.creatingPlan = true;
-    this.loading = true;
-    this.errorMessage = '';
-
-    const payload = this.buildDefaultPlanPayload();
-
-    this.planService.create(payload).subscribe({
-      next: (plan) => {
-        this.plans = [
-          plan,
-          ...this.plans.filter((existing) => existing.id !== plan.id),
-        ];
-        this.selectedPlanId = plan.id;
-        this.selectedPlan = { ...plan, items: plan.items ?? [] };
-        this.creatingPlan = false;
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMessage = 'No se pudo crear un plan nuevo.';
-        this.creatingPlan = false;
-        this.loading = false;
-      },
-    });
-  }
-
-  private buildDefaultPlanPayload(): PlanPayload {
-    const now = new Date();
-    return {
-      nombre: this.generateDefaultName(now),
-      semanaInicio: this.getWeekStartISO(now),
-      numComensales: 2,
-      observaciones: '',
-      items: [],
-    };
-  }
-
-  private getWeekStartISO(date: Date): string {
-    const start = new Date(date);
-    const jsDay = start.getDay();
-    const diff = jsDay === 0 ? -6 : 1 - jsDay;
-    start.setDate(start.getDate() + diff);
-    start.setHours(0, 0, 0, 0);
-    return start.toISOString().split('T')[0];
-  }
-
-  private generateDefaultName(date: Date): string {
-    const monthNames = [
-      'enero',
-      'febrero',
-      'marzo',
-      'abril',
-      'mayo',
-      'junio',
-      'julio',
-      'agosto',
-      'septiembre',
-      'octubre',
-      'noviembre',
-      'diciembre',
-    ];
-    const month = monthNames[date.getMonth()] ?? '';
-    const weekNumber = Math.max(1, Math.ceil(date.getDate() / 7));
-    return `${weekNumber} semana ${month}`.trim();
-  }
+  getSlot(day: DayOfWeek, meal: MealTurn) { return this.planMap.get(`${day}-${meal}`); }
 }

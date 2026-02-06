@@ -8,6 +8,7 @@ export interface PlanSummary {
   usuarioId: number;
   nombre: string;
   semanaInicio: string;
+  observaciones?: string; //añado para que salga en la lista de planes al entrar
   numComensales: number;
   fechaCreacion: string;
   totalCaloriasSemana: number;

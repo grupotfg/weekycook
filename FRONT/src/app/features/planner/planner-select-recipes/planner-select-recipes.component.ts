@@ -1,124 +1,111 @@
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-
 import { RecipeService } from '../../../core/services/recipe.service';
 import { PlanService } from '../../../core/services/plan.service';
 import { Recipe } from '../../../core/models/recipe.model';
+import { PlanItemPayload } from '../../../core/models/plan.model';
 import { DayOfWeek } from '../../../core/enums/day.enum';
 import { MealTurn } from '../../../core/enums/meal-turn.enum';
-import { PlanItemPayload } from '../../../core/models/plan.model';
 
 @Component({
   selector: 'app-planner-select-recipes',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './planner-select-recipes.component.html',
-  styleUrls: ['./planner-select-recipes.component.css'],
+  // He metido unos estilos rápidos aquí para no complicar el CSS global
+  styles: [`
+    .recipe-card { cursor: pointer; transition: all 0.2s ease-in-out; border-radius: 15px; overflow: hidden; }
+    .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; border-color: var(--primary); }
+    .img-container { height: 160px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; }
+    .badge-info { background-color: var(--primary-light); color: var(--primary-dark); font-weight: 600; }
+  `]
 })
 export class PlannerSelectRecipesComponent implements OnInit {
-  // cabecera igual que planner
-  subtitle = 'Organiza los platos de lunes a domingo';
-  viewLabel = 'Visto de frente';
+  // Inyectamos las herramientas que necesitamos
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private recipeService = inject(RecipeService);
+  private planService = inject(PlanService);
 
-  // contexto de la celda
-  planId: number | null = null;
-  day!: DayOfWeek;
-  turn!: MealTurn;
-
-  readonly days = Object.values(DayOfWeek);
-  readonly turns = Object.values(MealTurn);
-
-  // recetas
-  recipes: Recipe[] = [];
-  filteredRecipes: Recipe[] = [];
-  searchTerm = '';
-
+  // Variables para la lógica
+  recetas: Recipe[] = [];
+  filtroTexto: string = '';
   loading = true;
-  message = '';
-  saving = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private recipeService: RecipeService,
-    private planService: PlanService,
-  ) {}
+  // Estos datos vienen de la URL al hacer clic en el hueco del planner
+  planId: number = 0;
+  dia!: DayOfWeek; // Usamos ! porque sabemos que llegarán
+  turno!: MealTurn;
 
-  ngOnInit(): void {
-    //  parámetros de la URL (?planId=..&dia=..&turno=..)
-    const params = this.route.snapshot.queryParamMap;
+  ngOnInit() {
+    // 1. Escuchamos lo que viene por la URL (query params)
+    this.route.queryParams.subscribe(params => {
+      this.planId = Number(params['planId']);
+      
+      // TRUCO: Usamos 'as' para decirle a TS que el string de la URL 
+      // es realmente un valor válido de nuestros Enums
+      this.dia = params['dia'] as DayOfWeek;
+      this.turno = params['turno'] as MealTurn;
 
-    this.planId = Number(params.get('planId'));
-    this.day = params.get('dia') as DayOfWeek;
-    this.turn = params.get('turno') as MealTurn;
+      // Si por lo que sea entran aquí sin plan o día, los echamos fuera por seguridad
+      if (!this.planId || !this.dia || !this.turno) {
+        this.volver();
+      }
+    });
 
-    this.loadRecipes();
+    // 2. Traemos todas las recetas de la base de datos
+    this.cargarRecetas();
   }
 
-  // cargar recetas
-  loadRecipes(): void {
+  cargarRecetas() {
     this.loading = true;
-
     this.recipeService.getAll().subscribe({
-      next: (data) => {
-        this.recipes = data ?? [];
-        this.applyFilter();
+      next: (res) => {
+        this.recetas = res;
         this.loading = false;
       },
-      error: () => {
-        this.recipes = [];
-        this.filteredRecipes = [];
+      error: (err) => {
+        console.error('Vaya, no hemos podido cargar las recetas:', err);
         this.loading = false;
-      },
+      }
     });
   }
 
-  // filtro
-  applyFilter(): void {
-    const term = this.searchTerm.toLowerCase().trim();
-
-    this.filteredRecipes = !term
-      ? this.recipes
-      : this.recipes.filter(
-          (r) =>
-            r.titulo.toLowerCase().includes(term) ||
-            (r.descripcionCorta ?? '').toLowerCase().includes(term),
-        );
+  // Función para filtrar recetas por nombre mientras escribes
+  get recetasFiltradas() {
+    const busqueda = this.filtroTexto.toLowerCase().trim();
+    if (!busqueda) return this.recetas;
+    return this.recetas.filter(r => r.titulo.toLowerCase().includes(busqueda));
   }
 
-  // asignar receta
-  selectRecipe(recipe: Recipe): void {
-    if (!this.planId || !recipe.id) return;
+  // ESTA ES LA FUNCIÓN CLAVE: Cuando el usuario elige su plato
+  seleccionarReceta(receta: Recipe) {
+    if (!receta.id) return;
 
-    const payload: PlanItemPayload = {
-      recetaId: recipe.id,
-      dia: this.day,
-      turno: this.turn,
-      notas: '',
+    // Preparamos el paquete para el servidor
+    const nuevoItem: PlanItemPayload = {
+      dia: this.dia,
+      turno: this.turno,
+      recetaId: receta.id
     };
 
-    this.planService.addOrUpdateItem(this.planId, payload).subscribe({
+    // Llamamos al servicio para que guarde la receta en ese hueco
+    this.planService.addOrUpdateItem(this.planId, nuevoItem).subscribe({
       next: () => {
-        this.message = `Receta asignada a ${this.day} - ${this.turn}`;
+        // Si todo sale bien, volvemos al calendario para ver el cambio
+        this.volver();
       },
-      error: () => {
-        this.message = 'No se pudo asignar la receta';
-      },
+      error: (err) => {
+        console.error('Error al guardar el plato en el plan:', err);
+        alert('Lo sentimos, no se ha podido guardar la receta en el planificador.');
+      }
     });
   }
 
-  // eliminar receta de la celda
-  removeRecipe(): void {
-    if (!this.planId) return;
-
-    this.planService.deleteItem(this.planId, this.day, this.turn).subscribe({
-      next: () => {
-        this.message = `Receta eliminada de ${this.day} - ${this.turn}`;
-      },
-      error: () => {
-        this.message = 'No se pudo eliminar la receta';
-      },
-    });
-  }
+volver() {
+  // paso el planId pata que sepa que tiene que cargar el detalle y no la lista
+  this.router.navigate(['/planner'], { queryParams: { planId: this.planId } });
+}
 }

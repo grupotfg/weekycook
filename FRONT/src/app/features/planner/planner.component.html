@@ -1,153 +1,111 @@
-<section class="planner-hero">
-  <div class="layout-container hero-row">
-    <div class="hero-copy">
-      <h1 class="hero-title serif-font">Planificador Semanal</h1>
-      <p class="hero-sub">{{ subtitle }}</p>
-    </div>
 
-    <div class="hero-cta">
-      <button
-        class="btn-wk btn-primary-wk btn-pill"
-        type="button"
-        (click)="onCreatePlan()"
-        [disabled]="creatingPlan"
-      >
-        + Nuevo plan
-      </button>
-      <button
-        class="btn-wk btn-soft btn-pill"
-        type="button"
-        (click)="onRandomize()"
-        [disabled]="!selectedPlanId"
-      >
-        Aleatorio
-      </button>
-    </div>
-  </div>
-</section>
+<div class="layout-container section-padding">
+  
+  <header class="planner-header">
+    <h1 class="serif-font txt-primary">Planificador Semanal</h1>
+  </header>
 
-<section class="planner-wrap">
-  <div class="layout-container">
-    <div class="planner-panel">
-      <div class="plan-controls">
-        <div class="control-group">
-          <span class="label">Plan actual</span>
-          <div class="select-shell">
-            <select
-              [(ngModel)]="selectedPlanId"
-              (change)="onPlanChange()"
-              [disabled]="!plans.length"
-            >
-              @if (!plans.length) {
-                <option [ngValue]="null">Sin planes disponibles</option>
+  <main>
+    @if (viewMode === 'list' && !loading) {
+      <div class="list-top-bar">
+        <button class="btn-wk btn-primary-wk" (click)="viewMode = 'create'; newPlan = {nombre: '', semanaInicio: '', numComensales: 2, observaciones: '', items: []}; errorMessage = ''">+ Crear Plan Nuevo</button>
+      </div>
+
+      <div class="plans-stack">
+        @for (p of plans; track p.id) {
+          <div class="plan-row-card" (click)="router.navigate([], { queryParams: { planId: p.id }})">
+            <div class="date-badge">
+              <span class="day">{{ p.semanaInicio | date:'dd' }}</span>
+              <span class="month">{{ p.semanaInicio | date:'MMM' | uppercase }}</span>
+            </div>
+            <div class="plan-main">
+              <h3>{{ p.nombre }}</h3>
+              @if (p.observaciones) {
+                <p class="plan-obs">{{ p.observaciones }}</p>
               }
-              @for (p of plans; track p.id) {
-                <option [ngValue]="p.id">{{ p.nombre }}</option>
-              }
-            </select>
-            <span class="caret">▾</span>
+            </div>
+            <button class="btn-delete-item" (click)="borrarPlan(p.id, $event)" title="Eliminar este plan">
+              <i class="bi bi-trash3"></i>
+            </button>
+            <i class="bi bi-chevron-right ms-3 arrow-icon"></i>
+          </div>
+        }
+      </div>
+    }
+
+    @if (viewMode === 'detail' && selectedPlan) {
+      <div class="planner-view">
+        <div class="view-header">
+          <div>
+            <h2 class="serif-font">{{ selectedPlan.nombre }}</h2>
+            <span class="badge-week">Semana del {{ selectedPlan.semanaInicio | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="view-header-actions">
+            <button class="btn-wk btn-random-purple" (click)="rellenarAleatorio()">
+              <i class="bi bi-dice-5"></i> Rellenar Aleatorio
+            </button>
           </div>
         </div>
 
-        <button
-          class="btn-wk btn-pill btn-danger-wk"
-          type="button"
-          (click)="onDeletePlan()"
-          [disabled]="!selectedPlanId"
-        >
-          <span class="btn-icon">✕</span>
-          Eliminar plan
-        </button>
-      </div>
+        <div class="grid-container shadow-sm">
+          <div class="planner-grid">
+            <div class="empty-corner"></div>
+            @for (d of days; track d) {
+              <div class="day-label">{{ d.substring(0,2) }}</div>
+            }
 
-      <div class="panel-body">
-        @if (loading) {
-          <div class="status-banner" aria-live="polite">
-            <span class="status-dot"></span>
-            Cargando plan...
-          </div>
-        }
-
-        @if (!loading && errorMessage) {
-          <div class="status-banner error" aria-live="assertive">
-            {{ errorMessage }}
-          </div>
-        }
-
-        @if (!loading && selectedPlan) {
-          <div class="grid-shell">
-            <div class="planner-grid">
-              <div class="grid-head">
-                <div></div>
-                @for (d of days; track d) {
-                  <div class="day-head">{{ d }}</div>
-                }
-              </div>
-
-              @for (m of meals; track m) {
-                <div class="grid-row">
-                  <div class="meal-head">{{ m }}</div>
-
-                  @for (d of days; track d) {
-                    <div class="cell">
-                      @if (getSlot(d, m); as slot) {
-                        <div
-                          class="slot-card occupied"
-                          role="button"
-                          [class.disabled]="!selectedPlanId"
-                          [attr.tabindex]="selectedPlanId ? 0 : -1"
-                          (click)="handleSlotClick(d, m)"
-                          (keydown)="onSlotKey($event, d, m)"
-                          [attr.aria-disabled]="!selectedPlanId"
-                        >
-                          <div class="slot-body">
-                            <div class="slot-title">
-                              {{ displayTitle(slot.receta?.titulo) }}
-                            </div>
-                          </div>
-                          <div class="slot-meta">
-                            @if (
-                              slot.receta?.tiempoPreparacionMin !== null &&
-                              slot.receta?.tiempoPreparacionMin !== undefined
-                            ) {
-                              <div class="slot-time">
-                                {{ slot.receta?.tiempoPreparacionMin }} min
-                              </div>
-                            }
-                            <button
-                              class="slot-remove"
-                              type="button"
-                              [attr.aria-label]="
-                                'Quitar receta de ' + d + ' ' + m
-                              "
-                              (click)="removeSlot(d, m, $event)"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        </div>
-                      } @else {
-                        <div
-                          class="slot-card is-empty"
-                          role="button"
-                          [class.disabled]="!selectedPlanId"
-                          [attr.tabindex]="selectedPlanId ? 0 : -1"
-                          (click)="handleSlotClick(d, m)"
-                          (keydown)="onSlotKey($event, d, m)"
-                          [attr.aria-disabled]="!selectedPlanId"
-                        >
-                          <span class="add-icon">+</span>
-                          <span class="add-label">Añadir</span>
-                        </div>
-                      }
+            @for (m of meals; track m) {
+              <div class="meal-row-title">{{ m | uppercase }}</div>
+              @for (d of days; track d) {
+                <div class="slot-cell" [class.has-data]="getSlot(d, m)">
+                  @if (getSlot(d, m); as slot) {
+                    <div class="recipe-filled-box" (click)="handleSlotClick(d, m)">
+                      <span class="recipe-text">{{ slot.receta?.titulo }}</span>
+                      <button class="btn-remove-recipe" (click)="removeSlot(d, m, $event)">×</button>
                     </div>
+                  } @else {
+                    <button class="btn-add-recipe" (click)="handleSlotClick(d, m)">+</button>
                   }
                 </div>
               }
-            </div>
+            }
           </div>
-        }
+        </div>
+
+        <div class="view-footer">
+          <button class="btn-wk btn-purple-outline" (click)="irALista()">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    }
+
+    @if (viewMode === 'create') {
+      <div class="create-form-box surface-card shadow-sm">
+        <h2 class="serif-font txt-primary">Nueva Planificación</h2>
+        
+        @if (errorMessage) {
+          <div class="alert-banner-error">{{ errorMessage }}</div>
+        }
+
+        <div class="form-group">
+          <label class="form-label-wk">Nombre del Plan</label>
+          <input type="text" class="field-control" [(ngModel)]="newPlan.nombre" placeholder="Ej: Dieta Mediterránea">
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label-wk">Fecha de Inicio (Lunes)</label>
+          <input type="date" class="field-control" [(ngModel)]="newPlan.semanaInicio">
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label-wk">Observaciones</label>
+          <textarea class="field-control" [(ngModel)]="newPlan.observaciones" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions-bottom mt-4">
+          <button class="btn-wk btn-primary-wk" (click)="confirmCreate()">Crear Planificador</button>
+          <button class="btn-wk btn-cancel-light" (click)="viewMode = 'list'; newPlan = {nombre: '', semanaInicio: '', numComensales: 2, observaciones: '', items: []}; errorMessage = ''">Cancelar</button>
+        </div>
+      </div>
+    }
+  </main>
+</div>
