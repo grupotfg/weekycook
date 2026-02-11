@@ -48,6 +48,8 @@
   --space-4: 1rem;
   --space-5: 1.5rem;
   --space-6: 2rem;
+
+  --navbar-height: 96px;
 }
 
 /* Estilos Globales */
@@ -61,6 +63,13 @@ body {
   color: var(--gray-800);
   line-height: 1.5;
   margin: 0;
+  padding-top: var(--navbar-height);
+}
+
+@media (max-width: 1024px) {
+  body {
+    padding-top: 120px;
+  }
 }
 
 h1,
