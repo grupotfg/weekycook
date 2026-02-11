@@ -1,36 +1,48 @@
-@if (loading) {
-  <p class="status loading">Cargando favoritos...</p>
-}
+<header class="favorites-hero layout-container">
+  <h1 class="serif-font text-purple">
+    <span class="hero-heart" aria-hidden="true">❤</span>
+    Mis Favoritos
+  </h1>
+  <p class="text-muted">
+    Tus recetas guardadas para acceso rápido siempre que lo necesites.
+  </p>
+</header>
 
-@if (!loading && error) {
-  <p class="status error">{{ error }}</p>
-}
+<div class="favorites-content layout-container">
+  @if (loading) {
+    <p class="status loading">Cargando favoritos...</p>
+  }
 
-@if (!loading && !error && favoriteRecipes.length === 0) {
-  <div class="empty-state">
-    <i class="bi bi-heart"></i>
-    <p>Aún no has guardado ninguna receta.</p>
-    <a class="btn-wk btn-primary-wk btn-pill" routerLink="/recipes"
-      >Explorar recetas</a
-    >
-  </div>
-}
+  @if (!loading && error) {
+    <p class="status error">{{ error }}</p>
+  }
 
-@if (!loading && !error && favoriteRecipes.length > 0) {
-  <div class="recipes-grid">
-    @for (recipe of favoriteRecipes; track recipe.id) {
-      <div class="favorite-wrapper">
-        <app-recipe-card [recipe]="recipe"></app-recipe-card>
+  @if (!loading && !error && favoriteRecipes.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-heart"></i>
+      <p>Aún no has guardado ninguna receta.</p>
+      <a class="btn-wk btn-primary-wk btn-pill" routerLink="/recipes"
+        >Explorar recetas</a
+      >
+    </div>
+  }
 
-        <button
-          type="button"
-          class="remove-fav-btn"
-          (click)="recipe.id && removeFromFavorites(recipe.id)"
-          aria-label="Quitar de favoritos"
-        >
-          <i class="bi bi-heart-fill"></i>
-        </button>
-      </div>
-    }
-  </div>
-}
+  @if (!loading && !error && favoriteRecipes.length > 0) {
+    <div class="recipes-grid">
+      @for (recipe of favoriteRecipes; track recipe.id) {
+        <div class="favorite-wrapper">
+          <app-recipe-card [recipe]="recipe"></app-recipe-card>
+
+          <button
+            type="button"
+            class="remove-fav-btn"
+            (click)="recipe.id && removeFromFavorites(recipe.id)"
+            aria-label="Quitar de favoritos"
+          >
+            <i class="bi bi-heart-fill"></i>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
