@@ -250,6 +250,17 @@ a:hover {
   background: #fff;
 }
 
+app-recipe-card .recipe-action-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  min-width: auto;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
 .card-recipe:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);

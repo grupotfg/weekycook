@@ -130,11 +130,13 @@
   color: #7a6d8c;
 }
 
-.recipe-footer .btn-wk {
-  padding: 0.55rem 1.1rem;
+.recipe-action-btn {
+  padding: 0.5rem 1rem;
   font-size: 0.9rem;
   min-width: auto;
+  line-height: 1;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
 }
