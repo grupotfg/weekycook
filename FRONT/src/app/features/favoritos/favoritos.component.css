@@ -32,16 +32,20 @@
 }
 
 .recipes-grid {
-  width: 100%;
+  width: min(1200px, 100%);
+  margin: 0 auto;
   display: grid;
   grid-auto-flow: row;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
   align-items: stretch;
+  justify-items: center;
 }
 
 .favorite-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 360px;
 }
 
 .remove-fav-btn {
