@@ -129,3 +129,12 @@
 .author small {
   color: #7a6d8c;
 }
+
+.recipe-footer .btn-wk {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+  min-width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
