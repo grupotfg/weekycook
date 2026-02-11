@@ -3,18 +3,22 @@
     <div>
       <h2 class="hero-title mb-1">Elige una receta</h2>
       <p class="text-muted m-0">
-        Para: <span class="badge bg-info text-dark">{{ dia }} - {{ turno }}</span>
+        Para:
+        <span class="badge bg-info text-dark">{{ dia }} - {{ turno }}</span>
       </p>
     </div>
-    <button class="btn btn-outline-secondary" (click)="volver()">Cancelar</button>
+    <button class="btn btn-outline-secondary" (click)="volver()">
+      Cancelar
+    </button>
   </div>
 
   <div class="mb-4">
-    <input 
-      type="text" 
-      class="form-control form-control-lg shadow-sm" 
-      placeholder="Buscar por nombre (ej: Pasta, Ensalada...)" 
-      [(ngModel)]="filtroTexto">
+    <input
+      type="text"
+      class="form-control form-control-lg shadow-sm"
+      placeholder="Buscar por nombre (ej: Pasta, Ensalada...)"
+      [(ngModel)]="filtroTexto"
+    />
   </div>
 
   @if (loading) {
@@ -26,7 +30,10 @@
     <div class="row g-4">
       @for (receta of recetasFiltradas; track receta.id) {
         <div class="col-md-4 col-sm-6">
-          <div class="card h-100 border-0 shadow-sm recipe-card" (click)="seleccionarReceta(receta)">
+          <div
+            class="card h-100 border-0 shadow-sm recipe-card"
+            (click)="seleccionarReceta(receta)"
+          >
             <div class="card-img-top img-container">
               <img
                 [src]="resolveImage(receta)"
@@ -43,14 +50,17 @@
             <div class="card-body">
               <h5 class="card-title fw-bold text-dark">{{ receta.titulo }}</h5>
               <p class="card-text small text-muted">
-                <i class="bi bi-clock me-1"></i> {{ receta.tiempoPreparacionMin }} min
+                <i class="bi bi-clock me-1"></i>
+                {{ receta.tiempoPreparacionMin }} min
               </p>
             </div>
           </div>
         </div>
       } @empty {
         <div class="col-12 text-center py-5">
-          <p class="text-muted fs-5">No se encontraron recetas con ese nombre.</p>
+          <p class="text-muted fs-5">
+            No se encontraron recetas con ese nombre.
+          </p>
         </div>
       }
     </div>

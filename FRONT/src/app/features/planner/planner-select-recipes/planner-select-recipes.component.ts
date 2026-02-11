@@ -17,14 +17,53 @@ import { FavoriteService } from '../../../core/services/favorite.service';
   imports: [CommonModule, FormsModule],
   templateUrl: './planner-select-recipes.component.html',
   // He metido unos estilos rápidos aquí para no complicar el CSS global
-  styles: [`
-    .recipe-card { cursor: pointer; transition: all 0.2s ease-in-out; border-radius: 15px; overflow: hidden; }
-    .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; border-color: var(--primary); }
-    .img-container { position: relative; height: 190px; background-color: #f8f9fa; border-radius: 18px; overflow: hidden; }
-    .recipe-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .favorite-indicator { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); color: #e63946; border-radius: 999px; padding: 0.35rem; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 5px 15px rgba(230, 57, 70, 0.25); }
-    .badge-info { background-color: var(--primary-light); color: var(--primary-dark); font-weight: 600; }
-  `]
+  styles: [
+    `
+      .recipe-card {
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border-radius: 15px;
+        overflow: hidden;
+      }
+      .recipe-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        border-color: var(--primary);
+      }
+      .img-container {
+        position: relative;
+        height: 190px;
+        background-color: #f8f9fa;
+        border-radius: 18px;
+        overflow: hidden;
+      }
+      .recipe-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .favorite-indicator {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #e63946;
+        border-radius: 999px;
+        padding: 0.35rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        box-shadow: 0 5px 15px rgba(230, 57, 70, 0.25);
+      }
+      .badge-info {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+    `,
+  ],
 })
 export class PlannerSelectRecipesComponent implements OnInit {
   // Inyectamos las herramientas que necesitamos
@@ -40,7 +79,8 @@ export class PlannerSelectRecipesComponent implements OnInit {
   filtroTexto: string = '';
   loading = true;
   favoriteRecipeIds = new Set<number>();
-  private readonly fallbackRecipeImage = 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
+  private readonly fallbackRecipeImage =
+    'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
 
   // Estos datos vienen de la URL al hacer clic en el hueco del planner
   planId: number = 0;
@@ -56,10 +96,10 @@ export class PlannerSelectRecipesComponent implements OnInit {
     }
 
     // 1. Escuchamos lo que viene por la URL (query params)
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.planId = Number(params['planId']);
-      
-      // TRUCO: Usamos 'as' para decirle a TS que el string de la URL 
+
+      // TRUCO: Usamos 'as' para decirle a TS que el string de la URL
       // es realmente un valor válido de nuestros Enums
       this.dia = params['dia'] as DayOfWeek;
       this.turno = params['turno'] as MealTurn;
@@ -81,11 +121,11 @@ export class PlannerSelectRecipesComponent implements OnInit {
 
     this.favoriteService.getAll(this.currentUserId).subscribe({
       next: (favoritos) => {
-        this.favoriteRecipeIds = new Set(favoritos.map(f => f.recetaId));
+        this.favoriteRecipeIds = new Set(favoritos.map((f) => f.recetaId));
       },
       error: (err) => {
         console.error('No se pudieron obtener los favoritos del usuario:', err);
-      }
+      },
     });
   }
 
@@ -99,7 +139,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
       error: (err) => {
         console.error('Vaya, no hemos podido cargar las recetas:', err);
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -115,7 +155,9 @@ export class PlannerSelectRecipesComponent implements OnInit {
   get recetasFiltradas() {
     const busqueda = this.filtroTexto.toLowerCase().trim();
     if (!busqueda) return this.recetas;
-    return this.recetas.filter(r => r.titulo.toLowerCase().includes(busqueda));
+    return this.recetas.filter((r) =>
+      r.titulo.toLowerCase().includes(busqueda),
+    );
   }
 
   // ESTA ES LA FUNCIÓN CLAVE: Cuando el usuario elige su plato
@@ -126,7 +168,7 @@ export class PlannerSelectRecipesComponent implements OnInit {
     const nuevoItem: PlanItemPayload = {
       dia: this.dia,
       turno: this.turno,
-      recetaId: receta.id
+      recetaId: receta.id,
     };
 
     // Llamamos al servicio para que guarde la receta en ese hueco
@@ -137,13 +179,17 @@ export class PlannerSelectRecipesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al guardar el plato en el plan:', err);
-        alert('Lo sentimos, no se ha podido guardar la receta en el planificador.');
-      }
+        alert(
+          'Lo sentimos, no se ha podido guardar la receta en el planificador.',
+        );
+      },
     });
   }
 
-volver() {
-  // paso el planId pata que sepa que tiene que cargar el detalle y no la lista
-  this.router.navigate(['/planner'], { queryParams: { planId: this.planId } });
-}
+  volver() {
+    // paso el planId pata que sepa que tiene que cargar el detalle y no la lista
+    this.router.navigate(['/planner'], {
+      queryParams: { planId: this.planId },
+    });
+  }
 }
