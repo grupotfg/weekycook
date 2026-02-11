@@ -14,6 +14,9 @@ export class RecipeCardComponent {
   @Input({ required: true }) recipe!: Recipe;
   constructor(private router: Router) {}
 
+  private readonly authorFallback = 'Chef WeekyCook';
+  private readonly AUTHOR_NAME_LIMIT = 5;
+
   private readonly difficultyLabels: Record<
     'facil' | 'media' | 'dificil',
     string
@@ -47,6 +50,13 @@ export class RecipeCardComponent {
   get creatorInitial(): string {
     const source = this.recipe.creadorNombre ?? this.recipe.titulo ?? '?';
     return source.charAt(0).toUpperCase();
+  }
+
+  get displayAuthorName(): string {
+    const raw = this.recipe.creadorNombre?.trim() || this.authorFallback;
+    return raw.length > this.AUTHOR_NAME_LIMIT
+      ? `${raw.slice(0, this.AUTHOR_NAME_LIMIT)}…`
+      : raw;
   }
 
   private getDifficulty(): 'facil' | 'media' | 'dificil' {
