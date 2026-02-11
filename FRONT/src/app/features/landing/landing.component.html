@@ -1,17 +1,34 @@
 <header class="hero-section">
-  <div class="layout-container hero-shell">
-    <p class="eyebrow text-soft">Planifica sin estrés</p>
-    <h1 class="hero-title serif-font">
-      Planifica Tus Comidas <br />Semanalmente
-    </h1>
-    <p class="hero-lead copy-constrain">
-      Organiza tus semanas con recetas deliciosas, crea planes personalizados y
-      disfruta de una alimentación fácil y saludable.
-    </p>
-    <div class="hero-actions">
-      <a routerLink="/recipes" class="btn-wk btn-ghost-light btn-lg"
-        >Explorar Recetas</a
-      >
+  <div class="hero-overlay"></div>
+  <div class="layout-container hero-layout">
+    <div class="hero-content">
+      <span class="hero-pill">Planifica sin estrés</span>
+      <h1 class="hero-title serif-font">
+        Planifica tus comidas<br />con estilo y sabor
+      </h1>
+      <p class="hero-lead">
+        Diseña menús equilibrados, guarda tus favoritos y genera planes
+        personalizados para cada día de la semana sin complicaciones.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/recipes" class="btn-wk btn-primary-wk btn-pill">
+          Explorar Recetas
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>+150</strong>
+          <span>Recetas saludables</span>
+        </div>
+        <div class="stat">
+          <strong>24K</strong>
+          <span>Planes guardados</span>
+        </div>
+        <div class="stat">
+          <strong>4.9/5</strong>
+          <span>Satisfacción</span>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -38,5 +55,64 @@
         }
       </div>
     }
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="layout-container">
+    <div class="section-heading">
+      <p class="eyebrow">Lo que hace especial a WeekyCook</p>
+      <h2 class="serif-font">Características Principales</h2>
+    </div>
+
+    <div class="features-grid">
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-calendar-week"></i>
+        </span>
+        <h3>Planificador Semanal</h3>
+        <p>Organiza tus comidas de lunes a domingo con un planner visual.</p>
+      </article>
+
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-heart"></i>
+        </span>
+        <h3>Favoritos</h3>
+        <p>Guarda tus recetas preferidas y accede a ellas al instante.</p>
+      </article>
+
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-clipboard-data"></i>
+        </span>
+        <h3>Gestión de Planes</h3>
+        <p>Crea múltiples planes semanales y ajústalos según tus objetivos.</p>
+      </article>
+
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-shuffle"></i>
+        </span>
+        <h3>Generación Aleatoria</h3>
+        <p>Recibe combinaciones sugeridas para inspirarte cada semana.</p>
+      </article>
+
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-funnel"></i>
+        </span>
+        <h3>Filtros Inteligentes</h3>
+        <p>Filtra por tiempo, dificultad, tipo de plato o ingredientes.</p>
+      </article>
+
+      <article class="feature-card">
+        <span class="feature-icon">
+          <i class="bi bi-basket"></i>
+        </span>
+        <h3>Gestión de Ingredientes</h3>
+        <p>Controla los ingredientes necesarios para tu plan semanal.</p>
+      </article>
+    </div>
   </div>
 </section>
