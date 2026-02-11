@@ -8,6 +8,8 @@ import { Recipe } from '../../../core/models/recipe.model';
 import { PlanItemPayload } from '../../../core/models/plan.model';
 import { DayOfWeek } from '../../../core/enums/day.enum';
 import { MealTurn } from '../../../core/enums/meal-turn.enum';
+import { AuthService } from '../../../core/services/auth.service';
+import { FavoriteService } from '../../../core/services/favorite.service';
 
 @Component({
   selector: 'app-planner-select-recipes',
@@ -18,7 +20,9 @@ import { MealTurn } from '../../../core/enums/meal-turn.enum';
   styles: [`
     .recipe-card { cursor: pointer; transition: all 0.2s ease-in-out; border-radius: 15px; overflow: hidden; }
     .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; border-color: var(--primary); }
-    .img-container { height: 160px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; }
+    .img-container { position: relative; height: 190px; background-color: #f8f9fa; border-radius: 18px; overflow: hidden; }
+    .recipe-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .favorite-indicator { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); color: #e63946; border-radius: 999px; padding: 0.35rem; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 5px 15px rgba(230, 57, 70, 0.25); }
     .badge-info { background-color: var(--primary-light); color: var(--primary-dark); font-weight: 600; }
   `]
 })
@@ -28,18 +32,29 @@ export class PlannerSelectRecipesComponent implements OnInit {
   private router = inject(Router);
   private recipeService = inject(RecipeService);
   private planService = inject(PlanService);
+  private authService = inject(AuthService);
+  private favoriteService = inject(FavoriteService);
 
   // Variables para la lógica
   recetas: Recipe[] = [];
   filtroTexto: string = '';
   loading = true;
+  favoriteRecipeIds = new Set<number>();
+  private readonly fallbackRecipeImage = 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
 
   // Estos datos vienen de la URL al hacer clic en el hueco del planner
   planId: number = 0;
   dia!: DayOfWeek; // Usamos ! porque sabemos que llegarán
   turno!: MealTurn;
+  private currentUserId?: number;
 
   ngOnInit() {
+    const currentUser = this.authService.currentUser();
+    if (currentUser?.id) {
+      this.currentUserId = currentUser.id;
+      this.cargarFavoritos();
+    }
+
     // 1. Escuchamos lo que viene por la URL (query params)
     this.route.queryParams.subscribe(params => {
       this.planId = Number(params['planId']);
@@ -59,6 +74,21 @@ export class PlannerSelectRecipesComponent implements OnInit {
     this.cargarRecetas();
   }
 
+  private cargarFavoritos() {
+    if (!this.currentUserId) {
+      return;
+    }
+
+    this.favoriteService.getAll(this.currentUserId).subscribe({
+      next: (favoritos) => {
+        this.favoriteRecipeIds = new Set(favoritos.map(f => f.recetaId));
+      },
+      error: (err) => {
+        console.error('No se pudieron obtener los favoritos del usuario:', err);
+      }
+    });
+  }
+
   cargarRecetas() {
     this.loading = true;
     this.recipeService.getAll().subscribe({
@@ -71,6 +101,14 @@ export class PlannerSelectRecipesComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  esFavorita(receta: Recipe): boolean {
+    return !!receta.id && this.favoriteRecipeIds.has(receta.id);
+  }
+
+  resolveImage(receta: Recipe): string {
+    return receta.fotoUrl?.trim() ? receta.fotoUrl : this.fallbackRecipeImage;
   }
 
   // Función para filtrar recetas por nombre mientras escribes

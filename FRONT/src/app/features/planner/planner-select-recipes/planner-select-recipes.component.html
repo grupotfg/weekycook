@@ -27,11 +27,17 @@
       @for (receta of recetasFiltradas; track receta.id) {
         <div class="col-md-4 col-sm-6">
           <div class="card h-100 border-0 shadow-sm recipe-card" (click)="seleccionarReceta(receta)">
-            <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 180px;">
-              @if (receta.fotoUrl) {
-                <img [src]="receta.fotoUrl" class="w-100 h-100 object-fit-cover" alt="...">
-              } @else {
-                <i class="bi bi-camera fs-1"></i>
+            <div class="card-img-top img-container">
+              <img
+                [src]="resolveImage(receta)"
+                class="recipe-photo"
+                [alt]="receta.titulo"
+                loading="lazy"
+              />
+              @if (esFavorita(receta)) {
+                <span class="favorite-indicator" aria-label="Receta favorita">
+                  <i class="bi bi-heart-fill"></i>
+                </span>
               }
             </div>
             <div class="card-body">
