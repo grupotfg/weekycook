@@ -33,19 +33,7 @@
       <div class="row g-4">
         @for (receta of recetasDestacadas; track receta.id) {
           <div class="col-md-4">
-            <article class="featured-card">
-              <div class="featured-meta">
-                <span class="pill pill-primary">{{
-                  receta.categoriaNombre
-                }}</span>
-                <span
-                  ><i class="bi bi-clock"></i>
-                  {{ receta.tiempoPreparacionMin }} min</span
-                >
-              </div>
-              <h5 class="featured-title serif-font">{{ receta.titulo }}</h5>
-              <p class="featured-description">{{ receta.descripcionCorta }}</p>
-            </article>
+            <app-recipe-card [recipe]="receta"></app-recipe-card>
           </div>
         }
       </div>

@@ -2,11 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../../core/models/recipe.model';
+import { RecipeCardComponent } from '../../shared/components/recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RecipeCardComponent],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css',
 })

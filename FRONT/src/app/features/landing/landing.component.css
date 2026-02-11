@@ -50,36 +50,6 @@
   font-size: clamp(2rem, 3vw, 2.75rem);
 }
 
-.featured-card {
-  border: none;
-  background: #fff;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-4);
-  height: 100%;
-}
-
-.featured-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-3);
-  font-size: 0.9rem;
-  color: var(--gray-600);
-}
-
-.featured-title {
-  margin-bottom: var(--space-2);
-  font-size: 1.25rem;
-  color: var(--gray-800);
-}
-
-.featured-description {
-  color: var(--gray-600);
-  font-size: 0.95rem;
-  margin: 0;
-}
-
 @media (max-width: 768px) {
   .hero-actions {
     flex-direction: column;

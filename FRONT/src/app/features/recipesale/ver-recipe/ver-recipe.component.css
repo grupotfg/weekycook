@@ -311,6 +311,13 @@
   padding: 0.85rem 1rem;
 }
 
+.planner-feedback {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c73666;
+}
+
 .empty-message {
   color: #7a6d8c;
   margin: 0;

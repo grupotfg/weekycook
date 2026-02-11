@@ -144,11 +144,14 @@
         <button
           class="planner-btn btn-wk btn-primary-wk btn-pill"
           type="button"
-          routerLink="/planner"
+          (click)="onPlannerClick()"
         >
           <i class="bi bi-calendar-plus"></i>
           Añadir al planificador
         </button>
+        @if (plannerMessage) {
+          <p class="planner-feedback" role="status">{{ plannerMessage }}</p>
+        }
       </aside>
     </div>
   </section>

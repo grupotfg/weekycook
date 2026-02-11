@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Recipe } from '../../../core/models/recipe.model';
@@ -21,7 +21,6 @@ interface FavoriteState {
   imports: [CommonModule, RouterModule],
   templateUrl: './ver-recipe.component.html',
   styleUrls: ['./ver-recipe.component.css'],
-
 })
 export class VerRecipeComponent implements OnInit {
   recipe?: Recipe;
@@ -35,11 +34,14 @@ export class VerRecipeComponent implements OnInit {
     error: '',
   };
 
+  plannerMessage = '';
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private favoriteService: FavoriteService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -106,7 +108,8 @@ export class VerRecipeComponent implements OnInit {
             backendMsg.includes('ya está marcada como favorita')
           ) {
             this.favoriteState.saved = true;
-            this.favoriteState.message = 'Esta receta ya estaba en tus favoritos.';
+            this.favoriteState.message =
+              'Esta receta ya estaba en tus favoritos.';
             this.favoriteState.error = '';
             return;
           }
@@ -134,7 +137,9 @@ export class VerRecipeComponent implements OnInit {
 
   public get totalTimeLabel(): string {
     const total = this.recipe?.tiempoPreparacionMin;
-    return total === null || total === undefined ? 'Sin dato' : `${total} minutos`;
+    return total === null || total === undefined
+      ? 'Sin dato'
+      : `${total} minutos`;
   }
 
   public get instructionSteps(): string[] {
@@ -153,5 +158,17 @@ export class VerRecipeComponent implements OnInit {
     if (byNumbering.length > 1) return byNumbering;
 
     return cleanSteps([raw]);
+  }
+
+  onPlannerClick(): void {
+    const currentUser = this.authService.currentUser();
+
+    if (!currentUser?.id) {
+      this.plannerMessage = 'Regístrate para planificar tus recetas.';
+      return;
+    }
+
+    this.plannerMessage = '';
+    this.router.navigate(['/planner']);
   }
 }
