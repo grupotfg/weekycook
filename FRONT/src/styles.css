@@ -30,8 +30,8 @@
   --gray-800: #1e1b2e;
 
   /* Tipografía */
+
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "Playfair Display", serif;
 
   /* Bordes y sombras */
   --radius-xs: 6px;
