@@ -86,6 +86,28 @@
   box-shadow: var(--shadow-md);
 }
 
+.remove-fav-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -42px;
+  right: 0;
+  transform: translateY(-4px);
+  background: rgba(30, 27, 46, 0.9);
+  color: #fff;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.remove-fav-btn:hover::after,
+.remove-fav-btn:focus-visible::after {
+  opacity: 1;
+}
+
 .status {
   text-align: center;
   font-weight: 600;
