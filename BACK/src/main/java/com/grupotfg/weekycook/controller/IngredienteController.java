@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.net.URI;
+import java.util.Objects;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,12 @@ public class IngredienteController {
         Ingrediente created = ingredienteService.create(ingrediente);
         IngredienteResponseDTO dto = ingredienteMapper.toDto(created);
 
-        URI location = URI.create("/api/ingredientes/" + created.getId());
+        URI location = Objects.requireNonNull(
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri()
+        );
         return ResponseEntity.created(location).body(dto);
     }
 

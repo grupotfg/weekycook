@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * PlanSemanalController
@@ -48,7 +50,13 @@ public class PlanSemanalController {
             @RequestBody PlanSemanalRequestDTO dto) {
         PlanSemanalResponseDTO created = service.crearPlan(usuarioId, dto);
         // location header opcional
-        return ResponseEntity.created(URI.create("/api/planes/" + created.getId())).body(created);
+        URI location = Objects.requireNonNull(
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri()
+        );
+        return ResponseEntity.created(location).body(created);
     }
 
     @GetMapping("/{planId}")

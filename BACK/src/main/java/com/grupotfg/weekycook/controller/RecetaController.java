@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/recetas")
@@ -104,7 +106,12 @@ public class RecetaController {
         RecetaDetailResponseDTO recetaCreada = recetaService.crearReceta(usuarioId, dto);
         
         // Devolver 201 Created 
-        URI location = URI.create("/api/recetas/" + recetaCreada.getId());
+        URI location = Objects.requireNonNull(
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(recetaCreada.getId())
+                .toUri()
+        );
         return ResponseEntity.created(location).body(recetaCreada);
     }
 
