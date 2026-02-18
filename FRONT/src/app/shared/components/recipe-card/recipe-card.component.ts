@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Recipe } from '../../../core/models/recipe.model';
+import { resolveImagePath } from '../../../core/utils/image-path.util';
 
 @Component({
   selector: 'app-recipe-card',
@@ -16,6 +17,8 @@ export class RecipeCardComponent {
 
   private readonly authorFallback = 'Chef WeekyCook';
   private readonly AUTHOR_NAME_LIMIT = 5;
+  private readonly fallbackImage =
+    'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
 
   private readonly difficultyLabels: Record<
     'facil' | 'media' | 'dificil',
@@ -27,9 +30,10 @@ export class RecipeCardComponent {
   };
 
   get image(): string {
-    return this.recipe.fotoUrl?.trim()
-      ? this.recipe.fotoUrl
-      : 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
+    return (
+      resolveImagePath(this.recipe.fotoUrl, this.fallbackImage) ||
+      this.fallbackImage
+    );
   }
 
   get difficultyBadge(): string {

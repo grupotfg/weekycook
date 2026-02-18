@@ -7,6 +7,7 @@ import { Recipe } from '../../../core/models/recipe.model';
 import { RecipeService } from '../../../core/services/recipe.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { resolveImagePath } from '../../../core/utils/image-path.util';
 
 interface FavoriteState {
   saving: boolean;
@@ -26,6 +27,8 @@ export class VerRecipeComponent implements OnInit {
   recipe?: Recipe;
   loading = true;
   error = false;
+  private readonly fallbackImage =
+    'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=900&q=80&q=60';
 
   favoriteState: FavoriteState = {
     saving: false,
@@ -140,6 +143,13 @@ export class VerRecipeComponent implements OnInit {
     return total === null || total === undefined
       ? 'Sin dato'
       : `${total} minutos`;
+  }
+
+  public get heroImageUrl(): string {
+    return (
+      resolveImagePath(this.recipe?.fotoUrl, this.fallbackImage) ||
+      this.fallbackImage
+    );
   }
 
   public get instructionSteps(): string[] {

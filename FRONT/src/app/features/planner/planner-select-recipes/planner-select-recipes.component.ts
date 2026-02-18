@@ -10,6 +10,7 @@ import { DayOfWeek } from '../../../core/enums/day.enum';
 import { MealTurn } from '../../../core/enums/meal-turn.enum';
 import { AuthService } from '../../../core/services/auth.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
+import { resolveImagePath } from '../../../core/utils/image-path.util';
 
 @Component({
   selector: 'app-planner-select-recipes',
@@ -148,7 +149,10 @@ export class PlannerSelectRecipesComponent implements OnInit {
   }
 
   resolveImage(receta: Recipe): string {
-    return receta.fotoUrl?.trim() ? receta.fotoUrl : this.fallbackRecipeImage;
+    return (
+      resolveImagePath(receta.fotoUrl, this.fallbackRecipeImage) ||
+      this.fallbackRecipeImage
+    );
   }
 
   // Función para filtrar recetas por nombre mientras escribes
