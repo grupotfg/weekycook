@@ -10,15 +10,15 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { AlertService } from '../../../core/services/alert.service';
 
-// VALIDADOR
+// VALIDADOR PERSONALIZADO: Comprueba que las contraseñas coincidan
 export const passwordMatchValidator: ValidatorFn = (
   group: AbstractControl
 ): ValidationErrors | null => {
   const password = group.get('password')?.value;
   const confirmPassword = group.get('confirmarContrasena')?.value;
 
-  // Si coinciden o si alguno está vacío (para no molestar mientras se escribe), no hay error
   if (!password || !confirmPassword) return null;
 
   return password === confirmPassword ? null : { passwordMismatch: true };
@@ -35,12 +35,12 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
+  private alertService = inject(AlertService);
 
   registerForm = this.fb.group(
     {
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       apellido: [''],
-      // lo pongo más estricto para email debe tener como algo@algo.dominio
       correo: [
         '',
         [
@@ -54,42 +54,56 @@ export class RegisterComponent {
       numComensalesDefecto: [2],
     },
     {
-      validators: [passwordMatchValidator], //va a nivel de form
+      validators: [passwordMatchValidator], 
     }
   );
 
   onSubmit() {
-    // ya esta ok, l o dejo porque me daba errores el validades de la contraseña con f12 ya ok los emnsajes por consola
-    console.log('Errores del formulario:', this.registerForm.errors);
-    console.log('Valor Password:', this.registerForm.get('password')?.value);
-    console.log(
-      'Valor Confirmar:',
-      this.registerForm.get('confirmarContrasena')?.value
-    );
+    console.log('Estado del formulario:', this.registerForm.valid ? 'VÁLIDO' : 'INVÁLIDO');
 
     if (this.registerForm.valid) {
       const val = this.registerForm.value;
+      
+      // Creamos el cuerpo de la petición
+      
       const requestBody = {
         correo: val.correo,
         nombre: val.nombre,
         apellido: val.apellido || '',
-        // AÑADIMOS EL {noop} AQUÍ
-        contraseña: '{noop}' + val.password, // y Mapeo por la puñetera ñ que hemos puesto que por eso daba error
+        "contraseña": `{noop}${val.password}`, 
         descripcion: val.descripcion || '',
         numComensalesDefecto: val.numComensalesDefecto || 2,
+        esAdmin: false // El backend debería mapear esto a 'es_admin'
+        
       };
+
+      
+      console.log('Enviando a Java:', requestBody);
 
       this.http
         .post('http://localhost:8080/api/usuarios', requestBody)
         .subscribe({
           next: () => {
-            alert('¡Registro con éxito!');
+            this.alertService.success(
+              '¡Registro completado!', 
+              'Ya puedes iniciar sesión con tu cuenta.'
+            );
             this.router.navigate(['/auth/login']);
           },
-          error: (err) =>
-            alert('Error: ' + (err.error?.message || 'Fallo en el servidor')),
+          error: (err) => {
+            console.error('Error de registro:', err);
+            // Si el error es por el nulo de es_admin, lo veremos aquí
+            this.alertService.error(
+              'Error al registrar', 
+              err.error?.message || 'Error en el servidor. Revisa si el campo es_admin falta.'
+            );
+          },
         });
     } else {
+      this.alertService.error(
+        'Revisa el formulario', 
+        'Hay campos vacíos o las contraseñas no coinciden.'
+      );
       this.registerForm.markAllAsTouched();
     }
   }

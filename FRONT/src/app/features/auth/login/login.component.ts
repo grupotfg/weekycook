@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+//metemos el nuevo servicio de alertas
+import { AlertService } from '../../../core/services/alert.service'; 
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private alertService = inject(AlertService);
 
   loginForm = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -27,14 +30,14 @@ export class LoginComponent {
         .login({ correo: correo!, contrasena: contrasena! })
         .subscribe({
           next: () => {
-            // Redirige según si es Admin (es_admin=1) o Usuario (es_admin=0)
+            this.alertService.success('¡Hola!', 'Entrando en tu planificador...');
             if (this.authService.isAdmin()) {
               this.router.navigate(['/admin']);
             } else {
-              this.router.navigate(['/planner']); // O dashboard
+              this.router.navigate(['/planner']);
             }
           },
-          error: () => alert('Credenciales incorrectas'),
+          error: () => this.alertService.error('Error de acceso', 'El correo o la contraseña no son correctos.'),
         });
     }
   }

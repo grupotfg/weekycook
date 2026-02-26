@@ -6,6 +6,7 @@ import { PlanService } from '../../core/services/plan.service';
 import { PlanDetail, PlanItem, PlanPayload, PlanSummary } from '../../core/models/plan.model';
 import { DayOfWeek } from '../../core/enums/day.enum';
 import { MealTurn } from '../../core/enums/meal-turn.enum';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-planner',
@@ -18,6 +19,7 @@ export class PlannerComponent implements OnInit {
   // uso de inject 
   private planService = inject(PlanService);
   private route = inject(ActivatedRoute);
+  private alertService = inject(AlertService);
   
   // uso public para que el html no de error de acceso privado que daba fallos el html
   public router = inject(Router); 
@@ -85,47 +87,64 @@ export class PlannerComponent implements OnInit {
   }
 
   // Elimina un plan completo de la base de datos
-  borrarPlan(id: number, event: MouseEvent): void {
-    event.stopPropagation(); // Evitamos que al hacer clic sobre ello se abra el detalle del plan que es el resto
-    if (confirm('¿Seguro que quieres eliminar este plan semanal? No se puede deshacer.')) {
-      this.planService.delete(id).subscribe({
-        next: () => {
-          this.plans = this.plans.filter(p => p.id !== id);
-          if (this.selectedPlanId === id) this.irALista();
-        },
-        error: () => alert('Vaya, no hemos podido eliminar el plan ahora mismo.')
-      });
-    }
+  borrarPlan(id: number, nombre: string, event: MouseEvent): void {
+    event.stopPropagation();
+    
+    this.alertService.confirmDelete(`el plan semanal "${nombre}"`).then((confirmado) => {
+      if (confirmado) {
+        this.planService.delete(id).subscribe({
+          next: () => {
+            this.alertService.success('Eliminado', 'El plan ha desaparecido de tu lista.');
+            this.plans = this.plans.filter(p => p.id !== id);
+            if (this.selectedPlanId === id) this.irALista();
+          },
+          error: () => this.alertService.error('Error', 'No hemos podido eliminar el plan.')
+        });
+      }
+    });
   }
 
   //de relleno aleatorio
   rellenarAleatorio(): void {
     if (!this.selectedPlanId) return;
+    
     this.planService.randomize(this.selectedPlanId).subscribe({
-      next: () => this.loadPlanDetail(this.selectedPlanId!),
-      error: () => alert('Error al intentar generar recetas automáticas.')
+      next: () => {
+        this.alertService.success('¡Listo!', 'Hemos generado sugerencias para los huecos libres.');
+        this.loadPlanDetail(this.selectedPlanId!);
+      },
+      error: () => this.alertService.error('Ups', 'No hay suficientes recetas para rellenar el plan.')
     });
   }
 
   confirmCreate() {
     this.errorMessage = '';
     
-    // Validamos que haya fecha
+    // 1. Validaciones actuales (mantenemos los mensajes en pequeño en el HTML)
     if (!this.newPlan.semanaInicio) {
       this.errorMessage = 'Debes seleccionar una fecha de inicio.';
       return;
     }
 
-    // Validamos que sea LUNES (back y fron alineados)
     const date = new Date(this.newPlan.semanaInicio);
-    if (date.getUTCDay() !== 1) { // 1 es Lunes, lo he tenido que mirar sugún js
+    if (date.getUTCDay() !== 1) { 
       this.errorMessage = 'Lo sentimos, los planes deben empezar obligatoriamente un Lunes.';
       return;
     }
 
+    // 2. Llamada al servicio
     this.planService.create(this.newPlan).subscribe({
       next: (res) => {
-        // Limpiamos el formulario después de crear que se quedaba todo
+        // Guardamos el nombre para el mensaje antes de limpiar el objeto
+        const nombrePlan = this.newPlan.nombre || 'el plan semanal';
+
+        // LANZAMOS LA ALERTA DE ÉXITO
+        this.alertService.success(
+          '¡Plan creado!', 
+          `Se ha creado "${nombrePlan}" correctamente. Vamos a añadir las recetas.`
+        );
+
+        // Limpiamos el formulario
         this.newPlan = { 
           nombre: '', 
           semanaInicio: '', 
@@ -134,11 +153,12 @@ export class PlannerComponent implements OnInit {
           items: [] 
         };
         this.errorMessage = '';
-        // creamos y vamos
+
+        // Saltamos automáticamente al detalle (los items del plan)
         this.router.navigate([], { queryParams: { planId: res.id } });
       },
       error: (err) => {
-        // mensajes de error
+        // Mantenemos el mensaje de error en pequeño si ya existe la semana
         this.errorMessage = 'Ya tienes una planificación para esa semana';
       }
     });

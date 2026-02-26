@@ -24,7 +24,7 @@
                 <p class="plan-obs">{{ p.observaciones }}</p>
               }
             </div>
-            <button class="btn-delete-item" (click)="borrarPlan(p.id, $event)" title="Eliminar este plan">
+            <button class="btn-delete-item" (click)="borrarPlan(p.id, p.nombre, $event)" title="Eliminar este plan">
               <i class="bi bi-trash3"></i>
             </button>
             <i class="bi bi-chevron-right ms-3 arrow-icon"></i>

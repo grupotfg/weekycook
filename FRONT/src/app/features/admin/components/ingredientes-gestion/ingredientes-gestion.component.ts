@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IngredientService } from '../../../../core/services/ingredient.service';
 import { Ingredient } from '../../../../core/models/ingredient.model';
+import { AlertService } from '../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-ingredientes-gestion',
@@ -12,6 +13,7 @@ import { Ingredient } from '../../../../core/models/ingredient.model';
 })
 export class IngredientesGestionComponent implements OnInit {
   private ingService = inject(IngredientService);
+  private alertService = inject(AlertService);
 
   ingredientes: Ingredient[] = [];
   searchText: string = '';
@@ -39,20 +41,21 @@ export class IngredientesGestionComponent implements OnInit {
     );
   }
 
-  guardar() {
-    this.selectedIng.caloriasPorUnidad = Math.max(
-      0,
-      this.selectedIng.caloriasPorUnidad ?? 0
-    );
+guardar() {
+    this.selectedIng.caloriasPorUnidad = Math.max(0, this.selectedIng.caloriasPorUnidad ?? 0);
 
-    const action =
-      this.isEditing && this.selectedIng.id
-        ? this.ingService.update(this.selectedIng.id, this.selectedIng)
-        : this.ingService.create(this.selectedIng);
+    const action = this.isEditing && this.selectedIng.id
+      ? this.ingService.update(this.selectedIng.id, this.selectedIng)
+      : this.ingService.create(this.selectedIng);
 
-    action.subscribe(() => {
-      this.cargarDatos();
-      this.cancelar();
+    action.subscribe({
+      next: () => {
+        const msg = this.isEditing ? 'Ingrediente actualizado' : 'Ingrediente creado';
+        this.alertService.success('¡Hecho!', msg);
+        this.cargarDatos();
+        this.cancelar();
+      },
+      error: () => this.alertService.error('Error', 'No se pudo guardar el ingrediente')
     });
   }
 
@@ -62,10 +65,23 @@ export class IngredientesGestionComponent implements OnInit {
     this.showForm = true; // Al editar, mostramos el formulario
   }
 
-  eliminar(ing: Ingredient) {
-    if (confirm(`¿Eliminar "${ing.nombre}"?`)) {
-      this.ingService.delete(ing.id!).subscribe(() => this.cargarDatos());
-    }
+  eliminar(id: number, nombre: string) {
+    this.alertService.confirmDelete(nombre).then((confirmado) => {
+      if (confirmado && id) {
+        this.ingService.delete(id).subscribe({
+          next: () => {
+            this.alertService.success('Eliminado', `El ingrediente "${nombre}" ha sido borrado.`);
+            this.cargarDatos();
+          },
+          error: (err) => {
+            this.alertService.error(
+              'Error', 
+              'No se puede eliminar. Es posible que este ingrediente se esté usando en alguna receta.'
+            );
+          }
+        });
+      }
+    });
   }
 
   cancelar() {

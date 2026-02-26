@@ -4,6 +4,7 @@ export interface User {
   correo: string;
   nombre: string;
   apellido?: string;     // El '?' es opcional, ya que puede ser null en BD
+  contrasena: string;
   descripcion?: string;
   numComensalesDefecto: number;
   
@@ -19,7 +20,7 @@ export interface LoginRequest {
   contrasena: string; // Evitamos la 'ñ' en el nombre de variable por buenas practicas
 }
 
-// opcional si implementamos JWT o lo que sea
+// opcional si implementamos JWT o lo que sea más adelante
 export interface AuthResponse {
   token: string;
   usuario: User;

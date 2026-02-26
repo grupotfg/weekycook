@@ -8,7 +8,7 @@ import {
   Recipe,
   RecipeIngredientRequest,
 } from '../../../../core/models/recipe.model';
-
+import { AlertService } from '../../../../core/services/alert.service';
 @Component({
   selector: 'app-recetas-gestion',
   standalone: true,
@@ -19,6 +19,7 @@ export class RecetasGestionComponent implements OnInit {
   private recipeService = inject(RecipeService);
   private categoryService = inject(CategoryService);
   private ingredientService = inject(IngredientService);
+  private alertService = inject(AlertService);
 
   recetas: Recipe[] = [];
   categorias: any[] = [];
@@ -150,22 +151,46 @@ export class RecetasGestionComponent implements OnInit {
   }
 
   guardar() {
-    if (this.isEditing && this.selectedRecipe.id) {
-      this.recipeService
-        .update(this.selectedRecipe.id, this.selectedRecipe)
-        .subscribe(() => this.finalizar());
-    } else {
-      this.recipeService
-        .create(this.selectedRecipe)
-        .subscribe(() => this.finalizar());
-    }
-  }
+  const action = (this.isEditing && this.selectedRecipe.id)
+    ? this.recipeService.update(this.selectedRecipe.id, this.selectedRecipe)
+    : this.recipeService.create(this.selectedRecipe);
 
-  eliminar(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta receta?')) {
-      this.recipeService.delete(id).subscribe(() => this.cargarDatos());
+  action.subscribe({
+    next: () => {
+      const msg = this.isEditing ? 'Receta actualizada correctamente' : 'Receta creada con éxito';
+      this.alertService.success('¡Hecho!', msg);
+      this.finalizar();
+    },
+    error: (err) => {
+      console.error('Error al guardar receta:', err);
+      this.alertService.error('Error', 'No se pudo guardar la receta. Revisa que todos los campos obligatorios estén rellenos.');
     }
-  }
+  });
+}
+
+  // Cambia a (id, titulo) para que el Alert sea personalizado
+eliminar(id: number, titulo: string) {
+  this.alertService.confirmDelete(titulo).then((confirmado) => {
+    if (confirmado && id) {
+      this.recipeService.delete(id).subscribe({
+        next: () => {
+          this.alertService.success('Eliminada', `La receta "${titulo}" ha sido borrada.`);
+          this.cargarDatos();
+        },
+        error: (err) => {
+          // Detectamos si el error es de integridad (normalmente error 500 o 409)
+          console.error('Detalle del error técnico:', err);
+
+          // Personalizamos el mensaje para el usuario
+          this.alertService.error(
+            'No se puede borrar', 
+            `La receta "${titulo}" está asociada a un planificador semanal y no puede eliminarse para no perder el historial.`
+          );
+        }
+      });
+    }
+  });
+}
 
   finalizar() {
     this.showForm = false;

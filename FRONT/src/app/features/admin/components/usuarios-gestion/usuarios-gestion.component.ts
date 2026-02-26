@@ -2,7 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../../core/services/user.service';
-import { User } from '../../../../core/models/user.model';
+import { User } from '../../../../core/models/auth.model'; 
+import { AlertService } from '../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-usuarios-gestion',
@@ -12,6 +13,7 @@ import { User } from '../../../../core/models/user.model';
 })
 export class UsuariosGestionComponent implements OnInit {
   private userService = inject(UserService);
+  private alertService = inject(AlertService);
 
   usuarios: User[] = [];
   searchText: string = '';
@@ -24,34 +26,37 @@ export class UsuariosGestionComponent implements OnInit {
   }
 
   initUser(): User {
-    return { nombre: '', correo: '', contrasena: '', esAdmin: false };
+    // Inicializamos con los campos que espera el modelo y el backend
+    return { 
+      nombre: '', 
+      correo: '', 
+      contrasena: '', 
+      esAdmin: false,
+      numComensalesDefecto: 2 
+    } as User;
   }
 
   cargarUsuarios() {
-    this.userService.getAll().subscribe((data) => (this.usuarios = data));
+    // Añadimos el tipo (data: User[]) para evitar errores de compilación
+    this.userService.getAll().subscribe({
+      next: (data: User[]) => {
+        this.usuarios = data;
+      },
+      error: () => {
+        this.alertService.error('Error', 'No se pudieron cargar los usuarios del servidor.');
+      }
+    });
   }
-  //Busquedas
+
+  // Lógica de búsqueda avanzada
   get usuariosFiltrados() {
     const filter = this.normalizeForSearch(this.searchText);
-
-    if (!filter) {
-      return this.usuarios;
-    }
+    if (!filter) return this.usuarios;
 
     return this.usuarios.filter((u) => {
-      const nombre = this.normalizeForSearch(u.nombre);
-      const apellido = this.normalizeForSearch(u.apellido);
-      const nombreCompleto = this.normalizeForSearch(
-        `${u.nombre ?? ''}${u.apellido ?? ''}`
-      );
+      const nombreCompleto = this.normalizeForSearch(`${u.nombre ?? ''} ${u.apellido ?? ''}`);
       const correo = this.normalizeForSearch(u.correo);
-
-      return (
-        nombre.includes(filter) ||
-        apellido.includes(filter) ||
-        nombreCompleto.includes(filter) ||
-        correo.includes(filter)
-      );
+      return nombreCompleto.includes(filter) || correo.includes(filter);
     });
   }
 
@@ -59,8 +64,8 @@ export class UsuariosGestionComponent implements OnInit {
     return (value ?? '')
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '')
+      .replace(/[\u0300-\u036f]/g, '') // Quita tildes
+      .replace(/\s+/g, '') // Quita espacios
       .trim();
   }
 
@@ -71,28 +76,47 @@ export class UsuariosGestionComponent implements OnInit {
   }
 
   editar(user: User) {
-    this.selectedUser = { ...user, contrasena: '' }; // No cargamos la contraseña antigua por seguridad
+    // duplicamos el usuario para no modificar la lista original antes de guardar
+    this.selectedUser = { ...user, contrasena: '' }; 
     this.isEditing = true;
     this.showForm = true;
   }
 
   guardar() {
     if (this.isEditing && this.selectedUser.id) {
-      this.userService
-        .update(this.selectedUser.id, this.selectedUser)
-        .subscribe(() => this.finalizar());
+      this.userService.update(this.selectedUser.id, this.selectedUser).subscribe({
+        next: () => {
+          this.alertService.success('¡Actualizado!', 'Usuario modificado correctamente.');
+          this.finalizar();
+        },
+        //pongo revisar la clave, porque para modificar es necesario reenviar
+        //  clave y ponerla nueva sino no funciona
+        error: () => this.alertService.error('Error', 'No se pudo actualizar el usuario, revisa la clave.')
+      });
     } else {
-      
-      this.userService
-        .create(this.selectedUser)
-        .subscribe(() => this.finalizar());
+      this.userService.create(this.selectedUser).subscribe({
+        next: () => {
+          this.alertService.success('¡Creado!', 'El nuevo usuario ha sido registrado.');
+          this.finalizar();
+        },
+        error: () => this.alertService.error('Error', 'No se pudo crear el usuario. Revisa si el correo ya existe.')
+      });
     }
   }
 
-  eliminar(id: number) {
-    if (confirm('¿Estás seguro de eliminar este usuario?')) {
-      this.userService.delete(id).subscribe(() => this.cargarUsuarios());
-    }
+  eliminar(id: number, nombre: string) {
+    // Usamos SweetAlert
+    this.alertService.confirmDelete(nombre).then((confirmado) => {
+      if (confirmado && id) {
+        this.userService.delete(id).subscribe({
+          next: () => {
+            this.alertService.success('Eliminado', 'El usuario ha sido borrado.');
+            this.cargarUsuarios();
+          },
+          error: () => this.alertService.error('Error', 'No se pudo eliminar el usuario.')
+        });
+      }
+    });
   }
 
   finalizar() {

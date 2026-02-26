@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../../../core/services/category.service';
 import { Category } from '../../../../core/models/category.model';
+import { AlertService } from '../../../../core/services/alert.service';
+
 
 @Component({
   selector: 'app-categorias-gestion',
@@ -12,7 +14,7 @@ import { Category } from '../../../../core/models/category.model';
 })
 export class CategoriasGestionComponent implements OnInit {
   private catService = inject(CategoryService);
-
+   private alertService = inject(AlertService);
   categorias: Category[] = [];
   searchText: string = ''; // Texto del buscador
   selectedCat: Category = { nombre: '' };
@@ -52,17 +54,26 @@ export class CategoriasGestionComponent implements OnInit {
     }
   }
 
-  eliminar(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
+  eliminar(id: number, nombre: string) {
+  // Usamos el servicio de alertas que devuelve una Promesa (true/false)
+  this.alertService.confirmDelete(nombre).then((confirmado) => {
+    if (confirmado && id) {
       this.catService.delete(id).subscribe({
-        next: () => this.cargarCategorias(),
-        error: () =>
-          alert(
-            'Error: No se puede eliminar una categoría con recetas asociadas.'
-          ),
+        next: () => {
+          this.alertService.success('¡Eliminado!', `La categoría seleccionada ha sido borrada.`);
+          this.cargarCategorias();
+        },
+        error: () => {
+          
+          this.alertService.error(
+            'No se puede eliminar',
+            'Esta categoría tiene recetas asociadas. Elimina o mueve las recetas primero.'
+          );
+        }
       });
     }
-  }
+  });
+}
 
   editar(cat: Category) {
     this.selectedCat = { ...cat };
@@ -71,9 +82,11 @@ export class CategoriasGestionComponent implements OnInit {
   }
 
   finalizar() {
-    this.cargarCategorias();
-    this.cancelar();
-  }
+  const mensaje = this.isEditing ? 'Categoría actualizada' : 'Categoría creada';
+  this.alertService.success('¡Hecho!', mensaje);
+  this.cargarCategorias();
+  this.cancelar();
+}
 
   cancelar() {
     this.showForm = false;
