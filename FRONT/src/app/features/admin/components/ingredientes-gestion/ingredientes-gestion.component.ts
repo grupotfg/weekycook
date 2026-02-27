@@ -1,0 +1,112 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IngredientService } from '../../../../core/services/ingredient.service';
+import { Ingredient } from '../../../../core/models/ingredient.model';
+import { AlertService } from '../../../../core/services/alert.service';
+
+@Component({
+  selector: 'app-ingredientes-gestion',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './ingredientes-gestion.component.html',
+})
+export class IngredientesGestionComponent implements OnInit {
+  private ingService = inject(IngredientService);
+  private alertService = inject(AlertService);
+
+  ingredientes: Ingredient[] = [];
+  searchText: string = '';
+  selectedIng: Ingredient = this.resetIng();
+  isEditing = false;
+  showForm = false; // visibilidad del formulario
+
+  ngOnInit() {
+    this.cargarDatos();
+  }
+
+  cargarDatos() {
+    this.ingService.getAll().subscribe((data) => (this.ingredientes = data));
+  }
+
+  get ingredientesFiltrados() {
+    const filter = this.normalizeSearch(this.searchText);
+
+    if (!filter) {
+      return this.ingredientes;
+    }
+
+    return this.ingredientes.filter((ing) =>
+      this.normalizeSearch(ing.nombre).includes(filter)
+    );
+  }
+
+guardar() {
+    this.selectedIng.caloriasPorUnidad = Math.max(0, this.selectedIng.caloriasPorUnidad ?? 0);
+
+    const action = this.isEditing && this.selectedIng.id
+      ? this.ingService.update(this.selectedIng.id, this.selectedIng)
+      : this.ingService.create(this.selectedIng);
+
+    action.subscribe({
+      next: () => {
+        const msg = this.isEditing ? 'Ingrediente actualizado' : 'Ingrediente creado';
+        this.alertService.success('¡Hecho!', msg);
+        this.cargarDatos();
+        this.cancelar();
+      },
+      error: () => this.alertService.error('Error', 'No se pudo guardar el ingrediente')
+    });
+  }
+
+  editar(ing: Ingredient) {
+    this.selectedIng = { ...ing };
+    this.isEditing = true;
+    this.showForm = true; // Al editar, mostramos el formulario
+  }
+
+  eliminar(id: number, nombre: string) {
+    this.alertService.confirmDelete(nombre).then((confirmado) => {
+      if (confirmado && id) {
+        this.ingService.delete(id).subscribe({
+          next: () => {
+            this.alertService.success('Eliminado', `El ingrediente "${nombre}" ha sido borrado.`);
+            this.cargarDatos();
+          },
+          error: (err) => {
+            this.alertService.error(
+              'Error', 
+              'No se puede eliminar. Es posible que este ingrediente se esté usando en alguna receta.'
+            );
+          }
+        });
+      }
+    });
+  }
+
+  cancelar() {
+    this.showForm = false;
+    this.isEditing = false;
+    this.selectedIng = this.resetIng();
+  }
+
+  private resetIng(): Ingredient {
+    return {
+      nombre: '',
+      unidadBase: 'gr',
+      caloriasPorUnidad: 0,
+      proteinasPorUnidad: 0,
+      grasasPorUnidad: 0,
+      hidratosPorUnidad: 0,
+    };
+  }
+
+  private normalizeSearch(value?: string | null): string {
+    return (value ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
+  }
+}

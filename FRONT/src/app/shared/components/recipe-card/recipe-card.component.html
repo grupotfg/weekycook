@@ -1,0 +1,49 @@
+<article class="recipe-card">
+  <div class="recipe-image">
+    <img [src]="image" [alt]="recipe.titulo" />
+    <span class="difficulty-pill" [ngClass]="difficultyBadge">
+      <i class="bi bi-lightning-charge me-1"></i>{{ difficultyLabel }}
+    </span>
+  </div>
+
+  <div class="recipe-body">
+    <div class="meta-row">
+      <span class="pill pill-primary">
+        {{ recipe.categoriaNombre ?? "Sin categoría" }}
+      </span>
+    </div>
+
+    <h3>{{ recipe.titulo }}</h3>
+    <p class="description">{{ recipe.descripcionCorta }}</p>
+
+    <div class="metrics">
+      <div>
+        <i class="bi bi-clock"></i>
+        <span>{{ recipe.tiempoPreparacionMin ?? 0 }} minutos</span>
+      </div>
+      <div class="metric-servings">
+        <i class="bi bi-people"></i>
+        <span>{{ recipe.porciones ?? 2 }} porciones</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe-footer">
+    <div class="author">
+      <span class="avatar">{{ creatorInitial }}</span>
+      <div class="author-info">
+        <p>{{ displayAuthorName }}</p>
+        <small>Autor</small>
+      </div>
+    </div>
+
+    <button
+      class="btn-wk btn-soft btn-pill recipe-action-btn"
+      type="button"
+      (click)="viewRecipe()"
+    >
+      Ver receta
+      <i class="bi bi-arrow-up-right ms-1"></i>
+    </button>
+  </div>
+</article>

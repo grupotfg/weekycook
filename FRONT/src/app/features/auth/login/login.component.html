@@ -1,0 +1,44 @@
+<section class="auth-hero">
+  <div class="auth-card">
+    <div class="auth-header">
+      <p class="eyebrow text-soft">Bienvenido de nuevo</p>
+      <h1 class="serif-font">Iniciar Sesión</h1>
+      <p>Organiza tu semana culinaria en pocos clics.</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label>Correo electrónico</label>
+        <input
+          type="email"
+          class="form-control form-control-wk"
+          formControlName="correo"
+          placeholder="usuario@weekycook.com"
+        />
+      </div>
+
+      <div class="form-field">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          class="form-control form-control-wk"
+          formControlName="contrasena"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-wk btn-primary-wk btn-pill auth-submit"
+        [disabled]="loginForm.invalid"
+      >
+        Entrar
+      </button>
+    </form>
+
+    <div class="auth-links">
+      ¿No tienes cuenta?
+      <a routerLink="/auth/register">Regístrate</a>
+    </div>
+  </div>
+</section>

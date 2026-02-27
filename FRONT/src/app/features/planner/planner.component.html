@@ -1,0 +1,111 @@
+
+<div class="layout-container section-padding">
+  
+  <header class="planner-header">
+    <h1 class="serif-font txt-primary">Planificador Semanal</h1>
+  </header>
+
+  <main>
+    @if (viewMode === 'list' && !loading) {
+      <div class="list-top-bar">
+        <button class="btn-wk btn-primary-wk" (click)="viewMode = 'create'; newPlan = {nombre: '', semanaInicio: '', numComensales: 2, observaciones: '', items: []}; errorMessage = ''">+ Crear Plan Nuevo</button>
+      </div>
+
+      <div class="plans-stack">
+        @for (p of plans; track p.id) {
+          <div class="plan-row-card" (click)="router.navigate([], { queryParams: { planId: p.id }})">
+            <div class="date-badge">
+              <span class="day">{{ p.semanaInicio | date:'dd' }}</span>
+              <span class="month">{{ p.semanaInicio | date:'MMM' | uppercase }}</span>
+            </div>
+            <div class="plan-main">
+              <h3>{{ p.nombre }}</h3>
+              @if (p.observaciones) {
+                <p class="plan-obs">{{ p.observaciones }}</p>
+              }
+            </div>
+            <button class="btn-delete-item" (click)="borrarPlan(p.id, p.nombre, $event)" title="Eliminar este plan">
+              <i class="bi bi-trash3"></i>
+            </button>
+            <i class="bi bi-chevron-right ms-3 arrow-icon"></i>
+          </div>
+        }
+      </div>
+    }
+
+    @if (viewMode === 'detail' && selectedPlan) {
+      <div class="planner-view">
+        <div class="view-header">
+          <div>
+            <h2 class="serif-font">{{ selectedPlan.nombre }}</h2>
+            <span class="badge-week">Semana del {{ selectedPlan.semanaInicio | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="view-header-actions">
+            <button class="btn-wk btn-random-purple" (click)="rellenarAleatorio()">
+              <i class="bi bi-dice-5"></i> Rellenar Aleatorio
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-container shadow-sm">
+          <div class="planner-grid">
+            <div class="empty-corner"></div>
+            @for (d of days; track d) {
+              <div class="day-label">{{ d.substring(0,2) }}</div>
+            }
+
+            @for (m of meals; track m) {
+              <div class="meal-row-title">{{ m | uppercase }}</div>
+              @for (d of days; track d) {
+                <div class="slot-cell" [class.has-data]="getSlot(d, m)">
+                  @if (getSlot(d, m); as slot) {
+                    <div class="recipe-filled-box" (click)="handleSlotClick(d, m)">
+                      <span class="recipe-text">{{ slot.receta?.titulo }}</span>
+                      <button class="btn-remove-recipe" (click)="removeSlot(d, m, $event)">×</button>
+                    </div>
+                  } @else {
+                    <button class="btn-add-recipe" (click)="handleSlotClick(d, m)">+</button>
+                  }
+                </div>
+              }
+            }
+          </div>
+        </div>
+
+        <div class="view-footer">
+          <button class="btn-wk btn-purple-outline" (click)="irALista()">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (viewMode === 'create') {
+      <div class="create-form-box surface-card shadow-sm">
+        <h2 class="serif-font txt-primary">Nueva Planificación</h2>
+        
+        @if (errorMessage) {
+          <div class="alert-banner-error">{{ errorMessage }}</div>
+        }
+
+        <div class="form-group">
+          <label class="form-label-wk">Nombre del Plan</label>
+          <input type="text" class="field-control" [(ngModel)]="newPlan.nombre" placeholder="Ej: Dieta Mediterránea">
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label-wk">Fecha de Inicio (Lunes)</label>
+          <input type="date" class="field-control" [(ngModel)]="newPlan.semanaInicio">
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label-wk">Observaciones</label>
+          <textarea class="field-control" [(ngModel)]="newPlan.observaciones" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions-bottom mt-4">
+          <button class="btn-wk btn-primary-wk" (click)="confirmCreate()">Crear Planificador</button>
+          <button class="btn-wk btn-cancel-light" (click)="viewMode = 'list'; newPlan = {nombre: '', semanaInicio: '', numComensales: 2, observaciones: '', items: []}; errorMessage = ''">Cancelar</button>
+        </div>
+      </div>
+    }
+  </main>
+</div>

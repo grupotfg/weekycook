@@ -1,0 +1,108 @@
+<section class="layout-container admin-shell">
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">Panel Administrativo</p>
+      <h2 class="admin-title serif-font">Panel de Control Admin</h2>
+      <p>
+        Gestiona recetas, ingredientes, categorías y accesos de la plataforma.
+      </p>
+    </div>
+    <div class="admin-header-actions">
+      <button
+        type="button"
+        class="btn-wk btn-soft btn-pill"
+        (click)="setTab('usuarios')"
+      >
+        <i class="bi bi-people-fill"></i>
+        <span>Gestión usuarios</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="admin-tabs" aria-label="Módulos de administración">
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'recetas'"
+      (click)="setTab('recetas')"
+    >
+      <i class="bi bi-journal-text"></i>
+      <span>Recetas</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'ingredientes'"
+      (click)="setTab('ingredientes')"
+    >
+      <i class="bi bi-basket"></i>
+      <span>Ingredientes</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'categorias'"
+      (click)="setTab('categorias')"
+    >
+      <i class="bi bi-tags"></i>
+      <span>Categorías</span>
+    </button>
+    <button
+      type="button"
+      class="admin-tab"
+      [class.is-active]="activeTab === 'usuarios'"
+      (click)="setTab('usuarios')"
+    >
+      <i class="bi bi-person-badge"></i>
+      <span>Usuarios</span>
+    </button>
+  </nav>
+
+  <div class="surface-card admin-panel">
+    @if (activeTab === "recetas") {
+      <app-recetas-gestion
+        (formStateChange)="handleRecetasFormState($event)"
+      ></app-recetas-gestion>
+      <div class="admin-note">
+        <i class="bi bi-journal-text"></i>
+        <div>
+          <h5>Módulo de Recetas</h5>
+          <p>Crea, edita y gestiona los platos publicados en WeekyCook.</p>
+        </div>
+      </div>
+    }
+    @if (activeTab === "ingredientes") {
+      <app-ingredientes-gestion></app-ingredientes-gestion>
+      <div class="admin-note">
+        <i class="bi bi-basket"></i>
+        <div>
+          <h5>Módulo de Ingredientes</h5>
+          <p>Define ingredientes base para nutrir el catálogo de recetas.</p>
+        </div>
+      </div>
+    }
+    @if (activeTab === "categorias") {
+      <app-categorias-gestion></app-categorias-gestion>
+      <div class="admin-note">
+        <i class="bi bi-tags"></i>
+        <div>
+          <h5>Módulo de Categorías</h5>
+          <p>
+            Organiza etiquetas como "Vegano" o "Cenas rápidas" para filtrar
+            recetas.
+          </p>
+        </div>
+      </div>
+    }
+    @if (activeTab === "usuarios") {
+      <app-usuarios-gestion></app-usuarios-gestion>
+      <div class="admin-note">
+        <i class="bi bi-person-badge"></i>
+        <div>
+          <h5>Control de usuarios</h5>
+          <p>Administra roles, accesos y credenciales de la comunidad.</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>

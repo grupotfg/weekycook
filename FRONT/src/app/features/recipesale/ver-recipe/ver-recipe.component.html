@@ -1,0 +1,155 @@
+@if (loading) {
+  <p class="status loading">Cargando receta...</p>
+}
+
+@if (error) {
+  <p class="status error">Error al cargar la receta</p>
+}
+
+@if (recipe && !loading) {
+  <section class="detail-surface layout-container">
+    <div class="detail-header">
+      <a routerLink="/recipes" class="back-link btn-wk btn-soft btn-pill">
+        <i class="bi bi-arrow-left-short"></i>
+        Volver a recetas
+      </a>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-main">
+        <article class="hero-card surface-card">
+          <div class="hero-image">
+            <img [src]="heroImageUrl" [alt]="recipe.titulo" />
+          </div>
+
+          <div class="hero-body">
+            <div class="hero-header">
+              @if (recipe.categoriaNombre) {
+                <span class="pill pill-primary hero-category">{{
+                  recipe.categoriaNombre
+                }}</span>
+              }
+              <button
+                class="favorite-btn"
+                type="button"
+                aria-label="Guardar receta en favoritos"
+                (click)="onFavoriteClick()"
+                [disabled]="favoriteState.saving || favoriteState.saved"
+                [class.is-active]="favoriteState.saved"
+                [attr.aria-pressed]="favoriteState.saved"
+                [attr.aria-busy]="favoriteState.saving"
+              >
+                <i
+                  class="bi"
+                  [ngClass]="favoriteState.saved ? 'bi-heart-fill' : 'bi-heart'"
+                ></i>
+              </button>
+            </div>
+            @if (favoriteState.message || favoriteState.error) {
+              <p
+                class="favorite-feedback"
+                [class.error]="!!favoriteState.error"
+                aria-live="polite"
+                role="status"
+              >
+                {{ favoriteState.error || favoriteState.message }}
+              </p>
+            }
+            <h1>{{ recipe.titulo }}</h1>
+            <p class="hero-description">{{ recipe.descripcionCorta }}</p>
+
+            <div class="hero-meta">
+              <div class="meta-tile">
+                <span class="meta-label">Preparación</span>
+                <strong>{{ recipe.tiempoPreparacionMin ?? 0 }} min</strong>
+              </div>
+              <div class="meta-tile">
+                <span class="meta-label">Cocción</span>
+                <strong>{{ recipe.tiempoPreparacionMin ?? 0 }} min</strong>
+              </div>
+              <div class="meta-tile">
+                <span class="meta-label">Porciones</span>
+                <strong>{{ recipe.porciones ?? 0 }}</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <section class="instructions-card surface-card">
+          <h2>Instrucciones</h2>
+          @if (instructionSteps.length > 0) {
+            <ol class="instruction-steps">
+              @for (step of instructionSteps; track step; let index = $index) {
+                <li>
+                  <span class="step-index">{{ index + 1 }}</span>
+                  <p>{{ step }}</p>
+                </li>
+              }
+            </ol>
+          } @else {
+            <p class="empty-message">
+              No hay instrucciones disponibles para esta receta.
+            </p>
+          }
+        </section>
+      </div>
+
+      <aside class="detail-aside">
+        <div class="info-card surface-card">
+          <h3>Ingredientes</h3>
+          @if ((recipe.ingredientes ?? []).length > 0) {
+            <ul class="ingredient-list">
+              @for (
+                ing of recipe.ingredientes ?? [];
+                track ing.ingredienteId ?? ing.ingredienteNombre ?? ing
+              ) {
+                <li>
+                  <span class="ingredient-quantity"
+                    >{{ ing.cantidad }} {{ ing.unidad }}</span
+                  >
+                  <strong>{{
+                    ing.ingredienteNombre ?? ing.nombreAux ?? "Ingrediente"
+                  }}</strong>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-message">No se registraron ingredientes.</p>
+          }
+        </div>
+
+        <div class="info-card surface-card">
+          <h3>Información</h3>
+          <dl class="info-list">
+            <div>
+              <dt>Dificultad</dt>
+              <dd>{{ difficultyLabel }}</dd>
+            </div>
+            <div>
+              <dt>Tiempo total</dt>
+              <dd>{{ totalTimeLabel }}</dd>
+            </div>
+            @if (recipe.creadorNombre) {
+              <div>
+                <dt>Autor</dt>
+                <dd>{{ recipe.creadorNombre }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+
+        <button
+          class="planner-btn btn-wk btn-primary-wk btn-pill"
+          type="button"
+          (click)="onPlannerClick()"
+        >
+          <i class="bi bi-calendar-plus"></i>
+          Añadir al planificador
+        </button>
+        @if (plannerMessage) {
+          <p class="planner-feedback" role="status">{{ plannerMessage }}</p>
+        }
+      </aside>
+    </div>
+  </section>
+}

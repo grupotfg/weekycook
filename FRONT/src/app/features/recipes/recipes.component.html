@@ -1,0 +1,181 @@
+<section class="recipes-hero">
+  <div class="layout-container hero-content">
+    <p class="eyebrow">Explorar Recetas</p>
+    <h1>Descubre platos para tu planificador semanal</h1>
+    <p class="summary copy-constrain">
+      Filtra por categoría, dificultad o tiempo y encuentra la receta perfecta.
+    </p>
+  </div>
+</section>
+
+<section class="filters-section">
+  <div class="layout-container">
+    <div class="filters-card surface-card">
+      <div class="filter-field">
+        <label>Buscar recetas</label>
+        <div class="form-shell">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+            placeholder="Carne, Pasta, ensaladas,..."
+          />
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label>Categoría</label>
+        <div class="form-shell">
+          <i class="bi bi-grid"></i>
+          <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+            <option value="all">Todas</option>
+            @for (category of categories; track category.id) {
+              <option [value]="category.id">{{ category.nombre }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label>Dificultad</label>
+        <div class="form-shell">
+          <i class="bi bi-stars"></i>
+          <select [(ngModel)]="selectedDifficulty" (change)="applyFilters()">
+            <option value="all">Todas</option>
+            <option value="facil">Fácil</option>
+            <option value="media">Media</option>
+            <option value="dificil">Difícil</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label>Tiempo</label>
+        <div class="form-shell">
+          <i class="bi bi-clock-history"></i>
+          <select [(ngModel)]="selectedTime" (change)="applyFilters()">
+            @for (option of timeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button
+          class="btn-wk btn-soft btn-pill clear-filters-btn"
+          (click)="resetFilters()"
+        >
+          <i class="bi bi-arrow-counterclockwise me-2"></i>Limpiar filtros
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="results-section">
+  <div class="layout-container">
+    <div class="results-header">
+      @if (!loading) {
+        <div class="results-meta">
+          <p class="results-count">
+            {{ filteredRecipes.length }} recetas encontradas
+          </p>
+          <div class="page-size-picker" (click)="$event.stopPropagation()">
+            <span>Mostrar</span>
+            <button
+              type="button"
+              class="btn-wk btn-soft btn-pill page-size-trigger"
+              [class.open]="pageSizeMenuOpen"
+              (click)="togglePageSizeMenu($event)"
+            >
+              <span>{{ pageSize }}</span>
+              <i class="bi bi-chevron-down"></i>
+            </button>
+            <span>por página</span>
+
+            @if (pageSizeMenuOpen) {
+              <div class="page-size-menu" [class.open]="pageSizeMenuOpen">
+                @for (size of pageSizeOptions; track size) {
+                  <button
+                    type="button"
+                    class="page-size-option"
+                    [class.active]="size === pageSize"
+                    (click)="selectPageSize(size)"
+                  >
+                    {{ size }} recetas
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @if (loading) {
+        <div class="status">
+          <div class="spinner-border text-primary" role="status"></div>
+          <span class="ms-2">Cargando recetas...</span>
+        </div>
+      }
+      @if (!loading && errorMessage) {
+        <p class="status text-danger">
+          {{ errorMessage }}
+        </p>
+      }
+    </div>
+
+    @if (!loading && !errorMessage && filteredRecipes.length === 0) {
+      <div class="empty-state">
+        <i class="bi bi-emoji-neutral"></i>
+        <p>No hay recetas que coincidan con los filtros seleccionados.</p>
+        <button class="btn-wk btn-primary-wk btn-pill" (click)="resetFilters()">
+          Ver todas
+        </button>
+      </div>
+    }
+    @if (!loading && !errorMessage && filteredRecipes.length > 0) {
+      <div class="recipes-grid">
+        @for (
+          recipe of paginatedRecipes;
+          track recipe.id ?? recipe.titulo ?? recipe
+        ) {
+          <app-recipe-card [recipe]="recipe"></app-recipe-card>
+        }
+      </div>
+
+      <div class="pagination-bar">
+        <button
+          type="button"
+          class="btn-wk btn-soft btn-pill"
+          (click)="prevPage()"
+          [disabled]="currentPage === 1"
+        >
+          ← Anterior
+        </button>
+
+        <div class="page-list">
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              class="chip-control"
+              [class.is-active]="page === currentPage"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="btn-wk btn-soft btn-pill"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          Siguiente →
+        </button>
+      </div>
+    }
+  </div>
+</section>
